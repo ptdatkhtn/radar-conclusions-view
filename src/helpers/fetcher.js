@@ -1,7 +1,7 @@
 import  axios from 'axios';
 import { getCsrfToken, getSessionToken } from "./session";
 
-const baseUrl = process.env.REACT_APP_BASE_URL_API;
+const baseUrl = process.env.REACT_APP_VOTING_API_URL
 
 async function httpRequest(baseUrl, method, path, payload = null) {
   return axios({

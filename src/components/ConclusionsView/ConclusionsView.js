@@ -10,7 +10,7 @@ import {
   ConclusionsHeader,
   ConclusionsTabFooter
 } from "./styles";
-const VotingResultsView = ({axisLabel3, axisLabel4, axisLabel5, axisLabel6, axisLabel1, axisLabel1a, axisLabel1b, axisLabel2, axisLabel2a, axisLabel2b}) => {
+const VotingResultsView = () => {
   const { state: {phenonmenaData, radar }} = useContext(DataContext)
   
   const stageCanvasRef = React.useRef(null);
@@ -45,16 +45,16 @@ const VotingResultsView = ({axisLabel3, axisLabel4, axisLabel5, axisLabel6, axis
           phenomena={phenonmenaData || []} 
           containerWidth={width -100} 
           containerHeight={height - 100}
-          axisLabel3={axisLabel3} 
-          axisLabel4={axisLabel4} 
-          axisLabel5={axisLabel5} 
-          axisLabel6={axisLabel6} 
-          axisLabel1={axisLabel1}
-          axisLabel1a={axisLabel1a}
-          axisLabel1b={axisLabel1b}
-          axisLabel2={axisLabel2}
-          axisLabel2a={axisLabel2a}
-          axisLabel2b={axisLabel2b}
+          axisLabel3={radar.fourFieldsBottomLeft} 
+          axisLabel4={radar.fourFieldsBottomRight} 
+          axisLabel5={radar.fourFieldsTopLeft} 
+          axisLabel6={radar.fourFieldsTopRight} 
+          axisLabel1={radar.axisXTitle}
+          axisLabel1a={radar.axisXMin}
+          axisLabel1b={radar.axisXMax}
+          axisLabel2={radar.axisYTitle}
+          axisLabel2a={radar.axisYMin}
+          axisLabel2b={radar.axisYMax}
         />
       }
         <RatingResults phenomena={phenonmenaData || []} radar={radar}/>
