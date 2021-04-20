@@ -219,7 +219,7 @@ const App = ({
       .range([30, containerWidth - 10])
       .nice()
     const y = d3.scaleLinear()
-      .domain(d3.extent(data, d => d[1]))
+      .domain(d3.extent(data, d => d[0]))
       .range([containerHeight - 30, 10])
       .nice()
     const xAxis = (g, scale) => g
@@ -279,8 +279,8 @@ const App = ({
     let z = d3.zoomIdentity;
 
     // set up the ancillary zooms and an accessor for their transforms
-    const zoomX = d3.zoom().scaleExtent([0.7, 30]);
-    const zoomY = d3.zoom().scaleExtent([0.7, 30]);
+    const zoomX = d3.zoom().scaleExtent([1, 30]);
+    const zoomY = d3.zoom().scaleExtent([1, 30]);
     const tx = () => d3.zoomTransform(gx.node());
     const ty = () => d3.zoomTransform(gy.node());
     gx.call(zoomX).attr("pointer-events", "none");
@@ -404,10 +404,10 @@ const App = ({
   }
 
   return (
-    <div style={{ display: 'flex' }}>
+    <div style={{ display: 'flex', paddingTop: '54px', paddingBottom: '54px' }}>
       <AxisY originalHeight={containerHeight} axisHeight={containerHeight + 170} axisLabel2={axisLabel2} axisLabel2a={axisLabel2a} axisLabel2b={axisLabel2b} />
-      <div style={{ width: containerWidth, height: containerHeight + 70, padding: '40px 60px 60px 0', boxSizing: 'content-box', background: '#e0dede' }}>
-      <div style={{paddingBottom:"24px", paddingTop: "24px", display: 'flex', alignItems: 'center'}}>
+      <div style={{ width: containerWidth, height: containerHeight + 70, padding: '0 0 60px 0', boxSizing: 'content-box', background: '#e0dede' }}>
+      <div style={{paddingBottom:"32px", display: 'flex', alignItems: 'center'}}>
           <input style={{width:"20px", height: "20px", cursor: 'pointer', margin: 0}} type="checkbox" label='Hide labels'  id="rating-view-tab-cb-id" name="rating-view-tab-cb-name" checked={!visibleText} onChange={onToggleTitle}></input>
           <label style={{fontSize:"18px", fontWeight:'bold', paddingLeft: '12px'}} for="rating-view-tab-cb-name"> Hide Titles</label><br></br>
           <input style={{width:"20px", height: "20px", cursor: 'pointer', margin: 0, marginLeft: '20px'}} type="radio" label='Show as average'  id="rating-view-tab-cb-id" name="rating-view-tab-cb-name" checked={isAverage} onChange={onToggleIsAverage}></input>

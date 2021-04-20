@@ -10,7 +10,9 @@ const AxisX = ({
   const cellStyle = { fontSize: 14, color: 'grey', fontWeight: 500, height: 30, whiteSpace: 'nowrap' }
   return (
     <>
-      <table cellPadding='0' cellSpacing='0' align='center' style={{ width: axisWidth, margin: 0, background: 'rgb(224 222 222)' }}>
+      <table cellPadding='0' cellSpacing='0' align='center' style={{ width: axisWidth, margin: 0
+        // background: 'rgb(224 222 222)' 
+        }}>
         <tbody>
           <tr>
             <td style={{ ...cellStyle, textAlign: 'left' }}>
@@ -23,7 +25,9 @@ const AxisX = ({
         </tbody>
       </table>
 
-      <table cellPadding='0' cellSpacing='0' align='center' style={{ width: axisWidth, margin: 0, background: 'rgb(224 222 222)' }}>
+      <table cellPadding='0' cellSpacing='0' align='center' style={{ width: axisWidth, margin: 0
+        // background: 'rgb(224 222 222)'
+        }}>
         <tbody>
           <tr>
             <td style={{ ...cellStyle, textAlign: 'center' }}>
