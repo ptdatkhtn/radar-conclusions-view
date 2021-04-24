@@ -130,16 +130,16 @@ const App = ({
   const appMargin = { top: 20, right: 20, bottom: 30, left: 40 }
   const innerLineData = [
     { 
-      x1: 0,
+      x1: -1500,
       y1: 50,
-      x2: 100,
+      x2: 1500,
       y2: 50
     },
     { 
       x1: 50,
-      y1: 0,
+      y1: -1500,
       x2: 50,
-      y2: 100
+      y2: 1500
     }
   ]
 
@@ -289,6 +289,9 @@ const App = ({
 
     // active zooming
     const zoom = d3.zoom().on("zoom", function(e) {
+
+      const trans = d3.transition().duration(150).ease(d3.easeLinear)
+
       const t = e.transform;
  
       const k = t.k / z.k;
@@ -318,24 +321,29 @@ const App = ({
       gy.call(yAxis, yr);
       
       innerText
+        .transition(trans)
         .attr('x', d => xr(d.x) - getTextWidth(d.title))
         .attr('y', d => yr(d.y))
       
       innerLine
+        .transition(trans)  
         .attr("x1", d => xr(d.x1))
         .attr("y1", d => yr(d.y1))
         .attr("x2", d => xr(d.x2))
         .attr("y2", d => yr(d.y2))
         
       visibleText && myTexts
+        .transition(trans)
         .attr('x', d => xr(+d.x) + NODE_RADIUS - getTextWidth(d.title) / 2)
         .attr('y', d => yr(+d.y) + NODE_RADIUS * 3)
 
       myCircle1
+        .transition(trans)
         .attr('cx', d => xr(+d.x))
         .attr('cy', d => yr(+d.y))
         .attr('r', 10)
       myCircle
+        .transition(trans)
         .attr('cx', d => xr(+d.x))
         .attr('cy', d => yr(+d.y))
         .attr('r', 7)

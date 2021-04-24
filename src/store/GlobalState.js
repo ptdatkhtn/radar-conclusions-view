@@ -75,10 +75,10 @@ export const DataProvider = ({children, node}) => {
                             Object.keys(data)?.map( async(phe) => {
                                 const pheId = phe.split('/')
                                 !!phenonmena?.length && phenonmena?.forEach(phenomenon => { 
-                                    if(phenomenon?.id === pheId[5] && pheId[6] ==='x') {
+                                    if(String(phenomenon?.id) === String(pheId[5]) && String(pheId[6]) ==='x') {
                                         phenomenon['rating_x'] = data[phe]
                                     }
-                                    if(phenomenon?.id === pheId[5] && pheId[6] ==='y') {
+                                    if(String(phenomenon?.id) === String(pheId[5]) && String(pheId[6]) ==='y') {
                                         phenomenon['rating_y'] = data[phe]
                                     }
                                 })

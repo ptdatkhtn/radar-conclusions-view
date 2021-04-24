@@ -63,8 +63,8 @@ const Rating = ({ phenomenon, radar, isRatingX }) => {
         </RatingHeader>
         <RatingItem>
           <RatingSliderScale>
-              <SliderScaleMin>{isRatingX? radar.axisXMin : radar.axisYMin}</SliderScaleMin>
-              <SliderScaleMax>{isRatingX? radar.axisXMax : radar.axisYMax}</SliderScaleMax>
+              <SliderScaleMin>{isRatingX? radar?.axisXMin : radar?.axisYMin}</SliderScaleMin>
+              <SliderScaleMax>{isRatingX? radar?.axisXMax : radar?.axisYMax}</SliderScaleMax>
             </RatingSliderScale>
           <RatingSlider
             className="inactive"
