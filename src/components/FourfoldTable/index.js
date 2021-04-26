@@ -63,24 +63,26 @@ const App = ({
   const nodeListAsMedian = React.useMemo(()=> {
     const nodes = []
     !!phenomena?.length && phenomena.map((phen) => {
-      const {innerStroke, outerStroke, fillSymbol} = setNodeColor(phen)
-      const node = {}
-      node['id'] = phen['id']
-      node['type'] = []
-      node['type'] = [].concat({innerStroke, outerStroke, fillSymbol})
+      if (phen['rating_x']['median'] && phen['rating_y']['median']) {
+        const {innerStroke, outerStroke, fillSymbol} = setNodeColor(phen)
+        const node = {}
+        node['id'] = phen['id']
+        node['type'] = []
+        node['type'] = [].concat({innerStroke, outerStroke, fillSymbol})
 
-      node['title'] = String(phen['content']['short_title']) || String(phen['content']['title'])
-      if (String (phen['rating_x']['median']) >= 100|| String (phen['rating_y']['median']) >= 100) {
-        node['x'] = phen['rating_x']['median'] 
-        node['y'] = phen['rating_y']['median'] 
-      } else if (String (phen['rating_x']['median']) === 0|| String (phen['rating_y']['median']) === 0) {
-        node['x'] = phen['rating_x']['median'] 
-        node['y'] = phen['rating_y']['median'] 
-      } else {
-        node['x'] = phen['rating_x']['median']
-        node['y'] = phen['rating_y']['median']
+        node['title'] = String(phen['content']['short_title']) || String(phen['content']['title'])
+        if (String (phen['rating_x']['median']) >= 100|| String (phen['rating_y']['median']) >= 100) {
+          node['x'] = phen['rating_x']['median'] 
+          node['y'] = phen['rating_y']['median'] 
+        } else if (String (phen['rating_x']['median']) === 0|| String (phen['rating_y']['median']) === 0) {
+          node['x'] = phen['rating_x']['median'] 
+          node['y'] = phen['rating_y']['median'] 
+        } else {
+          node['x'] = phen['rating_x']['median']
+          node['y'] = phen['rating_y']['median']
+        }
+        nodes.push(node)
       }
-      nodes.push(node)
     })
     return nodes
   }, [phenomena])
@@ -88,24 +90,26 @@ const App = ({
   const nodeListAsAverage = React.useMemo(() => {
     const nodes = []
     !!phenomena?.length && phenomena.map((phen) => {
-      const {innerStroke, outerStroke, fillSymbol} = setNodeColor(phen)
-      const node = {}
-      node['id'] = phen['id']
-      node['type'] = []
-      node['type'] = [].concat({innerStroke, outerStroke, fillSymbol})
+      if (phen['rating_x']['avg'] && phen['rating_y']['avg']) {
+        const {innerStroke, outerStroke, fillSymbol} = setNodeColor(phen)
+        const node = {}
+        node['id'] = phen['id']
+        node['type'] = []
+        node['type'] = [].concat({innerStroke, outerStroke, fillSymbol})
 
-      node['title'] = String(phen['content']['short_title']) || String(phen['content']['title'])
-      if (String (phen['rating_x']['avg']) >= 100|| String (phen['rating_y']['avg']) >= 100) {
-        node['x'] = phen['rating_x']['avg'] 
-        node['y'] = phen['rating_y']['avg']
-      } else if (String (phen['rating_x']['avg']) === 0|| String (phen['rating_y']['avg']) === 0) {
-        node['x'] = phen['rating_x']['avg'] 
-        node['y'] = phen['rating_y']['avg'] 
-      } else {
-        node['x'] = phen['rating_x']['avg']
-        node['y'] = phen['rating_y']['avg']
+        node['title'] = String(phen['content']['short_title']) || String(phen['content']['title'])
+        if (String (phen['rating_x']['avg']) >= 100|| String (phen['rating_y']['avg']) >= 100) {
+          node['x'] = phen['rating_x']['avg'] 
+          node['y'] = phen['rating_y']['avg']
+        } else if (String (phen['rating_x']['avg']) === 0|| String (phen['rating_y']['avg']) === 0) {
+          node['x'] = phen['rating_x']['avg'] 
+          node['y'] = phen['rating_y']['avg'] 
+        } else {
+          node['x'] = phen['rating_x']['avg']
+          node['y'] = phen['rating_y']['avg']
+        }
+        nodes.push(node)
       }
-      nodes.push(node)
     })
     return nodes
   }, [phenomena])
@@ -198,17 +202,11 @@ const App = ({
   useEffect(() => {
     if (phenomena.length < 1 || !scatterSvg) return ;
     let nodes = []
-    if(isAverage && isMedian) {
-      nodes = []
-      nodes = [].concat(nodeListAsAverage).concat(nodeListAsMedian)
-    } else {
-      if(isAverage) {
-        nodes = nodeListAsAverage
-      }
-    
-      if(isMedian) {
-        nodes = nodeListAsMedian
-      }
+    if(isAverage) {
+      nodes = !!nodeListAsAverage.length ? nodeListAsAverage : []
+    }
+    else if(isMedian) {
+      nodes = !!nodeListAsMedian.length ? nodeListAsMedian : []
     }
 
     let data = nodes.map(item => [item.x, item.y])
@@ -250,14 +248,17 @@ const App = ({
       .attr("stroke", "#ccc")
       .attr("stroke-width", 1)
       
-    const myTexts = scatterSvg.append('g')
-      .selectAll('text')
-      .data(nodes)
-      .join('text')
-      .text(d => d.title)
-      .style('fill', 'black')
-      .attr('id', 'myTexts')
-
+      let myTexts = ''
+      if (visibleText) {
+       myTexts = scatterSvg.append('g')
+        .selectAll('text')
+        .data(nodes)
+        .join('text')
+        .text(d => d.title)
+        .style('fill', 'black')
+        .attr('id', 'myTexts')
+        .attr('font-size', 16)
+      }
     const myCircle1 = scatterSvg.append('g')
       .selectAll('circle')
       .data(nodes)
@@ -333,6 +334,15 @@ const App = ({
         .attr("y2", d => yr(d.y2))
         
       visibleText && myTexts
+      .on('end', () => {
+        if (k === 1) return
+        const scale = Math.min(t.k, 8)
+        const minScale = Math.max(scale, 1)
+        const fonts = Math.max(16, Math.round(16 + minScale / 2))
+        const tran2 = d3.transition().duration(250).ease(d3.easeLinear)
+        myTexts.transition(tran2)
+          .attr('font-size', fonts)
+      })
         .transition(trans)
         .attr('x', d => xr(+d.x) + NODE_RADIUS - getTextWidth(d.title) / 2)
         .attr('y', d => yr(+d.y) + NODE_RADIUS * 3)
