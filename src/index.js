@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { DataProvider } from "./store/GlobalState";
-import './index.css';
 import reportWebVitals from './reportWebVitals';
 import ConclusionsView from "./components/ConclusionsView/ConclusionsView";
 
@@ -17,14 +16,14 @@ const renderApp = (nid) => {
   )
 }
 
-const appElements = document.getElementsByClassName('conclusions-tab')
+const appElements = document.getElementsByClassName('radar-conclusions-app')
 
 const defaultRadarId = (/node=\d+/.test(document.location.href) && document.location.href.replace(/^.*node=(\d+).*$/, '$1')) || null
 
 for (let el of appElements) {
   ReactDOM.render(
       renderApp(
-        el.hasAttribute('data-radarid') ? el.getAttribute('data-radarid') : defaultRadarId
+        el.hasAttribute('data-radar-id') ? el.getAttribute('data-radar-id') : defaultRadarId
       ),
       el
   )
