@@ -187,7 +187,7 @@ const App = ({
   }
 
   const getTextWidth = (text, fontSize = 12, fontFace = 'Roboto') => {
-    const canvasAxis = document.getElementById('axis')
+    const canvasAxis = document.getElementById('axis_Conclusion')
     const context = canvasAxis.getContext('2d')
     context.font = fontSize + 'px ' + fontFace
     return context.measureText(text).width
@@ -202,32 +202,32 @@ const App = ({
 
   useEffect(() => {
     if (!scatterSvg) return
-    d3.selectAll('#myTextsAvg').style('opacity', visibleText ? 1 : 0)
-    d3.selectAll('#myTextsMedian').style('opacity', visibleText ? 1 : 0)
+    d3.selectAll('#myTextsAvg_Conclusion').style('opacity', visibleText ? 1 : 0)
+    d3.selectAll('#myTextsMedian_Conclusion').style('opacity', visibleText ? 1 : 0)
   }, [scatterSvg, visibleText])
 
   useEffect(() => {
     if (!scatterSvg) return
 
-    d3.selectAll('#circleAvg').style('opacity', 0)
-    d3.selectAll('#circleMedian').style('opacity', 0)
+    d3.selectAll('#circleAvg_Conclusion').style('opacity', 0)
+    d3.selectAll('#circleMedian_Conclusion').style('opacity', 0)
     if (isAverage) {
-      d3.selectAll('#circleAvg').style('opacity', 1)
+      d3.selectAll('#circleAvg_Conclusion').style('opacity', 1)
     }
     if (!isAverage) {
-      d3.selectAll('#circleMedian').style('opacity', 1)
+      d3.selectAll('#circleMedian_Conclusion').style('opacity', 1)
     }
 
   }, [scatterSvg, isAverage])
 
   useEffect(() => {
-    d3.select('#svg-app').attr("viewBox", [0, 0, containerWidth, containerHeight])
+    d3.select('#svg-app_Conclusion').attr("viewBox", [0, 0, containerWidth, containerHeight])
   }, [containerWidth, containerHeight])
 
   useEffect(() => {
-    const svg = d3.select('#svg-app').attr("viewBox", [0, 0, containerWidth, containerHeight])
+    const svg = d3.select('#svg-app_Conclusion').attr("viewBox", [0, 0, containerWidth, containerHeight])
 
-    const canvasAxis = document.getElementById('axis')
+    const canvasAxis = document.getElementById('axis_Conclusion')
     setAppContext({
       axis: canvasAxis,
       axisContext: canvasAxis.getContext('2d'),
@@ -295,7 +295,7 @@ const App = ({
       .join('text')
       .text(d => d.title)
       .style('fill', 'black')
-      .attr('id', 'myTextsAvg')
+      .attr('id', 'myTextsAvg_Conclusion')
       .attr('font-size', 12)
 
     const myTextsMedian = scatterSvg.append('g')
@@ -304,7 +304,7 @@ const App = ({
       .join('text')
       .text(d => d.title)
       .style('fill', 'black')
-      .attr('id', 'myTextsMedian')
+      .attr('id', 'myTextsMedian_Conclusion')
       .attr('font-size', 12)
 
     const myCircleAvg1 = scatterSvg.append('g')
@@ -314,7 +314,7 @@ const App = ({
       .attr('stroke', d => d.type[0].outerStroke)
       .attr('cursor', 'pointer')
       .attr('r', 10)
-      .attr('id', 'circleAvg')
+      .attr('id', 'circleAvg_Conclusion')
       .style('fill', d => d.type[0].fillSymbol)
 
     const myCircleAvg = scatterSvg.append('g')
@@ -324,7 +324,7 @@ const App = ({
       .attr('stroke', d => d.type[0].innerStroke)
       .attr('cursor', 'pointer')
       .attr('r', 7)
-      .attr('id', 'circleAvg')
+      .attr('id', 'circleAvg_Conclusion')
       .style('fill', d => d.type[0].fillSymbol)
       .attr('cursor', 'pointer')
 
@@ -335,7 +335,7 @@ const App = ({
       .attr('stroke', d => d.type[0].outerStroke)
       .attr('cursor', 'pointer')
       .attr('r', 10)
-      .attr('id', 'circleMedian')
+      .attr('id', 'circleMedian_Conclusion')
       .style('fill', d => d.type[0].fillSymbol)
 
     const myCircleMedian = scatterSvg.append('g')
@@ -345,7 +345,7 @@ const App = ({
       .attr('stroke', d => d.type[0].innerStroke)
       .attr('cursor', 'pointer')
       .attr('r', 7)
-      .attr('id', 'circleMedian')
+      .attr('id', 'circleMedian_Conclusion')
       .style('fill', d => d.type[0].fillSymbol)
       .attr('cursor', 'pointer')
 
@@ -613,7 +613,6 @@ const App = ({
               }}
               checked={isAverage} 
               onChange={onToggleIsAverage}
-              id="rating-view-tab-cb-id"
             />
             <label style={{ fontSize: "13px", fontWeight: 'unset', paddingLeft: '8px', marginBottom: 0 }} for="rating-view-tab-cb-name"> Average </label><br></br>
             <Radio
@@ -625,15 +624,14 @@ const App = ({
               }}
               checked={!isAverage} 
               onChange={onToggleIsMedian}
-              id="rating-view-tab-cb-id"
             />
             <label style={{ fontSize: "13px", fontWeight: 'unset', paddingLeft: '8px', marginBottom: 0 }} for="rating-view-tab-cb-name"> Median </label><br></br>
           </div>
           
         </div>
         <div style={{ position: 'relative', width: containerWidth, height: containerHeight, background: 'grey' }}>
-          <svg id='svg-app' style={{ position: 'absolute' }} />
-          <canvas id='axis' />
+          <svg id='svg-app_Conclusion' style={{ position: 'absolute' }} />
+          <canvas id='axis_Conclusion' />
 
           {/* {visibleDialog && (
             <Modal style={customStyles} ariaHideApp={false} isOpen={true} contentLabel='Phenomena card label'>
