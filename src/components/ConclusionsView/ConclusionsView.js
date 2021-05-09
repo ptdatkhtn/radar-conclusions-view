@@ -3,7 +3,7 @@ import {DataContext} from '../../store/GlobalState'
 import VoteResults from "../VoteResults/VoteResults";
 import RatingResults from "../RatingResults/RatingResults";
 import FourfoldTable from '../FourfoldTable'
-
+import {innerDimensions} from '../../helpers/dimension'
 import {
   VoteTabWrapper,
   HorizontalLine,
@@ -12,49 +12,67 @@ import {
 } from "./styles";
 const VotingResultsView = () => {
   const { state: {phenonmenaData, radar }} = useContext(DataContext)
-  
-  const stageCanvasRef = React.useRef(null);
+
+  const getTabContentElement = document.getElementsByClassName('tab-content')[0]
+ 
+  const eventTimeoutRef = React.useRef(null)
   const [height, setHeight] = useState(0)
   const [width, setWidth] = useState(0)
 
   const calcSizeRateTabWrapper = React.useCallback(() => {
-    setHeight(Number(2* stageCanvasRef?.current?.offsetWidth/3))
-    setWidth(Number(stageCanvasRef?.current?.offsetWidth))
+    setHeight(
+      getTabContentElement? 
+      (+(innerDimensions(getTabContentElement).width -60) * 0.56)
+      : 1536 * 0.56
+      )
+    setWidth(
+      getTabContentElement?
+      (innerDimensions(getTabContentElement).width -60)
+      : 1536
+      )
   }, [setHeight, setWidth])
 
   React.useEffect(() => {
-    setHeight(Number(2* stageCanvasRef?.current?.offsetWidth/3))
-    setWidth(Number(stageCanvasRef?.current?.offsetWidth))
+    calcSizeRateTabWrapper()
     return () => {
       window.removeEventListener('resize', calcSizeRateTabWrapper)
     }
   }, [calcSizeRateTabWrapper, height, width])
 
-  window.addEventListener('resize', calcSizeRateTabWrapper, false)
+  window.addEventListener('resize', function () {
+    // clearTimeOut() resets the setTimeOut() timer
+    // due to this the function in setTimeout() is 
+    // fired after we are done resizing
+    clearTimeout(eventTimeoutRef.current)
+
+    // setTimeout returns the numeric ID which is used by
+    // clearTimeOut to reset the timer
+    eventTimeoutRef.current = setTimeout(calcSizeRateTabWrapper, 500);
+  }, false)
 
   return (
-    <VoteTabWrapper ref={stageCanvasRef}>
+    <VoteTabWrapper>
       <HorizontalLine></HorizontalLine>
       <ConclusionsHeader>Top 5 voted phenomena</ConclusionsHeader>
         <VoteResults phenomena={phenonmenaData || []} radar={radar}/>
       <HorizontalLine></HorizontalLine>
       <ConclusionsHeader>Top 5 rated phenomena</ConclusionsHeader>
       {
-        width > 0 && height > 0 && 
+        width > 0 && 
         <FourfoldTable 
           phenomena={phenonmenaData || []} 
-          containerWidth={width -100} 
-          containerHeight={height - 100}
-          axisLabel3={radar.fourFieldsBottomLeft} 
-          axisLabel4={radar.fourFieldsBottomRight} 
-          axisLabel5={radar.fourFieldsTopLeft} 
-          axisLabel6={radar.fourFieldsTopRight} 
-          axisLabel1={radar.axisXTitle}
-          axisLabel1a={radar.axisXMin}
-          axisLabel1b={radar.axisXMax}
-          axisLabel2={radar.axisYTitle}
-          axisLabel2a={radar.axisYMin}
-          axisLabel2b={radar.axisYMax}
+          containerWidth={width} 
+          containerHeight={height + 60}
+          axisLabel3={radar?.fourFieldsBottomLeft} 
+          axisLabel4={radar?.fourFieldsBottomRight} 
+          axisLabel5={radar?.fourFieldsTopLeft} 
+          axisLabel6={radar?.fourFieldsTopRight} 
+          axisLabel1={radar?.axisXTitle}
+          axisLabel1a={radar?.axisXMin}
+          axisLabel1b={radar?.axisXMax}
+          axisLabel2={radar?.axisYTitle}
+          axisLabel2a={radar?.axisYMin}
+          axisLabel2b={radar?.axisYMax}
         />
       }
         <RatingResults phenomena={phenonmenaData || []} radar={radar}/>
