@@ -11,6 +11,8 @@ import {
   SliderScaleMax
 } from "./styles";
 
+import {SingleRating} from './styles'
+
 const Rating = ({ phenomenon, radar, isRatingX }) => { 
   const {
     state: { error }
@@ -73,7 +75,20 @@ const Rating = ({ phenomenon, radar, isRatingX }) => {
             max="100"
             value={isRatingX? phenomenon?.rating_x?.avg: phenomenon?.rating_y?.avg }
             disabled={true}
-          ></RatingSlider>       
+          ></RatingSlider>    
+          <div style={{position:'relative', width:'100%'}}>
+            {
+              ((isRatingX ? 
+                (phenomenon?.rating_x?.values && !!phenomenon?.rating_x?.values?.length && phenomenon?.rating_x?.values)
+                : (phenomenon?.rating_y?.values && !!phenomenon?.rating_y?.values?.length && phenomenon?.rating_y?.values)) || [])?.map(
+                     /* eslint-disable */
+                  rating => {
+                    return <SingleRating leftValue={rating}/>
+                  }
+                  
+              )
+            }
+          </div>     
         </RatingItem>
       </RatingWidget>
     )

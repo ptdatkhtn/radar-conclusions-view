@@ -105,14 +105,25 @@ export const RatingSlider = styled.input`
     }
 
     &.inactive {
-        background-color: #aaaaaa;
+        background-color: #c4c4c4;;
     }
 
     &.inactive:after {
-        background-color: #aaaaaa;
+        background-color: #c4c4c4;;
     }
 
     &.inactive::-webkit-slider-thumb {
-        background-color: #aaaaaa;
+        background-color: #848484;
     }
+`
+
+export const SingleRating= styled.span `
+    height: 12px;
+    width: 12px;
+    background-color: #848484;
+    border-radius: 50%;
+    display: inline-block;
+    position: absolute;
+    top: -13px;
+    left: calc(${props => props.leftValue}%  - 2.5px);
 `
