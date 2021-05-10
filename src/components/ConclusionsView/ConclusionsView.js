@@ -48,7 +48,7 @@ const VotingResultsView = () => {
 
     // setTimeout returns the numeric ID which is used by
     // clearTimeOut to reset the timer
-    eventTimeoutRef.current = setTimeout(calcSizeRateTabWrapper, 500);
+    eventTimeoutRef.current = setTimeout(calcSizeRateTabWrapper, 250);
   }, false)
 
   return (
