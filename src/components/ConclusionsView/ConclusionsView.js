@@ -19,25 +19,25 @@ const VotingResultsView = () => {
   const [height, setHeight] = useState(0)
   const [width, setWidth] = useState(0)
 
-  const calcSizeRateTabWrapper = React.useCallback(() => {
+  const calcSizeRateTabWrapper = () => {
     setHeight(
       getTabContentElement? 
       (+(innerDimensions(getTabContentElement).width -60) * 0.56)
       : 1536 * 0.56
       )
+
     setWidth(
       getTabContentElement?
       (innerDimensions(getTabContentElement).width -60)
       : 1536
       )
-  }, [setHeight, setWidth])
+  }
 
   React.useEffect(() => {
-    calcSizeRateTabWrapper()
     return () => {
       window.removeEventListener('resize', calcSizeRateTabWrapper)
     }
-  }, [calcSizeRateTabWrapper, height, width])
+  }, [])
 
   window.addEventListener('resize', function () {
     // clearTimeOut() resets the setTimeOut() timer
