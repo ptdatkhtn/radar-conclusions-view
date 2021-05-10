@@ -233,7 +233,7 @@ const App = ({
       axisContext: canvasAxis.getContext('2d'),
       scatterSvg: svg
     })
-  }, [])
+  }, [containerWidth, containerHeight])
 
   useEffect(() => {
     if (phenomena.length < 1 || !scatterSvg) return
