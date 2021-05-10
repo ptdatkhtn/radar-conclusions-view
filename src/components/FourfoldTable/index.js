@@ -362,190 +362,194 @@ const App = ({
 
     // active zooming
     const zoom = d3.zoom().on("zoom", function (e) {
-      if (e.transform.k < 1) {
-        e.transform.k = 1
-        return
+      try {
+        if (e.transform.k < 1) {
+          e.transform.k = 1
+          return
+        }
+        if (e.transform.k > 8) {
+          e.transform.k = 8
+          return
+        }
+        e.transform.k = Math.min(Math.max(e.transform.k, 1), 8)
+  
+        const trans = d3.transition().duration(150).ease(d3.easeLinear)
+        const t = e.transform
+  
+        const k = t.k / z.k
+        const point = center(e, this)
+  
+        // is it on an axis? is the shift key pressed?
+        const doX = point[0] > x.range()[0]
+        const doY = point[1] < y.range()[0]
+        const shift = e.sourceEvent && e.sourceEvent.shiftKey
+  
+        if (k === 1) {
+          // pure translation?
+          doX && gx.call(zoomX.translateBy, (t.x - z.x) / tx().k, 0)
+          doY && gy.call(zoomY.translateBy, 0, (t.y - z.y) / ty().k)
+        } else {
+          // if not, we're zooming on a fixed point
+          doX && gx.call(zoomX.scaleBy, shift ? 1 / k : k, point)
+          doY && gy.call(zoomY.scaleBy, k, point)
+        }
+  
+        z = t
+  
+        const xr = tx().rescaleX(x)
+        const yr = ty().rescaleY(y)
+  
+        const radius1 = myCircleAvg1.attr('r')
+        const radius = myCircleAvg.attr('r')
+  
+        gx.call(xAxis, xr)
+        gy.call(yAxis, yr)
+  
+        myWhiteRect
+          .transition(trans)
+          .attr('x', d => xr(d.x))
+          .attr('y', d => yr(d.y))
+          .attr('width', d => d.width * t.k)
+          .attr('height', d => d.height * t.k)
+  
+        innerText
+          .transition(trans)
+          .attr('x', d => xr(d.x) - getTextWidth(d.title))
+          .attr('y', d => yr(d.y))
+  
+        innerLine
+          .transition(trans)
+          .attr("x1", d => xr(d.x1))
+          .attr("y1", d => yr(d.y1))
+          .attr("x2", d => xr(d.x2))
+          .attr("y2", d => yr(d.y2))
+  
+        myTextsMedian
+          .transition(trans)
+          .on('end', () => {
+            try {
+              const scale = Math.min(t.k, 9)
+              const minScale = Math.max(scale, 1)
+              const fonts = Math.max(12, Math.floor(11 + minScale))
+              const tran2 = d3.transition().duration(200).ease(d3.easeLinear)
+              myTextsMedian.transition(tran2)
+                .attr('font-size', fonts)
+                .attr('x', d => xr(d.x) - getTextWidth(d.title, fonts) / 2)
+                .attr('y', d => yr(d.y) + 10 * 3)
+            } catch (error) {
+              console.error(error)
+            }
+          })
+          .attr('x', d => {
+            const fontS = myTextsMedian.attr('font-size')
+            return xr(d.x) - getTextWidth(d.title, fontS) / 2
+          })
+          .attr('y', d => yr(d.y) + 10 * 3)
+  
+        myTextsAvg
+          .transition(trans)
+          .on('end', () => {
+            try {
+              const scale = Math.min(t.k, 9)
+              const minScale = Math.max(scale, 1)
+              const fonts = Math.max(12, Math.floor(11 + minScale))
+              const tran2 = d3.transition().duration(200).ease(d3.easeLinear)
+              myTextsAvg.transition(tran2)
+                .attr('font-size', fonts)
+                .attr('x', d => xr(d.x) - getTextWidth(d.title, fonts) / 2)
+                .attr('y', d => yr(d.y) + 10 * 3)
+            } catch (error) {
+              console.error(error)
+            }
+          })
+          .attr('x', d => {
+            const fontS = myTextsAvg.attr('font-size')
+            return xr(d.x) - getTextWidth(d.title, fontS) / 2
+          })
+          .attr('y', d => yr(d.y) + 10 * 3)
+  
+        myCircleAvg1
+          .transition(trans)
+          .on('end', () => {
+            try {
+              const scale = Math.min(t.k, 8)
+              const minScale = Math.max(scale, 1)
+              const r = Math.max(10, Math.floor(10 + minScale))
+              const tran2 = d3.transition().duration(200).ease(d3.easeLinear)
+              myCircleAvg1.transition(tran2)
+                .attr('cx', d => xr(d.x))
+                .attr('cy', d => yr(d.y))
+                .attr('r', r)
+            } catch (error) {
+              console.error(error)
+            }
+          })
+          .attr('cx', d => xr(d.x))
+          .attr('cy', d => yr(d.y))
+          .attr('r', radius1)
+  
+        myCircleAvg
+          .transition(trans)
+          .on('end', () => {
+            try {
+              const scale = Math.min(t.k, 8)
+              const minScale = Math.max(scale, 1)
+              const r = Math.max(7, Math.floor(7 + minScale))
+              const tran2 = d3.transition().duration(200).ease(d3.easeLinear)
+              myCircleAvg.transition(tran2)
+                .attr('cx', d => xr(d.x))
+                .attr('cy', d => yr(d.y))
+                .attr('r', r)
+            } catch (error) {
+              console.error(error)
+            }
+          })
+          .attr('cx', d => xr(d.x))
+          .attr('cy', d => yr(d.y))
+          .attr('r', radius)
+  
+        myCircleMedian1
+          .transition(trans)
+          .on('end', () => {
+            try {
+              const scale = Math.min(t.k, 8)
+              const minScale = Math.max(scale, 1)
+              const r = Math.max(10, Math.floor(10 + minScale))
+              const tran2 = d3.transition().duration(200).ease(d3.easeLinear)
+              myCircleMedian1.transition(tran2)
+                .attr('cx', d => xr(d.x))
+                .attr('cy', d => yr(d.y))
+                .attr('r', r)
+            } catch (error) {
+              console.error(error)
+            }
+          })
+          .attr('cx', d => xr(d.x))
+          .attr('cy', d => yr(d.y))
+          .attr('r', radius1)
+  
+        myCircleMedian
+          .transition(trans)
+          .on('end', () => {
+            try {
+              const scale = Math.min(t.k, 8)
+              const minScale = Math.max(scale, 1)
+              const r = Math.max(7, Math.floor(7 + minScale))
+              const tran2 = d3.transition().duration(200).ease(d3.easeLinear)
+              myCircleMedian.transition(tran2)
+                .attr('cx', d => xr(d.x))
+                .attr('cy', d => yr(d.y))
+                .attr('r', r)
+            } catch (error) {
+              console.error(error)
+            }
+          })
+          .attr('cx', d => xr(d.x))
+          .attr('cy', d => yr(d.y))
+          .attr('r', radius)
+      } catch (error) {
+        console.error(error)
       }
-      if (e.transform.k > 8) {
-        e.transform.k = 8
-        return
-      }
-      e.transform.k = Math.min(Math.max(e.transform.k, 1), 8)
-
-      const trans = d3.transition().duration(150).ease(d3.easeLinear)
-      const t = e.transform
-
-      const k = t.k / z.k
-      const point = center(e, this)
-
-      // is it on an axis? is the shift key pressed?
-      const doX = point[0] > x.range()[0]
-      const doY = point[1] < y.range()[0]
-      const shift = e.sourceEvent && e.sourceEvent.shiftKey
-
-      if (k === 1) {
-        // pure translation?
-        doX && gx.call(zoomX.translateBy, (t.x - z.x) / tx().k, 0)
-        doY && gy.call(zoomY.translateBy, 0, (t.y - z.y) / ty().k)
-      } else {
-        // if not, we're zooming on a fixed point
-        doX && gx.call(zoomX.scaleBy, shift ? 1 / k : k, point)
-        doY && gy.call(zoomY.scaleBy, k, point)
-      }
-
-      z = t
-
-      const xr = tx().rescaleX(x)
-      const yr = ty().rescaleY(y)
-
-      const radius1 = myCircleAvg1.attr('r')
-      const radius = myCircleAvg.attr('r')
-
-      gx.call(xAxis, xr)
-      gy.call(yAxis, yr)
-
-      myWhiteRect
-        .transition(trans)
-        .attr('x', d => xr(d.x))
-        .attr('y', d => yr(d.y))
-        .attr('width', d => d.width * t.k)
-        .attr('height', d => d.height * t.k)
-
-      innerText
-        .transition(trans)
-        .attr('x', d => xr(d.x) - getTextWidth(d.title))
-        .attr('y', d => yr(d.y))
-
-      innerLine
-        .transition(trans)
-        .attr("x1", d => xr(d.x1))
-        .attr("y1", d => yr(d.y1))
-        .attr("x2", d => xr(d.x2))
-        .attr("y2", d => yr(d.y2))
-
-      myTextsMedian
-        .transition(trans)
-        .on('end', () => {
-          try {
-            const scale = Math.min(t.k, 9)
-            const minScale = Math.max(scale, 1)
-            const fonts = Math.max(12, Math.floor(11 + minScale))
-            const tran2 = d3.transition().duration(200).ease(d3.easeLinear)
-            myTextsMedian.transition(tran2)
-              .attr('font-size', fonts)
-              .attr('x', d => xr(d.x) - getTextWidth(d.title, fonts) / 2)
-              .attr('y', d => yr(d.y) + 10 * 3)
-          } catch (error) {
-            console.error(error)
-          }
-        })
-        .attr('x', d => {
-          const fontS = myTextsMedian.attr('font-size')
-          return xr(d.x) - getTextWidth(d.title, fontS) / 2
-        })
-        .attr('y', d => yr(d.y) + 10 * 3)
-
-      myTextsAvg
-        .transition(trans)
-        .on('end', () => {
-          try {
-            const scale = Math.min(t.k, 9)
-            const minScale = Math.max(scale, 1)
-            const fonts = Math.max(12, Math.floor(11 + minScale))
-            const tran2 = d3.transition().duration(200).ease(d3.easeLinear)
-            myTextsAvg.transition(tran2)
-              .attr('font-size', fonts)
-              .attr('x', d => xr(d.x) - getTextWidth(d.title, fonts) / 2)
-              .attr('y', d => yr(d.y) + 10 * 3)
-          } catch (error) {
-            console.error(error)
-          }
-        })
-        .attr('x', d => {
-          const fontS = myTextsAvg.attr('font-size')
-          return xr(d.x) - getTextWidth(d.title, fontS) / 2
-        })
-        .attr('y', d => yr(d.y) + 10 * 3)
-
-      myCircleAvg1
-        .transition(trans)
-        .on('end', () => {
-          try {
-            const scale = Math.min(t.k, 8)
-            const minScale = Math.max(scale, 1)
-            const r = Math.max(10, Math.floor(10 + minScale))
-            const tran2 = d3.transition().duration(200).ease(d3.easeLinear)
-            myCircleAvg1.transition(tran2)
-              .attr('cx', d => xr(d.x))
-              .attr('cy', d => yr(d.y))
-              .attr('r', r)
-          } catch (error) {
-            console.error(error)
-          }
-        })
-        .attr('cx', d => xr(d.x))
-        .attr('cy', d => yr(d.y))
-        .attr('r', radius1)
-
-      myCircleAvg
-        .transition(trans)
-        .on('end', () => {
-          try {
-            const scale = Math.min(t.k, 8)
-            const minScale = Math.max(scale, 1)
-            const r = Math.max(7, Math.floor(7 + minScale))
-            const tran2 = d3.transition().duration(200).ease(d3.easeLinear)
-            myCircleAvg.transition(tran2)
-              .attr('cx', d => xr(d.x))
-              .attr('cy', d => yr(d.y))
-              .attr('r', r)
-          } catch (error) {
-            console.error(error)
-          }
-        })
-        .attr('cx', d => xr(d.x))
-        .attr('cy', d => yr(d.y))
-        .attr('r', radius)
-
-      myCircleMedian1
-        .transition(trans)
-        .on('end', () => {
-          try {
-            const scale = Math.min(t.k, 8)
-            const minScale = Math.max(scale, 1)
-            const r = Math.max(10, Math.floor(10 + minScale))
-            const tran2 = d3.transition().duration(200).ease(d3.easeLinear)
-            myCircleMedian1.transition(tran2)
-              .attr('cx', d => xr(d.x))
-              .attr('cy', d => yr(d.y))
-              .attr('r', r)
-          } catch (error) {
-            console.error(error)
-          }
-        })
-        .attr('cx', d => xr(d.x))
-        .attr('cy', d => yr(d.y))
-        .attr('r', radius1)
-
-      myCircleMedian
-        .transition(trans)
-        .on('end', () => {
-          try {
-            const scale = Math.min(t.k, 8)
-            const minScale = Math.max(scale, 1)
-            const r = Math.max(7, Math.floor(7 + minScale))
-            const tran2 = d3.transition().duration(200).ease(d3.easeLinear)
-            myCircleMedian.transition(tran2)
-              .attr('cx', d => xr(d.x))
-              .attr('cy', d => yr(d.y))
-              .attr('r', r)
-          } catch (error) {
-            console.error(error)
-          }
-        })
-        .attr('cx', d => xr(d.x))
-        .attr('cy', d => yr(d.y))
-        .attr('r', radius)
     })
     d3.selectAll('circle').on('click', d => onClickNode(d.id))
     scatterSvg.call(zoom)
