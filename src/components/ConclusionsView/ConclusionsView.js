@@ -23,17 +23,18 @@ const VotingResultsView = () => {
     setHeight(
       getTabContentElement? 
       (+(innerDimensions(getTabContentElement).width -60) * 0.56)
-      : 1536 * 0.56
+      : 400 * 0.56
       )
 
     setWidth(
       getTabContentElement?
       (innerDimensions(getTabContentElement).width -60)
-      : 1536
+      : 400
       )
   }
 
   React.useEffect(() => {
+    calcSizeRateTabWrapper()
     return () => {
       window.removeEventListener('resize', calcSizeRateTabWrapper)
     }
