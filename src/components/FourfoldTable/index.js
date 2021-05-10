@@ -554,7 +554,7 @@ const App = ({
     return () => {
       scatterSvg.selectAll("*").remove()
     }
-  }, [phenomena, scatterSvg])
+  }, [phenomena, scatterSvg, containerWidth, containerHeight])
 
   const onClickNode = (id) => {
     setVisibleDialog(true)
