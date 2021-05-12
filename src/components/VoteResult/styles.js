@@ -5,6 +5,8 @@ export const Container = styled.div`
   width: 100%;
   justify-content: space-between;
   position: relative;
+  align-items: center;
+  padding-bottom: 4px;
 `
 export const WildCardWrapper = styled.div`
 
@@ -40,9 +42,6 @@ export const VoteWrapper = styled.div`
   width: 86px;
   display: flex;
   justify-content: space-between;
-  position: absolute;
-  top: 21px;
-  right: 60px;
 `
 
 export const ButtonGroup = styled.div`

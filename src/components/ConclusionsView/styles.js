@@ -17,7 +17,7 @@ export const HorizontalLine = styled.hr`
 
 export const ConclusionsHeader = styled.h3`
     width: 100%;
-    margin-bottom: 0;
+    margin-bottom: 16px;
 `
 
 export const ConclusionsTabFooter = styled.div`
