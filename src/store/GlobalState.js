@@ -41,7 +41,7 @@ export const DataProvider = ({children, node}) => {
             const size = phenomenaIds?.length || 10
             const phenonmena = []
            
-            await getPhenomena({ phenomenaIds, undefined, groups, page, size }).then(
+            await getPhenomena({ phenomena:phenomenaIds, undefined, groups, page, size }).then(
                 async (data) => {
                     const types = await getPhenomenaTypes(groups[1]);
                     data?.result.map((phenonmenon) => {
