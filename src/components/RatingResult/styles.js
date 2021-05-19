@@ -7,6 +7,9 @@ export const RatingWidget = styled.div`
 export const RatingHeader = styled.div`
   display: flex;
   justify-content: space-between;
+  :hover {
+    cursor:pointer;
+  }
 `
 
 export const RatingSliderScale = styled.div`

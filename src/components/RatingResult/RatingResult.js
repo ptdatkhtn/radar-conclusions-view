@@ -10,7 +10,7 @@ import {
   SliderScaleMin,
   SliderScaleMax
 } from "./styles";
-
+import {getPhenomenonUrl} from '../../helpers/contentCard'
 import {SingleRating} from './styles'
 
 const Rating = ({ phenomenon, radar, isRatingX }) => { 
@@ -58,9 +58,8 @@ const Rating = ({ phenomenon, radar, isRatingX }) => {
   }
 
   return (
-    !error && (
-      <RatingWidget>
-        <RatingHeader>
+    <RatingWidget>
+        <RatingHeader className='left' data-href={getPhenomenonUrl(radar?.id, phenomenon)}>
           <RatingItemHeader symbol={symbolPhenomenon} symbolBorder={symbolBorderPhenomenon} symbolBoxShadow={symbolBoxShadowPhenomenon}>{phenomenon?.content?.title}</RatingItemHeader>
         </RatingHeader>
         <RatingItem>
@@ -91,7 +90,6 @@ const Rating = ({ phenomenon, radar, isRatingX }) => {
           </div>     
         </RatingItem>
       </RatingWidget>
-    )
   );
 };
 
