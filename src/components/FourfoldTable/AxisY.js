@@ -16,10 +16,10 @@ const AxisY = ({
   return (
     <>
       <table cellPadding='0' cellSpacing='0' style={{ 
-        height: +axisHeight + 120, 
+        height: +axisHeight, 
         margin: 0, 
         // background: 'rgb(224 222 222)', 
-        padding: '77px 0px 93px 0' }}>
+        padding: '0px 0px 93px 0' }}>
         <tbody style={{borderTop: 'none'}}>
           <tr style={{ ...cellStyle }}>
             <td>
@@ -31,10 +31,10 @@ const AxisY = ({
       </table>
 
       <table cellPadding='0' cellSpacing='0' style={{ 
-        height: +axisHeight + 120, 
+        height: +axisHeight, 
         margin: 0, 
         // background: 'rgb(224 222 222)', 
-        padding: '77px 0px 93px 0' }}>
+        padding: '0px 0px 93px 0' }}>
         <tbody style={{borderTop: 'none'}}>
           <tr style={{ ...cellStyle }}>
             <td>

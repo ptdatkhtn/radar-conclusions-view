@@ -5,12 +5,14 @@ import AxisY from './AxisY'
 import Checkbox from '@material-ui/core/Checkbox'
 import Radio from '@material-ui/core/Radio'
 import {makeStyles} from '@material-ui/core'
+import {getPhenomenonUrl} from '../../helpers/contentCard'
 
 const useStyles = makeStyles({
   root: {
     border: 'none',
     padding: 0,
     margin: 0,
+    // color: 'black',
     '&$checked': {
       color: '#00C3FF'
     }
@@ -38,8 +40,10 @@ const App = ({
   axisLabel2 = 'Vertical Axis Default',
   axisLabel2a = 'Low End Default',
   axisLabel2b = 'High End Default',
-  phenomena = []
+  phenomena = [],
+  radar
 }) => {
+
   const [visibleDialog, setVisibleDialog] = useState(false)
   const [visibleText, setVisibleText] = useState(true)
   const [appContext, setAppContext] = useState({})
@@ -106,10 +110,10 @@ const App = ({
 
   const setNodeColor = (phenomenon) => {
     let innerStroke = 'transparent'
-    let outerStroke ='rgb(0, 202, 141)'
+    let outerStroke = 'rgb(0, 202, 141)'
     let fillSymbol = '#fff'
 
-    if(phenomenon['content-type-alias'] === 'summary') {
+    if (phenomenon['content-type-alias'] === 'summary') {
       innerStroke = '#fff'
       fillSymbol = 'rgb(0, 202, 141)'
     }
@@ -143,7 +147,7 @@ const App = ({
   const nodeListAsMedian = React.useMemo(() => {
     let nodes = []
     !!phenomena?.length && phenomena.map((phen) => {
-      if (phen && phen['rating_x'] && phen['rating_x']['median'] !== null && phen['rating_y'] && phen['rating_y']['median'] !== null) {
+      if (phen['rating_x'] && phen['rating_y'] && phen['rating_x']['median'] !== null && phen['rating_y']['median'] !== null) {
         const { innerStroke, outerStroke, fillSymbol } = setNodeColor(phen)
         let node = {}
         node['id'] = phen['id']
@@ -152,6 +156,7 @@ const App = ({
         node['x'] = phen['rating_x']['median']
         node['y'] = phen['rating_y']['median']
         node['avg'] = false
+        console.log('node', node)
         nodes.push(node)
       }
     })
@@ -160,9 +165,9 @@ const App = ({
 
   const nodeListAsAverage = React.useMemo(() => {
     let nodes = []
+    
     !!phenomena?.length && phenomena.map((phen) => {
-      if (phen && phen['rating_x'] && phen['rating_x']['avg'] && phen['rating_y'] &&
-       phen['rating_y']['avg']) {
+      if (phen['rating_x'] && phen['rating_y'] && phen['rating_x']['avg'] && phen['rating_y']['avg']) {
         const { innerStroke, outerStroke, fillSymbol } = setNodeColor(phen)
         let node = {}
         node['id'] = phen['id']
@@ -212,16 +217,22 @@ const App = ({
     d3.selectAll('#circleAvg_Conclusion').style('opacity', 0)
     d3.selectAll('#circleMedian_Conclusion').style('opacity', 0)
     if (isAverage) {
+      d3.selectAll('#myTextsAvg_Conclusion').style('opacity', visibleText ? 1 : 0)
+      d3.selectAll('#myTextsMedian_Conclusion').style('opacity', 0)
       d3.selectAll('#circleAvg_Conclusion').style('opacity', 1)
+      d3.selectAll('#circleMedian_Conclusion').style('opacity', 0)
     }
-    if (!isAverage) {
+    else if (!isAverage) {
+      d3.selectAll('#myTextsMedian_Conclusion').style('opacity', visibleText ? 1 : 0)
+      d3.selectAll('#myTextsAvg_Conclusion').style('opacity', 0)
       d3.selectAll('#circleMedian_Conclusion').style('opacity', 1)
+      d3.selectAll('#circleAvg_Conclusion').style('opacity', 0)
     }
 
   }, [scatterSvg, isAverage])
 
   // useEffect(() => {
-  //   d3.select('#svg-app_Conclusion').attr("viewBox", [0, 0, containerWidth, containerHeight])
+  //   d3.select('#svg-app').attr("viewBox", [0, 0, containerWidth, containerHeight])
   // }, [containerWidth, containerHeight])
 
   useEffect(() => {
@@ -353,8 +364,8 @@ const App = ({
     let z = d3.zoomIdentity
 
     // set up the ancillary zooms and an accessor for their transforms
-    const zoomX = d3.zoom().scaleExtent([1, 8])
-    const zoomY = d3.zoom().scaleExtent([1, 8])
+    const zoomX = d3.zoom().scaleExtent([1, 8]).translateExtent([[0, 0], [containerWidth, containerHeight]])
+    const zoomY = d3.zoom().scaleExtent([1, 8]).translateExtent([[0, 0], [containerWidth, containerHeight]])
     const tx = () => d3.zoomTransform(gx.node())
     const ty = () => d3.zoomTransform(gy.node())
     gx.call(zoomX).attr("pointer-events", "none")
@@ -487,6 +498,8 @@ const App = ({
           .attr('cx', d => xr(d.x))
           .attr('cy', d => yr(d.y))
           .attr('r', radius1)
+          .attr('class', 'left')
+          .attr('data-href', d => getPhenomenonUrl(radar?.id, d))
   
         myCircleAvg
           .transition(trans)
@@ -507,6 +520,11 @@ const App = ({
           .attr('cx', d => xr(d.x))
           .attr('cy', d => yr(d.y))
           .attr('r', radius)
+          .attr('class', 'left')
+          .attr('data-href', d => {
+            // console.log('ddd', d)
+            return getPhenomenonUrl(radar?.id, d)
+          })
   
         myCircleMedian1
           .transition(trans)
@@ -527,6 +545,8 @@ const App = ({
           .attr('cx', d => xr(d.x))
           .attr('cy', d => yr(d.y))
           .attr('r', radius1)
+          .attr('class', 'left')
+          .attr('data-href', d => getPhenomenonUrl(radar?.id, d))
   
         myCircleMedian
           .transition(trans)
@@ -547,6 +567,21 @@ const App = ({
           .attr('cx', d => xr(d.x))
           .attr('cy', d => yr(d.y))
           .attr('r', radius)
+          .attr('class', 'left')
+          .attr('data-href', d => getPhenomenonUrl(radar?.id, d))
+
+          if (isAverage) {
+            d3.selectAll('#myTextsAvg_Conclusion').style('opacity', visibleText ? 1 : 0)
+            d3.selectAll('#myTextsMedian_Conclusion').style('opacity', 0)
+            d3.selectAll('#circleAvg_Conclusion').style('opacity', 1)
+            d3.selectAll('#circleMedian_Conclusion').style('opacity', 0)
+          }
+          else if (!isAverage) {
+            d3.selectAll('#myTextsMedian_Conclusion').style('opacity', visibleText ? 1 : 0)
+            d3.selectAll('#myTextsAvg_Conclusion').style('opacity', 0)
+            d3.selectAll('#circleMedian_Conclusion').style('opacity', 1)
+            d3.selectAll('#circleAvg_Conclusion').style('opacity', 0)
+          }
       } catch (error) {
         console.error(error)
       }
@@ -558,7 +593,7 @@ const App = ({
     return () => {
       scatterSvg.selectAll("*").remove()
     }
-  }, [phenomena, scatterSvg, containerWidth, containerHeight])
+  }, [phenomena, scatterSvg, containerHeight, containerWidth])
 
   const onClickNode = (id) => {
     setVisibleDialog(true)
@@ -583,56 +618,61 @@ const App = ({
   const classes = useStyles();
 
   return (
-    <div style={{ display: 'flex', paddingTop: '54px', paddingBottom: '54px' }}>
+    <div style={{width: '100%'}}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '56px' }}>
+        <div style={{display: 'flex', alignItems: 'center'}}>
+          <Checkbox
+            color='primary'
+            className={classes.checkBoxSize}
+            classes={{
+              root: classes.root,
+              checked: classes.checked 
+            }}
+            checked={!visibleText} 
+            onChange={onToggleTitle}
+            id="rating-view-tab-cb-id"
+          />
+          <label style={{ fontSize: "13px", fontWeight: 'unset', paddingLeft: '8px', marginBottom: 0 }} for="rating-view-tab-cb-name"> Hide titles</label><br></br>
+        </div>
+        <div style={{display: 'flex', alignItems: 'center' }}>
+          <p style={{ fontSize: "13px", margin: 0}}>Show results as: </p>
+          <Radio
+            color='primary'
+            className={classes.radioSize}
+            classes={{
+              root: classes.root,
+              checked: classes.checked 
+            }}
+            checked={isAverage} 
+            onChange={onToggleIsAverage}
+            id="rating-view-tab-cb-id"
+          />
+          {/* <input style={{ width: "20px", height: "20px", cursor: 'pointer', margin: 0, marginLeft: '16px' }} type="radio" label='Show as average' id="rating-view-tab-cb-id" name="rating-view-tab-cb-name" checked={isAverage} onChange={onToggleIsAverage}></input> */}
+          <label style={{ fontSize: "13px", fontWeight: 'unset', paddingLeft: '8px', marginBottom: 0 }} for="rating-view-tab-cb-name"> Average </label><br></br>
+          <Radio
+            color='primary'
+            className={classes.radioSize}
+            classes={{
+              root: classes.root,
+              checked: classes.checked 
+            }}
+            checked={!isAverage} 
+            onChange={onToggleIsMedian}
+            id="rating-view-tab-cb-id"
+          />
+          {/* <input style={{ width: "20px", height: "20px", cursor: 'pointer', margin: 0, marginLeft: '16px' }} type="radio" label='Show as median' id="rating-view-tab-cb-id" name="rating-view-tab-cb-name" checked={!isAverage} onChange={onToggleIsMedian}></input> */}
+          <label style={{ fontSize: "13px", fontWeight: 'unset', paddingLeft: '8px', marginBottom: 0 }} for="rating-view-tab-cb-name"> Median </label><br></br>
+        </div>   
+    </div>
+    <div className='rating-results-diagram' style={{ display: 'flex', paddingTop: '32px', paddingBottom: '54px' }}>
       <AxisY originalHeight={containerHeight} axisHeight={containerHeight} axisLabel2={axisLabel2} axisLabel2a={axisLabel2a} axisLabel2b={axisLabel2b} />
       <div style={{
         width: containerWidth,
         height: containerHeight + 70,
         padding: '0px 0px 60px 0',
         boxSizing: 'content-box',
+        // background: '#e0dede' 
       }}>
-        <div style={{ paddingBottom: "32px", display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{display: 'flex', alignItems: 'center'}}>
-            <Checkbox
-              color='primary'
-              className={classes.checkBoxSize}
-              classes={{
-                root: classes.root,
-                checked: classes.checked 
-              }}
-              checked={!visibleText} 
-              onChange={onToggleTitle}
-              id="rating-view-tab-cb-id"
-            />
-            <label style={{ fontSize: "13px", fontWeight: 'unset', paddingLeft: '8px', marginBottom: 0 }} for="rating-view-tab-cb-name"> Hide titles</label><br></br>
-          </div>
-          <div style={{display: 'flex', alignItems: 'center' }}>
-            <p style={{ fontSize: "13px", margin: 0}}>Show results as: </p>
-            <Radio
-              color='primary'
-              className={classes.radioSize}
-              classes={{
-                root: classes.root,
-                checked: classes.checked 
-              }}
-              checked={isAverage} 
-              onChange={onToggleIsAverage}
-            />
-            <label style={{ fontSize: "13px", fontWeight: 'unset', paddingLeft: '8px', marginBottom: 0 }} for="rating-view-tab-cb-name"> Average </label><br></br>
-            <Radio
-              color='primary'
-              className={classes.radioSize}
-              classes={{
-                root: classes.root,
-                checked: classes.checked 
-              }}
-              checked={!isAverage} 
-              onChange={onToggleIsMedian}
-            />
-            <label style={{ fontSize: "13px", fontWeight: 'unset', paddingLeft: '8px', marginBottom: 0 }} for="rating-view-tab-cb-name"> Median </label><br></br>
-          </div>
-          
-        </div>
         <div style={{ position: 'relative', width: containerWidth, height: containerHeight, background: 'grey' }}>
           <svg id='svg-app_Conclusion' style={{ position: 'absolute' }} />
           <canvas id='axis_Conclusion' />
@@ -652,6 +692,7 @@ const App = ({
       </div>
       {visibleDialog && <button style={buttonStyles} onClick={onCloseDialog}>X</button>}
     </div>
+  </div>
   )
 }
 
