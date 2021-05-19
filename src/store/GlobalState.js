@@ -61,7 +61,7 @@ export const DataProvider = ({children, node}) => {
                                 const pheURL = String(Object.keys(data[phe]));
                                 const pheId = pheURL.split('/');
                                 phenonmena && !!phenonmena.length && phenonmena.forEach(phenomenon => {
-                                    if (phenomenon.id === pheId[5]) {
+                                    if (data[phe][`/${groups[1]}/radar/${node}/phenomenon/${pheId[5]}`] && phenomenon.id === pheId[5]) {
                                         phenomenon['vote_result'] = data[phe][`/${groups[1]}/radar/${node}/phenomenon/${pheId[5]}`];
                                     }
                                 });
