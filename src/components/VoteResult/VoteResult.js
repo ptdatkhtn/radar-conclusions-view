@@ -18,6 +18,7 @@ import {
 } from "./styles";
 import { votingApi } from "../../helpers/fetcher";
 import { ACTIONS } from "../../store/Actions";
+import {getPhenomenonUrl} from '../../helpers/contentCard'
 
 const VoteResult = ({ phenomenon, radar }) => {
   const {
@@ -141,7 +142,7 @@ const VoteResult = ({ phenomenon, radar }) => {
   return (
     !error && (
     <Container>
-      <WildCardWrapper>
+      <WildCardWrapper className='left' data-href={getPhenomenonUrl(radar?.id, phenomenon)}>
         <WildCard
           symbol={symbolPhenomenon}
           symbolBorder={symbolBorderPhenomenon}

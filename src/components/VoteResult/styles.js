@@ -9,7 +9,9 @@ export const Container = styled.div`
   padding-bottom: 4px;
 `
 export const WildCardWrapper = styled.div`
-
+:hover {
+  cursor:pointer;
+}
 `
 
 export const WildCard = styled.h4`
