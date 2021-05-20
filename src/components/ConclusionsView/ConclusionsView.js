@@ -16,6 +16,19 @@ const VotingResultsView = () => {
   visiblePhenonmena = phenonmenaData?.filter(phenomenon => !hiddenPhenomena?.includes(phenomenon?.id))
   const getTabContentElement = document.getElementsByClassName('tab-content')[0]
  
+  let sortedPhenomenaX = [];
+  let sortedPhenomenaY = [];
+  let sortedPhenomenaForChart = [];
+  sortedPhenomenaX = visiblePhenonmena.filter((p) => p.hasOwnProperty("rating_x"))
+    .sort((a, b) => Number(b["rating_x"].avg) - Number(a["rating_x"].avg))
+    .slice(0, 5)
+  sortedPhenomenaY = visiblePhenonmena.filter((p) => p.hasOwnProperty("rating_y"))
+  .sort((a, b) => Number(b["rating_y"].avg) - Number(a["rating_y"].avg))
+  .slice(0, 5)
+  
+  sortedPhenomenaForChart = sortedPhenomenaX.concat(sortedPhenomenaY)
+
+
   const eventTimeoutRef = React.useRef(null)
   const [height, setHeight] = useState(0)
   const [width, setWidth] = useState(0)
@@ -62,7 +75,7 @@ const VotingResultsView = () => {
       {
         width > 0 && 
         <FourfoldTable 
-          phenomena={visiblePhenonmena || []} 
+          phenomena={sortedPhenomenaForChart || []} 
           containerWidth={width} 
           containerHeight={height + 60}
           axisLabel3={radar?.fourFieldsBottomLeft} 
