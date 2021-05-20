@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   },
   radioSize: {
     transform: 'scale(1.111111)',
-    paddingLeft: '16px'
+    marginLeft: '16px'
   }
 });
 
@@ -632,7 +632,7 @@ const App = ({
             onChange={onToggleTitle}
             id="rating-view-tab-cb-id"
           />
-          <label style={{ fontSize: "13px", fontWeight: 'unset', paddingLeft: '8px', marginBottom: 0 }} for="rating-view-tab-cb-name"> Hide titles</label><br></br>
+          <label style={{ fontSize: "13px", fontWeight: 'unset', paddingLeft: '5px', marginBottom: 0 }} for="rating-view-tab-cb-name"> Hide titles</label><br></br>
         </div>
         <div style={{display: 'flex', alignItems: 'center' }}>
           <p style={{ fontSize: "13px", margin: 0}}>Show results as: </p>
@@ -648,7 +648,7 @@ const App = ({
             id="rating-view-tab-cb-id"
           />
           {/* <input style={{ width: "20px", height: "20px", cursor: 'pointer', margin: 0, marginLeft: '16px' }} type="radio" label='Show as average' id="rating-view-tab-cb-id" name="rating-view-tab-cb-name" checked={isAverage} onChange={onToggleIsAverage}></input> */}
-          <label style={{ fontSize: "13px", fontWeight: 'unset', paddingLeft: '8px', marginBottom: 0 }} for="rating-view-tab-cb-name"> Average </label><br></br>
+          <label style={{ fontSize: "13px", fontWeight: 'unset', paddingLeft: '5px', marginBottom: 0 }} for="rating-view-tab-cb-name"> Average </label><br></br>
           <Radio
             color='primary'
             className={classes.radioSize}
@@ -661,7 +661,7 @@ const App = ({
             id="rating-view-tab-cb-id"
           />
           {/* <input style={{ width: "20px", height: "20px", cursor: 'pointer', margin: 0, marginLeft: '16px' }} type="radio" label='Show as median' id="rating-view-tab-cb-id" name="rating-view-tab-cb-name" checked={!isAverage} onChange={onToggleIsMedian}></input> */}
-          <label style={{ fontSize: "13px", fontWeight: 'unset', paddingLeft: '8px', marginBottom: 0 }} for="rating-view-tab-cb-name"> Median </label><br></br>
+          <label style={{ fontSize: "13px", fontWeight: 'unset', paddingLeft: '5px', marginBottom: 0 }} for="rating-view-tab-cb-name"> Median </label><br></br>
         </div>   
     </div>
     <div className='rating-results-diagram' style={{ display: 'flex', paddingTop: '32px', paddingBottom: '54px' }}>
