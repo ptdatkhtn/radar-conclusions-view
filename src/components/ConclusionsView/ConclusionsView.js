@@ -11,8 +11,9 @@ import {
   ConclusionsTabFooter
 } from "./styles";
 const VotingResultsView = () => {
-  const { state: {phenonmenaData, radar }} = useContext(DataContext)
-
+  const { state: {phenonmenaData, radar, hiddenPhenomena }} = useContext(DataContext)
+  let visiblePhenonmena = []
+  visiblePhenonmena = phenonmenaData?.filter(phenomenon => !hiddenPhenomena?.includes(phenomenon?.id))
   const getTabContentElement = document.getElementsByClassName('tab-content')[0]
  
   const eventTimeoutRef = React.useRef(null)
@@ -61,7 +62,7 @@ const VotingResultsView = () => {
       {
         width > 0 && 
         <FourfoldTable 
-          phenomena={phenonmenaData || []} 
+          phenomena={visiblePhenonmena || []} 
           containerWidth={width} 
           containerHeight={height + 60}
           axisLabel3={radar?.fourFieldsBottomLeft} 
@@ -76,7 +77,7 @@ const VotingResultsView = () => {
           axisLabel2b={radar?.axisYMax}
         />
       }
-        <RatingResults phenomena={phenonmenaData || []} radar={radar}/>
+        <RatingResults phenomena={visiblePhenonmena || []} radar={radar}/>
         <ConclusionsTabFooter></ConclusionsTabFooter>
     </VoteTabWrapper>
   );

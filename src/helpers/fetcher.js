@@ -62,4 +62,9 @@ export const ratingApi = {
   deleteAllRatings: async (gid, radarId) => {
       return await httpRequest(baseUrl, 'DELETE', `rating/${gid}/radar/${radarId}/phenomenon`)
   },
+
+  //get all hidden ratings
+  getAllHiddenRatings : async (gid, radarId) => {
+    return await httpRequest(baseUrl, 'GET', `meta/rating/${gid}/radar/${radarId}/phenomenon/`)
+},
 }

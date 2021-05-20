@@ -15,6 +15,7 @@ const initialState = {
     phenonmenaData: [],
     error: {},
     radar: {},
+    hiddenPhenomena: []
 }
 
 export const DataContext = createContext(initialState)
@@ -91,6 +92,15 @@ export const DataProvider = ({children, node}) => {
                             })  
                         }
                     )
+
+                    await ratingApi.getAllHiddenRatings(groups[1], node)
+                        .then(async (hiddenPhenomena) => {
+                            dispatch({
+                                type: ACTIONS.HIDDENPHENOMENA,
+                                payload:  hiddenPhenomena?.data[`rating/${groups[1]}/radar/${node}`]?.hidden || []
+                            })
+                        })
+
                     dispatch({
                         type: ACTIONS.PHENOMENONDATA,
                         payload: phenonmena.filter((p) => p.hasOwnProperty('vote_result') || (p.hasOwnProperty('rating_x') && p.hasOwnProperty('rating_y'))) 
