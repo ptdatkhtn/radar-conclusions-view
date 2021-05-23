@@ -654,7 +654,7 @@ const App = ({
 
   return (
     <div style={{width: '100%'}}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '56px', paddingRight: '60px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '56px' }}>
         <div style={{display: 'flex', alignItems: 'center'}}>
           <div className="custom-control custom-checkbox">
             <input type="checkbox" className="custom-control-input" id="customCheckbox_hideTitles_Conclusion" checked={!visibleText} onChange={onToggleTitle} />
