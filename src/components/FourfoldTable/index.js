@@ -2,30 +2,6 @@ import React, { useEffect, useState } from 'react'
 import * as d3 from 'd3'
 import AxisX from './AxisX'
 import AxisY from './AxisY'
-import Checkbox from '@material-ui/core/Checkbox'
-import Radio from '@material-ui/core/Radio'
-import {makeStyles} from '@material-ui/core'
-import {getPhenomenonUrl} from '../../helpers/contentCard'
-
-const useStyles = makeStyles({
-  root: {
-    border: 'none',
-    padding: 0,
-    margin: 0,
-    // color: 'black',
-    '&$checked': {
-      color: '#00C3FF'
-    }
-  },
-  checked: {},
-  checkBoxSize: {
-    transform: 'scale(1.111111)',
-  },
-  radioSize: {
-    transform: 'scale(1.111111)',
-    marginLeft: '16px'
-  }
-});
 
 const App = ({
   containerWidth = 500,
@@ -40,8 +16,7 @@ const App = ({
   axisLabel2 = 'Vertical Axis Default',
   axisLabel2a = 'Low End Default',
   axisLabel2b = 'High End Default',
-  phenomena = [],
-  radar
+  phenomena = []
 }) => {
 
   const [visibleDialog, setVisibleDialog] = useState(false)
@@ -50,17 +25,6 @@ const App = ({
   const { axis, scatterSvg } = appContext
   const [isAverage, setIsAverage] = useState(true)
 
-  const customStyles = {
-    content: {
-      width: '30%',
-      height: '100%',
-      top: 0,
-      left: 0
-    },
-    overlay: {
-      background: 'transparent'
-    }
-  }
   const buttonStyles = {
     position: 'fixed',
     top: '50%',
@@ -96,6 +60,15 @@ const App = ({
       y2: 1500
     }
   ]
+
+  const margin = {
+    top: 50,
+    right: 50,
+    bottom: 50,
+    left: 50
+  }
+
+  const maxTextWidth = 120
 
   const rectNodes = React.useMemo(() => {
     return [
@@ -147,7 +120,7 @@ const App = ({
   const nodeListAsMedian = React.useMemo(() => {
     let nodes = []
     !!phenomena?.length && phenomena.map((phen) => {
-      if (phen['rating_x'] && phen['rating_y'] && phen['rating_x']['median'] !== null && phen['rating_y']['median'] !== null) {
+      if (phen['rating_x']['median'] !== null && phen['rating_y']['median'] !== null) {
         const { innerStroke, outerStroke, fillSymbol } = setNodeColor(phen)
         let node = {}
         node['id'] = phen['id']
@@ -156,7 +129,7 @@ const App = ({
         node['x'] = phen['rating_x']['median']
         node['y'] = phen['rating_y']['median']
         node['avg'] = false
-        console.log('node', node)
+
         nodes.push(node)
       }
     })
@@ -165,9 +138,9 @@ const App = ({
 
   const nodeListAsAverage = React.useMemo(() => {
     let nodes = []
-    
+
     !!phenomena?.length && phenomena.map((phen) => {
-      if (phen['rating_x'] && phen['rating_y'] && phen['rating_x']['avg'] && phen['rating_y']['avg']) {
+      if (phen['rating_x']['avg'] && phen['rating_y']['avg']) {
         const { innerStroke, outerStroke, fillSymbol } = setNodeColor(phen)
         let node = {}
         node['id'] = phen['id']
@@ -191,7 +164,7 @@ const App = ({
     return [containerWidth / 2, containerHeight / 2]
   }
 
-  const getTextWidth = (text, fontSize = 12, fontFace = 'Roboto') => {
+  const getTextWidth = (text, fontSize = 10, fontFace = 'Roboto') => {
     const canvasAxis = document.getElementById('axis_Conclusion')
     const context = canvasAxis.getContext('2d')
     context.font = fontSize + 'px ' + fontFace
@@ -207,8 +180,20 @@ const App = ({
 
   useEffect(() => {
     if (!scatterSvg) return
-    d3.selectAll('#myTextsAvg_Conclusion').style('opacity', visibleText ? 1 : 0)
-    d3.selectAll('#myTextsMedian_Conclusion').style('opacity', visibleText ? 1 : 0)
+    d3.selectAll('#myNewTextsAvg_Conclusion').style('opacity', visibleText ? 1 : 0)
+    d3.selectAll('#myNewTextsMedian_Conclusion').style('opacity', visibleText ? 1 : 0)
+    if (isAverage) {
+      d3.selectAll('#myNewTextsAvg_Conclusion').style('opacity', visibleText ? 1 : 0)
+      d3.selectAll('#myNewTextsMedian_Conclusion').style('opacity', 0)
+      d3.selectAll('#circleAvg_Conclusion').style('opacity', 1)
+      d3.selectAll('#circleMedian_Conclusion').style('opacity', 0)
+    }
+    else if (!isAverage) {
+      d3.selectAll('#myNewTextsMedian_Conclusion').style('opacity', visibleText ? 1 : 0)
+      d3.selectAll('#myNewTextsAvg_Conclusion').style('opacity', 0)
+      d3.selectAll('#circleMedian_Conclusion').style('opacity', 1)
+      d3.selectAll('#circleAvg_Conclusion').style('opacity', 0)
+    }
   }, [scatterSvg, visibleText])
 
   useEffect(() => {
@@ -217,14 +202,14 @@ const App = ({
     d3.selectAll('#circleAvg_Conclusion').style('opacity', 0)
     d3.selectAll('#circleMedian_Conclusion').style('opacity', 0)
     if (isAverage) {
-      d3.selectAll('#myTextsAvg_Conclusion').style('opacity', visibleText ? 1 : 0)
-      d3.selectAll('#myTextsMedian_Conclusion').style('opacity', 0)
+      d3.selectAll('#myNewTextsAvg_Conclusion').style('opacity', visibleText ? 1 : 0)
+      d3.selectAll('#myNewTextsMedian_Conclusion').style('opacity', 0)
       d3.selectAll('#circleAvg_Conclusion').style('opacity', 1)
       d3.selectAll('#circleMedian_Conclusion').style('opacity', 0)
     }
     else if (!isAverage) {
-      d3.selectAll('#myTextsMedian_Conclusion').style('opacity', visibleText ? 1 : 0)
-      d3.selectAll('#myTextsAvg_Conclusion').style('opacity', 0)
+      d3.selectAll('#myNewTextsMedian_Conclusion').style('opacity', visibleText ? 1 : 0)
+      d3.selectAll('#myNewTextsAvg_Conclusion').style('opacity', 0)
       d3.selectAll('#circleMedian_Conclusion').style('opacity', 1)
       d3.selectAll('#circleAvg_Conclusion').style('opacity', 0)
     }
@@ -247,6 +232,7 @@ const App = ({
   }, [containerWidth])
 
   useEffect(() => {
+    
     if (phenomena.length < 1 || !scatterSvg) return
     let nodes = [...nodeListAsAverage, ...nodeListAsMedian]
 
@@ -255,21 +241,21 @@ const App = ({
 
     const x = d3.scaleLinear()
       .domain(d3.extent(data, d => d[0]))
-      .range([0, containerWidth - 10])
+      .rangeRound([margin.left, containerWidth - margin.right])
       .nice()
     const y = d3.scaleLinear()
       .domain(d3.extent(data, d => d[0]))
-      .range([containerHeight, 0])
+      .rangeRound([containerHeight - margin.bottom, margin.top])
       .nice()
 
     const xAxis = (g, scale) => g
-      .attr("transform", `translate(0,${y(0) - 20})`)
+      .attr("transform", `translate(0,${y(0) + 10})`)
       .call(d3.axisBottom(scale).ticks(8))
       .call(g2 => g2.select(".domain").attr("display", "none"))
       .call(g2 => g2.selectAll(".tick line").attr("display", "none"))
 
     const yAxis = (g, scale) => g
-      .attr("transform", `translate(${x(0) + 25},0)`)
+      .attr("transform", `translate(${x(0) - 5},0)`)
       .call(d3.axisLeft(scale).ticks(8))
       .call(g2 => g2.select(".domain").attr("display", "none"))
       .call(g2 => g2.selectAll(".tick line").attr("display", "none"))
@@ -286,7 +272,10 @@ const App = ({
       .join('text')
       .text(d => d.title)
       .style('fill', 'rgb(224, 222, 222)')
-      .style('font-size', '20')
+      .style('font-size', '18.2px')
+      .style('font-style', 'italic')
+      .style('font-weight', '700')
+      .style('font-family', 'L10')
       .style('text-align', 'center')
 
     const innerLine = scatterSvg.append('g')
@@ -300,23 +289,45 @@ const App = ({
     const gx = scatterSvg.append("g")
     const gy = scatterSvg.append("g")
 
-    const myTextsAvg = scatterSvg.append('g')
-      .selectAll('text')
-      .data(nodeListAsAverage)
-      .join('text')
-      .text(d => d.title)
-      .style('fill', 'black')
-      .attr('id', 'myTextsAvg_Conclusion')
-      .attr('font-size', 12)
+    const myForeignObjectsAvg = scatterSvg.append('g').selectAll('foreignObject').data(nodeListAsAverage).join('foreignObject')
+    myForeignObjectsAvg
+      .attr('id', 'myNewTextsAvg_Conclusion')
+      .attr('width', maxTextWidth)
+      .attr('height', 60)
+      .style('transition', 'font-size 0.2s')
+      .style('transition-timing-function', 'linear')
+      .style('text-align', 'center')
+      .append("xhtml:div")
+      .html(d => d.title)
 
-    const myTextsMedian = scatterSvg.append('g')
-      .selectAll('text')
-      .data(nodeListAsMedian)
-      .join('text')
-      .text(d => d.title)
-      .style('fill', 'black')
-      .attr('id', 'myTextsMedian_Conclusion')
-      .attr('font-size', 12)
+    const myForeignObjectsMedian = scatterSvg.append('g').selectAll('foreignObject').data(nodeListAsMedian).join('foreignObject')
+      myForeignObjectsMedian
+        .attr('id', 'myNewTextsMedian_Conclusion')
+        .attr('width', maxTextWidth)
+        .attr('height', 60)
+        .style('transition', 'font-size 0.2s')
+        .style('transition-timing-function', 'linear')
+        .style('text-align', 'center')
+        .append("xhtml:div")
+        .html(d => d.title)
+
+    // const myTexts_Avg = scatterSvg.append('g')
+    //   .selectAll('text')
+    //   .data(nodeListAsAverage)
+    //   .join('text')
+    //   .text(d => d.title)
+    //   .style('fill', 'black')
+    //   .attr('id', 'myTexts_Avg')
+    //   .attr('font-size', 12)
+
+    // const myTexts_Median = scatterSvg.append('g')
+    //   .selectAll('text')
+    //   .data(nodeListAsMedian)
+    //   .join('text')
+    //   .text(d => d.title)
+    //   .style('fill', 'black')
+    //   .attr('id', 'myTexts_Median')
+    //   .attr('font-size', 12)
 
     const myCircleAvg1 = scatterSvg.append('g')
       .selectAll('circle')
@@ -359,6 +370,19 @@ const App = ({
       .attr('id', 'circleMedian_Conclusion')
       .style('fill', d => d.type[0].fillSymbol)
       .attr('cursor', 'pointer')
+
+      if (isAverage) {
+        d3.selectAll('#myNewTextsAvg_Conclusion').style('opacity', visibleText ? 1 : 0)
+        d3.selectAll('#myNewTextsMedian_Conclusion').style('opacity', 0)
+        d3.selectAll('#circleAvg_Conclusion').style('opacity', 1)
+        d3.selectAll('#circleMedian_Conclusion').style('opacity', 0)
+      }
+      else if (!isAverage) {
+        d3.selectAll('#myNewTextsMedian_Conclusion').style('opacity', visibleText ? 1 : 0)
+        d3.selectAll('#myNewTextsAvg_Conclusion').style('opacity', 0)
+        d3.selectAll('#circleMedian_Conclusion').style('opacity', 1)
+        d3.selectAll('#circleAvg_Conclusion').style('opacity', 0)
+      }
 
     // z holds a copy of the previous transform, so we can track its changes
     let z = d3.zoomIdentity
@@ -434,50 +458,87 @@ const App = ({
           .attr("y1", d => yr(d.y1))
           .attr("x2", d => xr(d.x2))
           .attr("y2", d => yr(d.y2))
-  
-        myTextsMedian
+
+        myForeignObjectsAvg
           .transition(trans)
           .on('end', () => {
             try {
-              const scale = Math.min(t.k, 9)
+              const scale = Math.min(t.k, 8)
               const minScale = Math.max(scale, 1)
-              const fonts = Math.max(12, Math.floor(11 + minScale))
-              const tran2 = d3.transition().duration(200).ease(d3.easeLinear)
-              myTextsMedian.transition(tran2)
-                .attr('font-size', fonts)
-                .attr('x', d => xr(d.x) - getTextWidth(d.title, fonts) / 2)
-                .attr('y', d => yr(d.y) + 10 * 3)
-            } catch (error) {
-              console.error(error)
+              const r = Math.max(10, Math.floor(10 + minScale))
+              const fonts = Math.max(10, Math.floor(9 + minScale))
+              d3.selectAll('#myNewTextsAvg_Conclusion').style('font-size', fonts).attr('y', d => yr(d.y) + r / 1)
+            } catch (err) {
+              console.log('error', err)
             }
+            
           })
           .attr('x', d => {
-            const fontS = myTextsMedian.attr('font-size')
-            return xr(d.x) - getTextWidth(d.title, fontS) / 2
+            return xr(d.x) - maxTextWidth / 2
           })
-          .attr('y', d => yr(d.y) + 10 * 3)
-  
-        myTextsAvg
+          .attr('y', d => yr(d.y) + radius / 1)
+
+        myForeignObjectsMedian
           .transition(trans)
           .on('end', () => {
             try {
-              const scale = Math.min(t.k, 9)
+              const scale = Math.min(t.k, 8)
               const minScale = Math.max(scale, 1)
-              const fonts = Math.max(12, Math.floor(11 + minScale))
-              const tran2 = d3.transition().duration(200).ease(d3.easeLinear)
-              myTextsAvg.transition(tran2)
-                .attr('font-size', fonts)
-                .attr('x', d => xr(d.x) - getTextWidth(d.title, fonts) / 2)
-                .attr('y', d => yr(d.y) + 10 * 3)
-            } catch (error) {
-              console.error(error)
+              const r = Math.max(10, Math.floor(10 + minScale))
+              const fonts = Math.max(10, Math.floor(9 + minScale))
+              d3.selectAll('#myNewTextsMedian_Conclusion').style('font-size', fonts).attr('y', d => yr(d.y) + r / 1)
+            } catch (err) {
+              console.log('error', err)
             }
           })
           .attr('x', d => {
-            const fontS = myTextsAvg.attr('font-size')
-            return xr(d.x) - getTextWidth(d.title, fontS) / 2
+            return xr(d.x) - maxTextWidth / 2
           })
-          .attr('y', d => yr(d.y) + 10 * 3)
+          .attr('y', d => yr(d.y) + radius / 1)
+  
+        // myTexts_Median
+        //   .transition(trans)
+        //   .on('end', () => {
+        //     try {
+        //       const scale = Math.min(t.k, 9)
+        //       const minScale = Math.max(scale, 1)
+        //       const fonts = Math.max(12, Math.floor(11 + minScale))
+        //       const tran2 = d3.transition().duration(200).ease(d3.easeLinear)
+        //       myTexts_Median.transition(tran2)
+        //         .attr('font-size', fonts)
+        //         .attr('x', d => xr(d.x) - getTextWidth(d.title, fonts) / 2)
+        //         .attr('y', d => yr(d.y) + 10 * 3)
+        //     } catch (error) {
+        //       console.error(error)
+        //     }
+        //   })
+        //   .attr('x', d => {
+        //     const fontS = myTexts_Median.attr('font-size')
+        //     return xr(d.x) - getTextWidth(d.title, fontS) / 2
+        //   })
+        //   .attr('y', d => yr(d.y) + 10 * 3)
+  
+        // myTexts_Avg
+        //   .transition(trans)
+        //   .on('end', () => {
+        //     try {
+        //       const scale = Math.min(t.k, 9)
+        //       const minScale = Math.max(scale, 1)
+        //       const fonts = Math.max(12, Math.floor(11 + minScale))
+        //       const tran2 = d3.transition().duration(200).ease(d3.easeLinear)
+        //       myTexts_Avg.transition(tran2)
+        //         .attr('font-size', fonts)
+        //         .attr('x', d => xr(d.x) - getTextWidth(d.title, fonts) / 2)
+        //         .attr('y', d => yr(d.y) + 10 * 3)
+        //     } catch (error) {
+        //       console.error(error)
+        //     }
+        //   })
+        //   .attr('x', d => {
+        //     const fontS = myTexts_Avg.attr('font-size')
+        //     return xr(d.x) - getTextWidth(d.title, fontS) / 2
+        //   })
+        //   .attr('y', d => yr(d.y) + 10 * 3)
   
         myCircleAvg1
           .transition(trans)
@@ -498,8 +559,6 @@ const App = ({
           .attr('cx', d => xr(d.x))
           .attr('cy', d => yr(d.y))
           .attr('r', radius1)
-          .attr('class', 'left')
-          .attr('data-href', d => getPhenomenonUrl(radar?.id, d))
   
         myCircleAvg
           .transition(trans)
@@ -520,11 +579,6 @@ const App = ({
           .attr('cx', d => xr(d.x))
           .attr('cy', d => yr(d.y))
           .attr('r', radius)
-          .attr('class', 'left')
-          .attr('data-href', d => {
-            // console.log('ddd', d)
-            return getPhenomenonUrl(radar?.id, d)
-          })
   
         myCircleMedian1
           .transition(trans)
@@ -545,8 +599,6 @@ const App = ({
           .attr('cx', d => xr(d.x))
           .attr('cy', d => yr(d.y))
           .attr('r', radius1)
-          .attr('class', 'left')
-          .attr('data-href', d => getPhenomenonUrl(radar?.id, d))
   
         myCircleMedian
           .transition(trans)
@@ -567,21 +619,6 @@ const App = ({
           .attr('cx', d => xr(d.x))
           .attr('cy', d => yr(d.y))
           .attr('r', radius)
-          .attr('class', 'left')
-          .attr('data-href', d => getPhenomenonUrl(radar?.id, d))
-
-          if (isAverage) {
-            d3.selectAll('#myTextsAvg_Conclusion').style('opacity', visibleText ? 1 : 0)
-            d3.selectAll('#myTextsMedian_Conclusion').style('opacity', 0)
-            d3.selectAll('#circleAvg_Conclusion').style('opacity', 1)
-            d3.selectAll('#circleMedian_Conclusion').style('opacity', 0)
-          }
-          else if (!isAverage) {
-            d3.selectAll('#myTextsMedian_Conclusion').style('opacity', visibleText ? 1 : 0)
-            d3.selectAll('#myTextsAvg_Conclusion').style('opacity', 0)
-            d3.selectAll('#circleMedian_Conclusion').style('opacity', 1)
-            d3.selectAll('#circleAvg_Conclusion').style('opacity', 0)
-          }
       } catch (error) {
         console.error(error)
       }
@@ -599,6 +636,10 @@ const App = ({
     setVisibleDialog(true)
   }
 
+  const onCloseDialog = () => {
+    setVisibleDialog(false)
+  }
+
   const onToggleTitle = (event) => {
     setVisibleText(!visibleText)
   }
@@ -611,83 +652,59 @@ const App = ({
     setIsAverage(false)
   }
 
-  const classes = useStyles();
-
   return (
     <div style={{width: '100%'}}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '56px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '56px', paddingRight: '60px' }}>
         <div style={{display: 'flex', alignItems: 'center'}}>
-          <Checkbox
-            color='primary'
-            className={classes.checkBoxSize}
-            classes={{
-              root: classes.root,
-              checked: classes.checked 
-            }}
-            checked={!visibleText} 
-            onChange={onToggleTitle}
-            id="rating-view-tab-cb-id"
-          />
-          <label style={{ fontSize: "13px", fontWeight: 'unset', paddingLeft: '5px', marginBottom: 0 }} for="rating-view-tab-cb-name"> Hide titles</label><br></br>
+          <div className="custom-control custom-checkbox">
+            <input type="checkbox" className="custom-control-input" id="customCheckbox_hideTitles_Conclusion" checked={!visibleText} onChange={onToggleTitle} />
+              <label className="custom-control-label" for="customCheckbox_hideTitles_Conclusion">Hide titles</label>
+          </div>
         </div>
         <div style={{display: 'flex', alignItems: 'center' }}>
           <p style={{ fontSize: "13px", margin: 0}}>Show results as: </p>
-          <Radio
-            color='primary'
-            className={classes.radioSize}
-            classes={{
-              root: classes.root,
-              checked: classes.checked 
-            }}
-            checked={isAverage} 
-            onChange={onToggleIsAverage}
-            id="rating-view-tab-cb-id"
-          />
-          {/* <input style={{ width: "20px", height: "20px", cursor: 'pointer', margin: 0, marginLeft: '16px' }} type="radio" label='Show as average' id="rating-view-tab-cb-id" name="rating-view-tab-cb-name" checked={isAverage} onChange={onToggleIsAverage}></input> */}
-          <label style={{ fontSize: "13px", fontWeight: 'unset', paddingLeft: '5px', marginBottom: 0 }} for="rating-view-tab-cb-name"> Average </label><br></br>
-          <Radio
-            color='primary'
-            className={classes.radioSize}
-            classes={{
-              root: classes.root,
-              checked: classes.checked 
-            }}
-            checked={!isAverage} 
-            onChange={onToggleIsMedian}
-            id="rating-view-tab-cb-id"
-          />
-          {/* <input style={{ width: "20px", height: "20px", cursor: 'pointer', margin: 0, marginLeft: '16px' }} type="radio" label='Show as median' id="rating-view-tab-cb-id" name="rating-view-tab-cb-name" checked={!isAverage} onChange={onToggleIsMedian}></input> */}
-          <label style={{ fontSize: "13px", fontWeight: 'unset', paddingLeft: '5px', marginBottom: 0 }} for="rating-view-tab-cb-name"> Median </label><br></br>
+          <div className="custom-control custom-radio custom-control-inline" style={{marginLeft: '16px'}}>
+            <input 
+              type="radio" 
+              id="customRadioInline_AsAverage_Conclusion" 
+              name="customRadioInline_AsAverage_Conclusion" 
+              className="custom-control-input" 
+              checked={isAverage} 
+              onChange={onToggleIsAverage} 
+            />
+              <label className="custom-control-label" for="customRadioInline_AsAverage_Conclusion">Average</label>
+          </div>
+          <div class="custom-control custom-radio custom-control-inline">
+            <input 
+              type="radio" 
+              id="customRadioInline_AsMedian_Conclusion" 
+              name="customRadioInline_AsMedian_Conclusion" 
+              className="custom-control-input" 
+              checked={!isAverage} 
+              onChange={onToggleIsMedian} 
+            />
+              <label className="custom-control-label" for="customRadioInline_AsMedian_Conclusion">Median</label>
+          </div>
         </div>   
     </div>
-    <div className='rating-results-diagram' style={{ display: 'flex', paddingTop: '32px', paddingBottom: '54px' }}>
+    <div className='rating-results-diagram' style={{ display: 'flex', paddingTop: '60px', paddingRight: '60px' }}>
       <AxisY originalHeight={containerHeight} axisHeight={containerHeight} axisLabel2={axisLabel2} axisLabel2a={axisLabel2a} axisLabel2b={axisLabel2b} />
       <div style={{
         width: containerWidth,
         height: containerHeight + 70,
-        padding: '0px 0px 60px 0',
+        // padding: '0px 0px 60px 0',
         boxSizing: 'content-box',
         // background: '#e0dede' 
       }}>
-        <div style={{ position: 'relative', width: containerWidth, height: containerHeight, background: 'grey' }}>
+        <div style={{ position: 'relative', width: containerWidth, height: containerHeight, background: 'white' }}>
           <svg id='svg-app_Conclusion' style={{ position: 'absolute' }} />
           <canvas id='axis_Conclusion' />
-
-          {/* {visibleDialog && (
-            <Modal style={customStyles} ariaHideApp={false} isOpen={true} contentLabel='Phenomena card label'>
-              <Iframe url='http://www.youtube.com/embed/xDMP3i36naA'
-                width='100%'
-                height='100%'
-                id='myId'
-                display='initial'
-                position='relative' />
-            </Modal>
-          )} */}
         </div>
         <AxisX originalWidth={containerWidth} axisWidth={containerWidth} axisLabel1={axisLabel1} axisLabel1a={axisLabel1a} axisLabel1b={axisLabel1b} />
       </div>
     </div>
   </div>
+
   )
 }
 
