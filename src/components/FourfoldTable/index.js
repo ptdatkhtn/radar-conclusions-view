@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import * as d3 from 'd3'
 import AxisX from './AxisX'
 import AxisY from './AxisY'
+import {getPhenomenonUrl} from '../../helpers/contentCard'
 
 const App = ({
   containerWidth = 500,
@@ -16,7 +17,8 @@ const App = ({
   axisLabel2 = 'Vertical Axis Default',
   axisLabel2a = 'Low End Default',
   axisLabel2b = 'High End Default',
-  phenomena = []
+  phenomena = [],
+  radar
 }) => {
 
   const [visibleDialog, setVisibleDialog] = useState(false)
@@ -559,6 +561,8 @@ const App = ({
           .attr('cx', d => xr(d.x))
           .attr('cy', d => yr(d.y))
           .attr('r', radius1)
+          .attr('class', 'left')
+          .attr('data-href', d => getPhenomenonUrl(radar?.id, d))
   
         myCircleAvg
           .transition(trans)
@@ -579,6 +583,8 @@ const App = ({
           .attr('cx', d => xr(d.x))
           .attr('cy', d => yr(d.y))
           .attr('r', radius)
+          .attr('class', 'left')
+          .attr('data-href', d => getPhenomenonUrl(radar?.id, d))
   
         myCircleMedian1
           .transition(trans)
@@ -599,7 +605,9 @@ const App = ({
           .attr('cx', d => xr(d.x))
           .attr('cy', d => yr(d.y))
           .attr('r', radius1)
-  
+          .attr('class', 'left')
+          .attr('data-href', d => getPhenomenonUrl(radar?.id, d))
+
         myCircleMedian
           .transition(trans)
           .on('end', () => {
@@ -619,6 +627,8 @@ const App = ({
           .attr('cx', d => xr(d.x))
           .attr('cy', d => yr(d.y))
           .attr('r', radius)
+          .attr('class', 'left')
+          .attr('data-href', d => getPhenomenonUrl(radar?.id, d))
       } catch (error) {
         console.error(error)
       }
