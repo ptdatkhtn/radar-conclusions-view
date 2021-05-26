@@ -252,12 +252,14 @@ const App = ({
 
     const xAxis = (g, scale) => g
       .attr("transform", `translate(0,${y(0) + 10})`)
+      .style('opacity', 0)
       .call(d3.axisBottom(scale).ticks(8))
       .call(g2 => g2.select(".domain").attr("display", "none"))
       .call(g2 => g2.selectAll(".tick line").attr("display", "none"))
 
     const yAxis = (g, scale) => g
       .attr("transform", `translate(${x(0) - 5},0)`)
+      .style('opacity', 0)
       .call(d3.axisLeft(scale).ticks(8))
       .call(g2 => g2.select(".domain").attr("display", "none"))
       .call(g2 => g2.selectAll(".tick line").attr("display", "none"))
