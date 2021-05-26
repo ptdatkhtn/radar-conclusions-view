@@ -233,9 +233,9 @@ const VoteResult = ({ phenomenon, radar }) => {
           <span>)</span>
         </ButtonGroup>
       </VoteWrapper>
-      <a onClick={onVisibilityHandler}>
+      {/* <a onClick={onVisibilityHandler}>
         <span className=" af-custom-eye-blocked" style={{fontSize: '1.3em', color: tokens.ColorBlue, cursor: 'pointer'}}/>
-      </a>
+      </a> */}
     </Container>
   );
 };
