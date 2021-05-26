@@ -66,17 +66,19 @@ const VoteResult = ({ phenomenon, radar }) => {
 
   const onUpHandler = async () => {
     try {
-      await fetchVoteCurrentUser();
+      // await fetchVoteCurrentUser();
       if (String(voteStatus) === String(VOTING_STATUS.up)) {
+        setVoteStatus(VOTING_STATUS.none)
         await votingApi.deleteVote(radar.group.id, radar.id, phenomenon.id);
       } else {
+        setVoteStatus(VOTING_STATUS.up)
         await votingApi.addVote(radar.group.id, radar.id, phenomenon.id, {
           up: true,
         });
       }
       // update/get vote(s) after handle up-vote
       await fetchAllVotes();
-      await fetchVoteCurrentUser();
+      // await fetchVoteCurrentUser();
     } catch (error) {
       dispatch({
         type: ACTIONS.ERROR,
@@ -87,17 +89,19 @@ const VoteResult = ({ phenomenon, radar }) => {
 
   const onDownHandler = async () => {
     try {
-      await fetchVoteCurrentUser();
+      // await fetchVoteCurrentUser();
       if (String(voteStatus) === String(VOTING_STATUS.down)) {
+        setVoteStatus(VOTING_STATUS.none)
         await votingApi.deleteVote(radar.group.id, radar.id, phenomenon.id);
       } else {
+        setVoteStatus(VOTING_STATUS.down)
         await votingApi.addVote(radar.group.id, radar.id, phenomenon.id, {
           up: false,
         });
       }
       // update/get vote(s) after handle down-vote
       await fetchAllVotes();
-      await fetchVoteCurrentUser();
+      // await fetchVoteCurrentUser();
     } catch (error) {
       dispatch({
         type: ACTIONS.ERROR,

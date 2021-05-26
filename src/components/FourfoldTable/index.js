@@ -17,7 +17,7 @@ const App = ({
   axisLabel2 = 'Vertical Axis Default',
   axisLabel2a = 'Low End Default',
   axisLabel2b = 'High End Default',
-  phenomena = [],
+  phenomena,
   radar
 }) => {
 
