@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { DataProvider } from "./store/GlobalState";
 import reportWebVitals from './reportWebVitals';
 import ConclusionsView from "./components/ConclusionsView/ConclusionsView";
+import './scss/global-styles.scss';
 
 // http://localhost:3008/?node=194688
 

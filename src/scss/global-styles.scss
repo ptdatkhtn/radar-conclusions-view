@@ -1,0 +1,9 @@
+@import "../../node_modules/@sangre-fp/css-framework/tokens/fp-design-tokens";
+
+.radar-conclusions-app {
+  .custom-radio {
+    .custom-control-label {
+      font-weight: $font-weight-normal;
+    }
+  }
+}
