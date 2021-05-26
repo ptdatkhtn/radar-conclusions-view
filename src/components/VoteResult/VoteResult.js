@@ -16,16 +16,18 @@ import {
   TriangleDown,
   VoteAmountItem,
 } from "./styles";
-import { votingApi } from "../../helpers/fetcher";
 import { ACTIONS } from "../../store/Actions";
 import {getPhenomenonUrl} from '../../helpers/contentCard'
-
+import * as tokens from "@sangre-fp/css-framework/tokens/fp-design-tokens"
+import { votingApi } from "../../helpers/fetcher";
 const VoteResult = ({ phenomenon, radar }) => {
+
   const {
-    state: { phenonmenaData, error },
+    state: { phenonmenaData, hiddenPhenomena, error },
     dispatch,
   } = useContext(DataContext);
   const [voteStatus, setVoteStatus] = React.useState(VOTING_STATUS.none);
+  const [amountHandler, setAmountHandler] = React.useState(0);
 
   //get radar phenomenon vote for current user
   const fetchVoteCurrentUser = React.useCallback(async () => {
@@ -39,7 +41,7 @@ const VoteResult = ({ phenomenon, radar }) => {
     } else {
       setVoteStatus(Number(sum) === 1 ? VOTING_STATUS.up : VOTING_STATUS.down);
     }
-  }, [phenomenon.id, radar.group.id, radar.id]);
+  }, [phenomenon]);
 
   // get all radar phenomenon votes
   const fetchAllVotes = React.useCallback(async () => {
@@ -49,8 +51,9 @@ const VoteResult = ({ phenomenon, radar }) => {
       phenomenon.id
     );
 
-    const newPhenomena = [...phenonmenaData]
-    !!newPhenomena?.length &&
+    const newPhenomena = [...phenonmenaData];
+    /* eslint-disable */
+    !!phenonmenaData?.length &&
       newPhenomena?.map((phen) => {
         if (phen?.id === phenomenon.id) {
           phen["vote_result"] = {
@@ -62,23 +65,25 @@ const VoteResult = ({ phenomenon, radar }) => {
       type: ACTIONS.PHENOMENONDATA,
       payload: newPhenomena,
     });
-  }, [dispatch, phenomenon.id, phenonmenaData, radar.group.id, radar.id]);
+  }, [dispatch, phenomenon, radar]);
 
   const onUpHandler = async () => {
     try {
       // await fetchVoteCurrentUser();
       if (String(voteStatus) === String(VOTING_STATUS.up)) {
-        setVoteStatus(VOTING_STATUS.none)
+        
         await votingApi.deleteVote(radar.group.id, radar.id, phenomenon.id);
+        
       } else {
-        setVoteStatus(VOTING_STATUS.up)
+        
         await votingApi.addVote(radar.group.id, radar.id, phenomenon.id, {
           up: true,
         });
+        
       }
       // update/get vote(s) after handle up-vote
-      await fetchAllVotes();
-      // await fetchVoteCurrentUser();
+      // await fetchAllVotes();
+      setAmountHandler(amountHandler => amountHandler + 1)
     } catch (error) {
       dispatch({
         type: ACTIONS.ERROR,
@@ -89,19 +94,21 @@ const VoteResult = ({ phenomenon, radar }) => {
 
   const onDownHandler = async () => {
     try {
-      // await fetchVoteCurrentUser();
       if (String(voteStatus) === String(VOTING_STATUS.down)) {
-        setVoteStatus(VOTING_STATUS.none)
+        // setVoteStatus(VOTING_STATUS.none)
         await votingApi.deleteVote(radar.group.id, radar.id, phenomenon.id);
+        
       } else {
-        setVoteStatus(VOTING_STATUS.down)
+        // setVoteStatus(VOTING_STATUS.down)
+        
         await votingApi.addVote(radar.group.id, radar.id, phenomenon.id, {
           up: false,
         });
+        
       }
       // update/get vote(s) after handle down-vote
-      await fetchAllVotes();
-      // await fetchVoteCurrentUser();
+      
+      setAmountHandler(amountHandler => amountHandler + 1)
     } catch (error) {
       dispatch({
         type: ACTIONS.ERROR,
@@ -111,46 +118,84 @@ const VoteResult = ({ phenomenon, radar }) => {
   };
 
   useEffect(() => {
-    fetchVoteCurrentUser();
-  }, [fetchVoteCurrentUser]);
+    if (amountHandler < 1) {
+      const setStatus = async() => {
+        const {
+          data: { plus_votes, minus_votes },
+        } = await votingApi.getVote(radar.group.id, radar.id, phenomenon.id);
+        
+        const sum = Number(plus_votes - minus_votes);
+    
+        if (sum === 0) {
+          setVoteStatus(VOTING_STATUS.none);
+        } else {
+          setVoteStatus(Number(sum) === 1 ? VOTING_STATUS.up : VOTING_STATUS.down);
+        }
+      }
+      setStatus()
+    }
+     else {
+      const setStatus = async() => {
+        const [getVoteData, getAllVotesData] = await Promise.all([
+          votingApi.getVote(radar.group.id, radar.id, phenomenon.id),
+          fetchAllVotes()
+        ])
+        const { data: { plus_votes, minus_votes }} = getVoteData
+        console.log('aaa', getVoteData)
+        // const {
+        //   data: { plus_votes, minus_votes },
+        // } = await votingApi.getVote(radar.group.id, radar.id, phenomenon.id);
+        // await fetchAllVotes();
+        const sum = Number(plus_votes - minus_votes);
+    
+        if (sum === 0) {
+          setVoteStatus(VOTING_STATUS.none);
+        } else {
+          setVoteStatus(Number(sum) === 1 ? VOTING_STATUS.up : VOTING_STATUS.down);
+        }
+      }
+      setStatus()
+     }
+  }, [amountHandler, setAmountHandler]);
 
-  let symbolPhenomenon = "";
-  let symbolBorderPhenomenon = "";
-  let symbolBoxShadowPhenomenon = "";
-  if (phenomenon?.["content-type-title"] === "Strengthening") {
-    symbolPhenomenon = "rgb(0, 202, 141)";
-    symbolBorderPhenomenon = "transparent";
-    symbolBoxShadowPhenomenon = "transparent";
-  } else if (phenomenon?.["content-type-title"] === "Weak signal") {
-    symbolPhenomenon = "rgb(168, 168, 168)";
-    symbolBorderPhenomenon = "transparent";
-    symbolBoxShadowPhenomenon = "transparent";
-  } else if (phenomenon?.["content-type-title"] === "Summary") {
-    symbolPhenomenon = "rgb(0, 202, 141)";
-    symbolBorderPhenomenon = "rgb(0, 202, 141)";
-    symbolBoxShadowPhenomenon = "#fff";
-  } else if (phenomenon?.["content-type-title"] === "Weakening") {
-    symbolPhenomenon = "rgb(0, 152, 255)";
-    symbolBorderPhenomenon = "transparent";
-    symbolBoxShadowPhenomenon = "transparent";
-  } else if (phenomenon?.["content-type-title"] === "Wild card") {
-    symbolPhenomenon = "rgb(233, 87, 87)";
-    symbolBorderPhenomenon = "transparent";
-    symbolBoxShadowPhenomenon = "transparent";
-  } else {
-    symbolPhenomenon = "transparent";
-    symbolBorderPhenomenon = "rgb(0, 202, 141)";
-    symbolBoxShadowPhenomenon = "transparent";
+  let iconClassName = ''
+  if(phenomenon?.['content-type-alias'] === 'rising'){
+      iconClassName = 'rising'
+  } 
+  else if(phenomenon?.['content-type-alias'] === 'weaksignal'){
+    iconClassName = 'weaksignal'
   }
-  
+  else if (phenomenon?.['content-type-alias'] === 'summary'){
+    iconClassName = 'summary'
+  }
+  else if (phenomenon?.['content-type-alias'] === 'cooling'){
+    iconClassName = 'cooling'
+  }
+  else if (phenomenon?.['content-type-alias'] === 'wildcard'){
+    iconClassName = 'wildcard'
+  }
+  else {
+    iconClassName = 'undefined'
+  }
+
+  const onVisibilityHandler = async () => {
+    const hiddenPhenomenaUpdated = hiddenPhenomena?.concat(phenomenon?.id);
+    await dispatch({
+      type: ACTIONS.HIDDENPHENOMENA,
+      payload: hiddenPhenomenaUpdated,
+    });
+    const payload = {
+      [`voting/${radar.group.id}/radar/${radar.id}`]: {
+        hidden: hiddenPhenomenaUpdated,
+      },
+    };
+    await votingApi.addHiddenPhenomenaVotes(radar.group.id, radar.id, payload);
+  };
   return (
-    !error && (
     <Container>
       <WildCardWrapper className='left' data-href={getPhenomenonUrl(radar?.id, phenomenon)}>
         <WildCard
-          symbol={symbolPhenomenon}
-          symbolBorder={symbolBorderPhenomenon}
-          symbolBoxShadow={symbolBoxShadowPhenomenon}
+          className= {`icon-issue ${iconClassName}`}
         >
           {phenomenon?.content?.title}
         </WildCard>
@@ -188,8 +233,10 @@ const VoteResult = ({ phenomenon, radar }) => {
           <span>)</span>
         </ButtonGroup>
       </VoteWrapper>
+      <a onClick={onVisibilityHandler}>
+        <span className=" af-custom-eye-blocked" style={{fontSize: '1.3em', color: tokens.ColorBlue, cursor: 'pointer'}}/>
+      </a>
     </Container>
-    )
   );
 };
 

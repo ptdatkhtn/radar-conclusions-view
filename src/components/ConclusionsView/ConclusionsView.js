@@ -26,7 +26,7 @@ const VotingResultsView = () => {
   .sort((a, b) => Number(b["rating_y"].avg) - Number(a["rating_y"].avg))
   .slice(0, 5)
   
-  sortedPhenomenaForChart = sortedPhenomenaX.concat(sortedPhenomenaY)
+  sortedPhenomenaForChart = React.useMemo( () => sortedPhenomenaX.concat(sortedPhenomenaY), [phenonmenaData])
 
 
   const eventTimeoutRef = React.useRef(null)
