@@ -670,11 +670,11 @@ const App = ({
         <div style={{display: 'flex', alignItems: 'center'}}>
           <div className="custom-control custom-checkbox">
             <input type="checkbox" className="custom-control-input" id="customCheckbox_hideTitles_Conclusion" checked={!visibleText} onChange={onToggleTitle} />
-              <label className="custom-control-label" for="customCheckbox_hideTitles_Conclusion">Hide titles</label>
+              <label className="custom-control-label" for="customCheckbox_hideTitles_Conclusion" style={{fontWeight: 400, fontSize: '13px'}}>Hide titles</label>
           </div>
         </div>
         <div style={{display: 'flex', alignItems: 'center' }}>
-          <p style={{ fontSize: "13px", margin: 0}}>Show results as: </p>
+          <p style={{ fontSize: "13px", margin: 0, fontWeight: 400}}>Show results as: </p>
           <div className="custom-control custom-radio custom-control-inline" style={{marginLeft: '16px'}}>
             <input 
               type="radio" 
@@ -684,7 +684,7 @@ const App = ({
               checked={isAverage} 
               onChange={onToggleIsAverage} 
             />
-              <label className="custom-control-label" for="customRadioInline_AsAverage_Conclusion">Average</label>
+              <label className="custom-control-label" for="customRadioInline_AsAverage_Conclusion" style={{fontWeight: 400, fontSize: '13px'}}>Average</label>
           </div>
           <div class="custom-control custom-radio custom-control-inline">
             <input 
@@ -695,7 +695,7 @@ const App = ({
               checked={!isAverage} 
               onChange={onToggleIsMedian} 
             />
-              <label className="custom-control-label" for="customRadioInline_AsMedian_Conclusion">Median</label>
+              <label className="custom-control-label" for="customRadioInline_AsMedian_Conclusion" style={{fontWeight: 400, fontSize: '13px'}}>Median</label>
           </div>
         </div>   
     </div>

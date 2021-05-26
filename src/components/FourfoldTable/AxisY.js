@@ -9,8 +9,8 @@ const AxisY = ({
 }) => {
   const cellStyle = {
     fontSize: 14,
-    color: 'grey',
-    fontWeight: 500,
+    color: 'rgb(153, 153, 153)', 
+    fontWeight: 700,
     whiteSpace: 'nowrap'
   }
   return (
@@ -38,13 +38,13 @@ const AxisY = ({
         <tbody style={{borderTop: 'none'}}>
           <tr style={{ ...cellStyle }}>
             <td>
-              <div style={{ width: 30, writingMode: 'vertical-rl', transform: 'rotate(180deg)', overflow: 'hidden', textOverflow: 'ellipsis', height: originalHeight / 2 - 10, textAlign: 'right' }}>{axisLabel2b}</div>
+              <div style={{ width: 30, writingMode: 'vertical-rl', transform: 'rotate(180deg)', overflow: 'hidden', textOverflow: 'ellipsis', height: originalHeight / 2 - 10, textAlign: 'right', fontWeight: 400, fontSize: '13px' }}>{axisLabel2b}</div>
             </td>
           </tr>
 
           <tr style={{ ...cellStyle }}>
             <td>
-              <div style={{ width: 30, writingMode: 'vertical-rl', transform: 'rotate(180deg)', overflow: 'hidden', textOverflow: 'ellipsis', height: originalHeight / 2 - 10, textAlign: 'left' }}>{axisLabel2a}</div>
+              <div style={{ width: 30, writingMode: 'vertical-rl', transform: 'rotate(180deg)', overflow: 'hidden', textOverflow: 'ellipsis', height: originalHeight / 2 - 10, textAlign: 'left', fontWeight: 400, fontSize: '13px' }}>{axisLabel2a}</div>
             </td>
           </tr>
           
