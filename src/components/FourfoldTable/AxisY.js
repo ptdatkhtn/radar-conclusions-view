@@ -23,7 +23,7 @@ const AxisY = ({
         <tbody style={{borderTop: 'none'}}>
           <tr style={{ ...cellStyle }}>
             <td>
-              <div style={{ width: 30, writingMode: 'vertical-lr', transform: 'rotate(180deg)', overflow: 'hidden', textOverflow: 'ellipsis', height: originalHeight, textAlign: 'center' }}>{axisLabel2}</div>
+              <div style={{ width: 30, paddingLeft: '12px', writingMode: 'vertical-lr', transform: 'rotate(180deg)', overflow: 'hidden', textOverflow: 'ellipsis', height: originalHeight, textAlign: 'center' }}>{axisLabel2}</div>
             </td>
           </tr>
           

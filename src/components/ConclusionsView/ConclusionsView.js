@@ -76,7 +76,7 @@ const VotingResultsView = () => {
         width > 0 && 
         <FourfoldTable 
           phenomena={sortedPhenomenaForChart || []} 
-          containerWidth={width} 
+          containerWidth={width - 60} 
           containerHeight={height + 60}
           axisLabel3={radar?.fourFieldsBottomLeft} 
           axisLabel4={radar?.fourFieldsBottomRight} 
