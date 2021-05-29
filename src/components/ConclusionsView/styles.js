@@ -2,10 +2,8 @@ import styled from "styled-components/macro";
 
 export const VoteTabWrapper = styled.div`
     background-color: #e8ebeb;
-    padding-left: 8px;
-    padding-right: 8px;
-    width: 100%
-    height: 100%
+    width: 100%;
+    height: 100%;
 `
 
 export const HorizontalLine = styled.hr`

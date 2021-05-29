@@ -673,7 +673,7 @@ const App = ({
               <label className="custom-control-label" for="customCheckbox_hideTitles_Conclusion" style={{fontWeight: 400, fontSize: '13px'}}>Hide titles</label>
           </div>
         </div>
-        <div style={{display: 'flex', alignItems: 'center' }}>
+        <div style={{display: 'flex', alignItems: 'center', marginRight: '-12px' }}>
           <p style={{ fontSize: "13px", margin: 0, fontWeight: 400}}>Show results as: </p>
           <div className="custom-control custom-radio custom-control-inline" style={{marginLeft: '16px'}}>
             <input 
