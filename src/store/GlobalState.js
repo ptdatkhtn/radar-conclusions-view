@@ -4,6 +4,7 @@ import { startSession } from '../helpers/session';
 import { ACTIONS } from './Actions'
 import { VOTING_STATUS } from '../constants'
 import { getRadar, getPhenomenaTypes } from '@sangre-fp/connectors/drupal-api';
+import radarDataApi from '@sangre-fp/connectors/radar-data-api';
 import {getPhenomena} from '../helpers/phenomenonFetcher'
 import { votingApi, ratingApi } from '../helpers/fetcher';
 import NProgress from 'nprogress'
@@ -27,22 +28,30 @@ export const DataProvider = ({children, node}) => {
 
     const fetchAllPhenomenonByRadarIdAndGroupId = useCallback(
         async () => {
+            await startSession()
             NProgress.start()
             NProgress.set(0.4)
 
             let phenomenaIds = []
             let groups = [0]
+
             // node=194690
-            await getRadar(node).then ((data) => {
-                dispatch({
-                    type: ACTIONS.RADAR,
-                    payload: data
+            await Promise.all([
+                radarDataApi.getRadar(node).then(radar => {
+                     /* eslint-disable */
+                    Object.keys(radar?.data?.phenomena).map(async (pid) => {
+                        phenomenaIds.push(radar?.data?.phenomena[pid]?.id)
+                    })
+                }),
+                getRadar(node).then ((radar) => {
+                    dispatch({
+                        type: ACTIONS.RADAR,
+                        payload: radar
+                    })
+    
+                    groups = groups.concat(radar?.group?.id)
                 })
-                groups = groups.concat(data?.group?.id)
-                Object.keys(data?.phenomena).map(async (pid) => {
-                    phenomenaIds.push(pid)
-                })
-            })
+            ])
               
             const page = 0
             const size = phenomenaIds?.length || 10
@@ -117,9 +126,6 @@ export const DataProvider = ({children, node}) => {
 
     useEffect(() => {
         try {
-            (async () => {
-                await startSession()
-            })();
 
             fetchAllPhenomenonByRadarIdAndGroupId()
             dispatch({type: ACTIONS.ERROR, payload: null})
