@@ -5,10 +5,12 @@ export const Container = styled.div`
   width: 100%;
   justify-content: space-between;
   position: relative;
-  align-items: center;
+  // align-items: center;
   padding-bottom: 4px;
 `
 export const WildCardWrapper = styled.div`
+width: 70%;
+
 :hover {
   cursor:pointer;
 }
@@ -24,10 +26,12 @@ export const WildCard = styled.h4`
   min-height: 25px;
   padding-left: 25px;
   padding-top: 0;
-  width: 410px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  width: 100%;
+  word-wrap: break-word;
+  // width: 410px;
+  // white-space: nowrap;
+  // overflow: hidden;
+  // text-overflow: ellipsis;
 
   &:before {
     background:${props => props.symbol};
@@ -45,9 +49,9 @@ export const WildCard = styled.h4`
 `
 
 export const VoteWrapper = styled.div`
-  width: 86px;
+  width: 30%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
 `
 
 export const ButtonGroup = styled.div`

@@ -50,7 +50,8 @@ export const RatingItemHeader = styled.h4`
     padding-left: 25px;
     padding-top: 0;
     padding-right: 60px;
-
+    width: 99%;
+    word-wrap: break-word;
     &:before {
         background:${props => props.symbol};
         border: 1px solid ${props => props.symbolBorder};
