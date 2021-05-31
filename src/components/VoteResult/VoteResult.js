@@ -27,63 +27,103 @@ const VoteResult = ({ phenomenon, radar }) => {
     dispatch,
   } = useContext(DataContext);
   const [voteStatus, setVoteStatus] = React.useState(VOTING_STATUS.none);
-  const [amountHandler, setAmountHandler] = React.useState(0);
-
-  //get radar phenomenon vote for current user
-  const fetchVoteCurrentUser = React.useCallback(async () => {
-    const {
-      data: { plus_votes, minus_votes },
-    } = await votingApi.getVote(radar.group.id, radar.id, phenomenon.id);
-    const sum = Number(plus_votes - minus_votes);
-
-    if (sum === 0) {
-      setVoteStatus(VOTING_STATUS.none);
-    } else {
-      setVoteStatus(Number(sum) === 1 ? VOTING_STATUS.up : VOTING_STATUS.down);
+  const [amountUpVotes, setAmountUpVotes] = React.useState(phenomenon?.vote_result?.plus_votes);
+  const [amountDownVotes, setAmountDownVotes] = React.useState(phenomenon?.vote_result?.minus_votes);
+  
+  useEffect(() => {
+    const updateAmountVotes = async() => {
+      const { data } = await votingApi.getVotes(
+        radar.group.id,
+        radar.id,
+        phenomenon.id
+      )
+  
+      const newPhenomena = [...phenonmenaData];
+      /* eslint-disable */
+      !!phenonmenaData?.length &&
+        newPhenomena?.map((phen) => {
+          if (phen?.id === phenomenon.id) {
+            phen["vote_result"] = {
+              ...data,
+            };
+          }
+        });
+    
+      dispatch({
+        type: ACTIONS.PHENOMENONDATA,
+        payload: newPhenomena,
+      });
     }
-  }, [phenomenon]);
+
+    updateAmountVotes()
+
+  }, [amountUpVotes, setAmountUpVotes, amountDownVotes, setAmountDownVotes])
+  //get radar phenomenon vote for current user
+  // const fetchVoteCurrentUser = React.useCallback(async () => {
+  //   const {
+  //     data: { plus_votes, minus_votes },
+  //   } = await votingApi.getVote(radar.group.id, radar.id, phenomenon.id);
+  //   const sum = Number(plus_votes - minus_votes);
+
+  //   if (sum === 0) {
+  //     setVoteStatus(VOTING_STATUS.none);
+  //   } else {
+  //     setVoteStatus(Number(sum) === 1 ? VOTING_STATUS.up : VOTING_STATUS.down);
+  //   }
+  // }, [phenomenon]);
 
   // get all radar phenomenon votes
-  const fetchAllVotes = React.useCallback(async () => {
-    const { data } = await votingApi.getVotes(
-      radar.group.id,
-      radar.id,
-      phenomenon.id
-    );
+  // const fetchAllVotes =async () => {
+  //   const { data } = await votingApi.getVotes(
+  //     radar.group.id,
+  //     radar.id,
+  //     phenomenon.id
+  //   );
 
-    const newPhenomena = [...phenonmenaData];
-    /* eslint-disable */
-    !!phenonmenaData?.length &&
-      newPhenomena?.map((phen) => {
-        if (phen?.id === phenomenon.id) {
-          phen["vote_result"] = {
-            ...data,
-          };
-        }
-      });
-    dispatch({
-      type: ACTIONS.PHENOMENONDATA,
-      payload: newPhenomena,
-    });
-  }, [dispatch, phenomenon, radar]);
-
+  //   const newPhenomena = [...phenonmenaData];
+  //   /* eslint-disable */
+  //   !!phenonmenaData?.length &&
+  //     newPhenomena?.map((phen) => {
+  //       if (phen?.id === phenomenon.id) {
+  //         phen["vote_result"] = {
+  //           ...data,
+  //         };
+  //       }
+  //     });
+  //   dispatch({
+  //     type: ACTIONS.PHENOMENONDATA,
+  //     payload: newPhenomena,
+  //   });
+  // }
+  
   const onUpHandler = async () => {
     try {
       // await fetchVoteCurrentUser();
       if (String(voteStatus) === String(VOTING_STATUS.up)) {
-        
+        setVoteStatus(VOTING_STATUS.none)
+        setAmountUpVotes(amountUpVotes - 1)
+
         await votingApi.deleteVote(radar.group.id, radar.id, phenomenon.id);
-        
-      } else {
-        
+      } else if (String(voteStatus) === String(VOTING_STATUS.none)) {
+        setVoteStatus(VOTING_STATUS.up)
+        setAmountUpVotes(amountUpVotes + 1)
+        // setAmountDownVotes(amountDownVotes - 1)
+
         await votingApi.addVote(radar.group.id, radar.id, phenomenon.id, {
           up: true,
         });
-        
+      } else {
+        setVoteStatus(VOTING_STATUS.up)
+        setAmountUpVotes(amountUpVotes + 1)
+        setAmountDownVotes(amountDownVotes - 1)
+
+        await votingApi.addVote(radar.group.id, radar.id, phenomenon.id, {
+          up: true,
+        });
       }
-      // update/get vote(s) after handle up-vote
-      // await fetchAllVotes();
-      setAmountHandler(amountHandler => amountHandler + 1)
+
+      
+
     } catch (error) {
       dispatch({
         type: ACTIONS.ERROR,
@@ -96,19 +136,32 @@ const VoteResult = ({ phenomenon, radar }) => {
     try {
       if (String(voteStatus) === String(VOTING_STATUS.down)) {
         // setVoteStatus(VOTING_STATUS.none)
+        setVoteStatus(VOTING_STATUS.none)
+        setAmountDownVotes(amountDownVotes - 1)
+
         await votingApi.deleteVote(radar.group.id, radar.id, phenomenon.id);
         
-      } else {
+      } else if (String(voteStatus) === String(VOTING_STATUS.none)) {
         // setVoteStatus(VOTING_STATUS.down)
-        
+        setVoteStatus(VOTING_STATUS.down)
+        // setAmountUpVotes(amountUpVotes - 1)
+        setAmountDownVotes(amountDownVotes + 1)
+
         await votingApi.addVote(radar.group.id, radar.id, phenomenon.id, {
           up: false,
         });
-        
+      } else {
+        setVoteStatus(VOTING_STATUS.down)
+        setAmountUpVotes(amountUpVotes - 1)
+        setAmountDownVotes(amountDownVotes + 1)
+
+        await votingApi.addVote(radar.group.id, radar.id, phenomenon.id, {
+          up: false,
+        });
       }
-      // update/get vote(s) after handle down-vote
+    
       
-      setAmountHandler(amountHandler => amountHandler + 1)
+
     } catch (error) {
       dispatch({
         type: ACTIONS.ERROR,
@@ -118,45 +171,21 @@ const VoteResult = ({ phenomenon, radar }) => {
   };
 
   useEffect(() => {
-    if (amountHandler < 1) {
-      const setStatus = async() => {
-        const {
-          data: { plus_votes, minus_votes },
-        } = await votingApi.getVote(radar.group.id, radar.id, phenomenon.id);
-        
-        const sum = Number(plus_votes - minus_votes);
-    
-        if (sum === 0) {
-          setVoteStatus(VOTING_STATUS.none);
-        } else {
-          setVoteStatus(Number(sum) === 1 ? VOTING_STATUS.up : VOTING_STATUS.down);
-        }
+    const setStatus = async() => {
+      const {
+        data: { plus_votes, minus_votes },
+      } = await votingApi.getVote(radar.group.id, radar.id, phenomenon.id);
+      
+      const sum = Number(plus_votes - minus_votes);
+  
+      if (sum === 0) {
+        setVoteStatus(VOTING_STATUS.none);
+      } else {
+        setVoteStatus(Number(sum) === 1 ? VOTING_STATUS.up : VOTING_STATUS.down);
       }
-      setStatus()
     }
-     else {
-      const setStatus = async() => {
-        const [getVoteData, getAllVotesData] = await Promise.all([
-          votingApi.getVote(radar.group.id, radar.id, phenomenon.id),
-          fetchAllVotes()
-        ])
-        const { data: { plus_votes, minus_votes }} = getVoteData
-        console.log('aaa', getVoteData)
-        // const {
-        //   data: { plus_votes, minus_votes },
-        // } = await votingApi.getVote(radar.group.id, radar.id, phenomenon.id);
-        // await fetchAllVotes();
-        const sum = Number(plus_votes - minus_votes);
-    
-        if (sum === 0) {
-          setVoteStatus(VOTING_STATUS.none);
-        } else {
-          setVoteStatus(Number(sum) === 1 ? VOTING_STATUS.up : VOTING_STATUS.down);
-        }
-      }
-      setStatus()
-     }
-  }, [amountHandler, setAmountHandler]);
+    setStatus()
+  }, []);
 
   let iconClassName = ''
   if(phenomenon?.['content-type-alias'] === 'rising'){
@@ -201,7 +230,7 @@ const VoteResult = ({ phenomenon, radar }) => {
         </WildCard>
       </WildCardWrapper>
       <VoteWrapper>
-        <VoteAmountResult>{phenomenon?.vote_result?.plus_votes - phenomenon?.vote_result?.minus_votes}</VoteAmountResult>
+        <VoteAmountResult>{amountUpVotes - amountDownVotes}</VoteAmountResult>
         <ButtonGroup>
           <span>(</span>
           <ButtonVote role="button" onClick={onUpHandler}>
@@ -214,7 +243,7 @@ const VoteResult = ({ phenomenon, radar }) => {
               ></LineUp>
             </VoteIcon>
             <VoteAmountItem>
-              {phenomenon?.vote_result?.plus_votes}
+              {amountUpVotes}
             </VoteAmountItem>
           </ButtonVote>
           <ButtonVote role="button" onClick={onDownHandler}>
@@ -227,7 +256,7 @@ const VoteResult = ({ phenomenon, radar }) => {
               ></TriangleDown>
             </VoteIcon>
             <VoteAmountItem>
-              {phenomenon?.vote_result?.minus_votes}
+              {amountDownVotes}
             </VoteAmountItem>
           </ButtonVote>
           <span>)</span>
