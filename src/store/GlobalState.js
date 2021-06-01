@@ -7,8 +7,6 @@ import { getRadar, getPhenomenaTypes } from '@sangre-fp/connectors/drupal-api';
 import radarDataApi from '@sangre-fp/connectors/radar-data-api';
 import {getPhenomena} from '../helpers/phenomenonFetcher'
 import { votingApi, ratingApi } from '../helpers/fetcher';
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
 
 const initialState = {
     status: VOTING_STATUS.none,
@@ -24,13 +22,10 @@ export const DataContext = createContext(initialState)
 export const DataProvider = ({children, node}) => {
    
     const [state, dispatch] = useReducer(reducers, initialState)
-    NProgress.configure({ minimum: 0.1 });
 
     const fetchAllPhenomenonByRadarIdAndGroupId = useCallback(
         async () => {
             await startSession()
-            NProgress.start()
-            NProgress.set(0.4)
 
             let phenomenaIds = []
             let groups = [0]
@@ -116,9 +111,7 @@ export const DataProvider = ({children, node}) => {
                     });
                 }
             )
-            NProgress.done(true)
-            NProgress.remove();
-            
+   
             return []
         },
         [dispatch]
