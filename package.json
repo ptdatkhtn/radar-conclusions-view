@@ -1,6 +1,6 @@
 {
   "name": "conclusions-tab",
-  "version": "0.1.0",
+  "version": "0.9.0",
   "private": true,
   "dependencies": {
     "@sangre-fp/connectors": "^1.5.5",
