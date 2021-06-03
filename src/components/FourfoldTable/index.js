@@ -17,7 +17,7 @@ const App = ({
   axisLabel2 = 'Vertical Axis Default',
   axisLabel2a = 'Low End Default',
   axisLabel2b = 'High End Default',
-  phenomena,
+  phenomena = [],
   radar
 }) => {
 
@@ -70,7 +70,7 @@ const App = ({
     left: 50
   }
 
-  const maxTextWidth = 120
+  const maxTextWidth = 90
 
   const rectNodes = React.useMemo(() => {
     return [
@@ -218,10 +218,6 @@ const App = ({
 
   }, [scatterSvg, isAverage])
 
-  // useEffect(() => {
-  //   d3.select('#svg-app').attr("viewBox", [0, 0, containerWidth, containerHeight])
-  // }, [containerWidth, containerHeight])
-
   useEffect(() => {
     const svg = d3.select('#svg-app_Conclusion').attr("viewBox", [0, 0, containerWidth, containerHeight])
 
@@ -243,12 +239,13 @@ const App = ({
 
     const x = d3.scaleLinear()
       .domain(d3.extent(data, d => d[0]))
-      .rangeRound([margin.left, containerWidth - margin.right])
       .nice()
+      .rangeRound([margin.left, containerWidth - margin.right])
+      
     const y = d3.scaleLinear()
       .domain(d3.extent(data, d => d[0]))
-      .rangeRound([containerHeight - margin.bottom, margin.top])
       .nice()
+      .rangeRound([containerHeight - margin.bottom, margin.top])
 
     const xAxis = (g, scale) => g
       .attr("transform", `translate(0,${y(0) + 10})`)
@@ -297,7 +294,7 @@ const App = ({
     myForeignObjectsAvg
       .attr('id', 'myNewTextsAvg_Conclusion')
       .attr('width', maxTextWidth)
-      .attr('height', 60)
+      .attr('height', 200)
       .style('transition', 'font-size 0.2s')
       .style('transition-timing-function', 'linear')
       .style('text-align', 'center')
@@ -308,30 +305,12 @@ const App = ({
       myForeignObjectsMedian
         .attr('id', 'myNewTextsMedian_Conclusion')
         .attr('width', maxTextWidth)
-        .attr('height', 60)
+        .attr('height', 200)
         .style('transition', 'font-size 0.2s')
         .style('transition-timing-function', 'linear')
         .style('text-align', 'center')
         .append("xhtml:div")
         .html(d => d.title)
-
-    // const myTexts_Avg = scatterSvg.append('g')
-    //   .selectAll('text')
-    //   .data(nodeListAsAverage)
-    //   .join('text')
-    //   .text(d => d.title)
-    //   .style('fill', 'black')
-    //   .attr('id', 'myTexts_Avg')
-    //   .attr('font-size', 12)
-
-    // const myTexts_Median = scatterSvg.append('g')
-    //   .selectAll('text')
-    //   .data(nodeListAsMedian)
-    //   .join('text')
-    //   .text(d => d.title)
-    //   .style('fill', 'black')
-    //   .attr('id', 'myTexts_Median')
-    //   .attr('font-size', 12)
 
     const myCircleAvg1 = scatterSvg.append('g')
       .selectAll('circle')
@@ -400,23 +379,13 @@ const App = ({
     gy.call(zoomY).attr("pointer-events", "none")
 
     // active zooming
-    const zoom = d3.zoom().on("zoom", function (e) {
+    const zoom = d3.zoom().scaleExtent([1, 8]).translateExtent([[0, 0], [containerWidth, containerHeight]]).on("zoom", function (e) {
       try {
-        if (e.transform.k < 1) {
-          e.transform.k = 1
-          return
-        }
-        if (e.transform.k > 8) {
-          e.transform.k = 8
-          return
-        }
-        e.transform.k = Math.min(Math.max(e.transform.k, 1), 8)
-  
         const trans = d3.transition().duration(150).ease(d3.easeLinear)
         const t = e.transform
   
         const k = t.k / z.k
-        const point = center(e, this)
+        const point = center(e, scatterSvg)
   
         // is it on an axis? is the shift key pressed?
         const doX = point[0] > x.range()[0]
@@ -430,7 +399,8 @@ const App = ({
         } else {
           // if not, we're zooming on a fixed point
           doX && gx.call(zoomX.scaleBy, shift ? 1 / k : k, point)
-          doY && gy.call(zoomY.scaleBy, k, point)
+          gy.call(zoomY.scaleBy, k, point)
+          // doY && gy.call(zoomY.scaleBy, k, point)
         }
   
         z = t
@@ -471,7 +441,7 @@ const App = ({
               const minScale = Math.max(scale, 1)
               const r = Math.max(10, Math.floor(10 + minScale))
               const fonts = Math.max(10, Math.floor(9 + minScale))
-              d3.selectAll('#myNewTextsAvg_Conclusion').style('font-size', fonts).attr('y', d => yr(d.y) + r / 1)
+              d3.selectAll('#myNewTextsAvg_Conclusion').style('font-size', fonts).attr('y', d => yr(d.y) + r / 1 - 3)
             } catch (err) {
               console.log('error', err)
             }
@@ -480,7 +450,7 @@ const App = ({
           .attr('x', d => {
             return xr(d.x) - maxTextWidth / 2
           })
-          .attr('y', d => yr(d.y) + radius / 1)
+          .attr('y', d => yr(d.y) + radius / 1 - 3)
 
         myForeignObjectsMedian
           .transition(trans)
@@ -490,7 +460,7 @@ const App = ({
               const minScale = Math.max(scale, 1)
               const r = Math.max(10, Math.floor(10 + minScale))
               const fonts = Math.max(10, Math.floor(9 + minScale))
-              d3.selectAll('#myNewTextsMedian_Conclusion').style('font-size', fonts).attr('y', d => yr(d.y) + r / 1)
+              d3.selectAll('#myNewTextsMedian_Conclusion').style('font-size', fonts).attr('y', d => yr(d.y) + r / 1 - 3)
             } catch (err) {
               console.log('error', err)
             }
@@ -498,51 +468,7 @@ const App = ({
           .attr('x', d => {
             return xr(d.x) - maxTextWidth / 2
           })
-          .attr('y', d => yr(d.y) + radius / 1)
-  
-        // myTexts_Median
-        //   .transition(trans)
-        //   .on('end', () => {
-        //     try {
-        //       const scale = Math.min(t.k, 9)
-        //       const minScale = Math.max(scale, 1)
-        //       const fonts = Math.max(12, Math.floor(11 + minScale))
-        //       const tran2 = d3.transition().duration(200).ease(d3.easeLinear)
-        //       myTexts_Median.transition(tran2)
-        //         .attr('font-size', fonts)
-        //         .attr('x', d => xr(d.x) - getTextWidth(d.title, fonts) / 2)
-        //         .attr('y', d => yr(d.y) + 10 * 3)
-        //     } catch (error) {
-        //       console.error(error)
-        //     }
-        //   })
-        //   .attr('x', d => {
-        //     const fontS = myTexts_Median.attr('font-size')
-        //     return xr(d.x) - getTextWidth(d.title, fontS) / 2
-        //   })
-        //   .attr('y', d => yr(d.y) + 10 * 3)
-  
-        // myTexts_Avg
-        //   .transition(trans)
-        //   .on('end', () => {
-        //     try {
-        //       const scale = Math.min(t.k, 9)
-        //       const minScale = Math.max(scale, 1)
-        //       const fonts = Math.max(12, Math.floor(11 + minScale))
-        //       const tran2 = d3.transition().duration(200).ease(d3.easeLinear)
-        //       myTexts_Avg.transition(tran2)
-        //         .attr('font-size', fonts)
-        //         .attr('x', d => xr(d.x) - getTextWidth(d.title, fonts) / 2)
-        //         .attr('y', d => yr(d.y) + 10 * 3)
-        //     } catch (error) {
-        //       console.error(error)
-        //     }
-        //   })
-        //   .attr('x', d => {
-        //     const fontS = myTexts_Avg.attr('font-size')
-        //     return xr(d.x) - getTextWidth(d.title, fontS) / 2
-        //   })
-        //   .attr('y', d => yr(d.y) + 10 * 3)
+          .attr('y', d => yr(d.y) + radius / 1 - 3)
   
         myCircleAvg1
           .transition(trans)
@@ -565,7 +491,8 @@ const App = ({
           .attr('r', radius1)
           .attr('class', 'left')
           .attr('data-href', d => getPhenomenonUrl(radar?.id, d))
-  
+
+
         myCircleAvg
           .transition(trans)
           .on('end', () => {
@@ -610,6 +537,7 @@ const App = ({
           .attr('class', 'left')
           .attr('data-href', d => getPhenomenonUrl(radar?.id, d))
 
+  
         myCircleMedian
           .transition(trans)
           .on('end', () => {
@@ -631,6 +559,7 @@ const App = ({
           .attr('r', radius)
           .attr('class', 'left')
           .attr('data-href', d => getPhenomenonUrl(radar?.id, d))
+          
       } catch (error) {
         console.error(error)
       }
