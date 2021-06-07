@@ -1,4 +1,5 @@
 import styled from "styled-components/macro";
+import * as tokens from "@sangre-fp/css-framework/tokens/fp-design-tokens"
 
 export const Container = styled.div`
   display: flex;
@@ -9,23 +10,19 @@ export const Container = styled.div`
   padding-bottom: 4px;
 `
 export const WildCardWrapper = styled.div`
-width: 70%;
-
-:hover {
-  cursor:pointer;
-}
+  width: 50%;
+  @media (min-width: 768px) {
+    width: 65%;
+  }
+  :hover {
+    cursor:pointer;
+  }
 `
 
 export const WildCard = styled.h4`
-  display: block;
-  position: relative;
-  margin-bottom: 6px;
-  font-weight: 700;
-  font-size: 15px;
-  line-height: 1.5;
+  font-size: ${tokens.H4FontSize};
   min-height: 25px;
   padding-left: 25px;
-  padding-top: 0;
   width: 100%;
   word-wrap: break-word;
   // width: 410px;
@@ -34,17 +31,10 @@ export const WildCard = styled.h4`
   // text-overflow: ellipsis;
 
   &:before {
-    background:${props => props.symbol};
-    border: 1px solid ${props => props.symbolBorder};
-    box-shadow: inset 0px 0px 1px 1px ${props => props.symbolBoxShadow};
-    display: block;
     position: absolute;
     left: 0;
     top: 4px;
-    content: '';
-    width: 16px;
-    height: 16px;
-    border-radius: 100%;
+    background:${props => props.backgroundColor} !important;
   }
 `
 

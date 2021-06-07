@@ -22,11 +22,18 @@ const reducers = (state, action) => {
       ...state,
       status: action.payload
     }
-    case ACTIONS.HIDDENPHENOMENA:
+    case ACTIONS.HIDDENPHENOMENARATING:
     return {
       ...state,
-      hiddenPhenomena: action.payload
+      hiddenPhenomenaRating: action.payload
     }
+    case ACTIONS.HIDDENPHENOMENAVOTING:
+      return {
+        ...state,
+        hiddenPhenomenaVoting: action.payload
+      }
+
+    
     default:
       return state
   }

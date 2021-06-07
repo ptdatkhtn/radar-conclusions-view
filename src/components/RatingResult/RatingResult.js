@@ -18,49 +18,41 @@ const Rating = ({ phenomenon, radar, isRatingX }) => {
     state: { error }
   } = useContext(DataContext);
 
-  let symbolPhenomenon = ''
-  let symbolBorderPhenomenon = ''
-  let symbolBoxShadowPhenomenon = ''
-  if(phenomenon?.['content-type-title'] === 'Strengthening'){
-    symbolPhenomenon= 'rgb(0, 202, 141)'
-    symbolBorderPhenomenon= 'transparent'
-    symbolBoxShadowPhenomenon='transparent'
-  } 
-  else if(phenomenon?.['content-type-title'] === 'Weak signal'){
-    symbolPhenomenon= 'rgb(168, 168, 168)'
-    symbolBorderPhenomenon= 'transparent'
-    symbolBoxShadowPhenomenon='transparent'
-
-  }
-  else if (phenomenon?.['content-type-title'] === 'Summary'){
-    symbolPhenomenon= 'rgb(0, 202, 141)'
-    symbolBorderPhenomenon= 'rgb(0, 202, 141)'
-    symbolBoxShadowPhenomenon='#fff'
-
-  }
-  else if (phenomenon?.['content-type-title'] === 'Weakening'){
-    symbolPhenomenon= 'rgb(0, 152, 255)'
-    symbolBorderPhenomenon= 'transparent'
-    symbolBoxShadowPhenomenon='transparent'
-
-  }
-  else if (phenomenon?.['content-type-title'] === 'Wild card'){
-    symbolPhenomenon= 'rgb(233, 87, 87)'
-    symbolBorderPhenomenon= 'transparent'
-    symbolBoxShadowPhenomenon='transparent'
-
-  }
-  else {
-    symbolPhenomenon= 'transparent'
-    symbolBorderPhenomenon='rgb(0, 202, 141)'
-    symbolBoxShadowPhenomenon='transparent'
-
+  let iconClassName = ''
+  let backgroundColor = ''
+  if(String(phenomenon?.['color']) === 'none'){
+    if(phenomenon?.['content-type-alias'] === 'rising'){
+      iconClassName = 'rising'
+    } 
+    else if(phenomenon?.['content-type-alias'] === 'weaksignal'){
+      iconClassName = 'weaksignal'
+    }
+    else if (phenomenon?.['content-type-alias'] === 'summary'){
+      iconClassName = 'summary'
+    }
+    else if (phenomenon?.['content-type-alias'] === 'cooling'){
+      iconClassName = 'cooling'
+    }
+    else if (phenomenon?.['content-type-alias'] === 'wildcard'){
+      iconClassName = 'wildcard'
+    }
+    else {
+      iconClassName = 'undefined'
+    }
+  } else {
+    iconClassName = 'undefined'
+    backgroundColor = phenomenon?.['color']
   }
 
   return (
     <RatingWidget>
         <RatingHeader className='left' data-href={getPhenomenonUrl(radar?.id, phenomenon)}>
-          <RatingItemHeader symbol={symbolPhenomenon} symbolBorder={symbolBorderPhenomenon} symbolBoxShadow={symbolBoxShadowPhenomenon}>{phenomenon?.content?.title}</RatingItemHeader>
+          <RatingItemHeader 
+            className= {`icon-issue ${iconClassName}`}
+            backgroundColor={backgroundColor}
+          >
+            {phenomenon?.content?.title}
+          </RatingItemHeader>
         </RatingHeader>
         <RatingItem>
           <RatingSliderScale>

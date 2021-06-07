@@ -14,7 +14,9 @@ const initialState = {
     phenonmenaData: [],
     error: {},
     radar: {},
-    hiddenPhenomena: []
+    hiddenPhenomenaRating: [],
+    hiddenPhenomenaVoting: []
+
 }
 
 export const DataContext = createContext(initialState)
@@ -61,6 +63,12 @@ export const DataProvider = ({children, node}) => {
                                 phenonmenon['content-type-alias'] = type.alias;
                                 phenonmenon['content-type-title'] = type.title;
                                 phenonmena?.push(phenonmenon);
+                                if(String(phenonmenon?.content?.type).includes('fp:doc-types')){
+                                    const nameCustomType = String(phenonmenon?.content?.type).split('/')[3]
+                                    phenonmenon['color'] = String(type?.style?.color)
+                                } else {
+                                    phenonmenon['color'] = 'none'
+                                }
                             }
                         });
                     });
@@ -97,10 +105,19 @@ export const DataProvider = ({children, node}) => {
                         }
                     )
 
+
+                    await votingApi.getAllHiddenVotes(groups[1], node)
+                        .then(async (hiddenPhenomena) => {
+                            dispatch({
+                                type: ACTIONS.HIDDENPHENOMENAVOTING,
+                                payload:  hiddenPhenomena?.data[`voting/${groups[1]}/radar/${node}`]?.hidden || []
+                            })
+                        })
+
                     await ratingApi.getAllHiddenRatings(groups[1], node)
                         .then(async (hiddenPhenomena) => {
                             dispatch({
-                                type: ACTIONS.HIDDENPHENOMENA,
+                                type: ACTIONS.HIDDENPHENOMENARATING,
                                 payload:  hiddenPhenomena?.data[`rating/${groups[1]}/radar/${node}`]?.hidden || []
                             })
                         })

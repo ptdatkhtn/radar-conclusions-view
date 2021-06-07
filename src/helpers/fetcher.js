@@ -43,6 +43,11 @@ export const votingApi = {
   getAllVotes: async (gid, radarId) => {
     return await httpRequest(baseUrl, 'GET', `voting/${gid}/radar/${radarId}/phenomenon`)
   },
+
+  //get all hidden votes from all phenomenon by radarId
+  getAllHiddenVotes: async (gid, radarId) => {
+    return await httpRequest(baseUrl, 'GET', `meta/voting/${gid}/radar/${radarId}/phenomenon/`)
+  },
 }
 
 export const ratingApi = {

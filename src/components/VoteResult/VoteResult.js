@@ -188,23 +188,29 @@ const VoteResult = ({ phenomenon, radar }) => {
   }, []);
 
   let iconClassName = ''
-  if(phenomenon?.['content-type-alias'] === 'rising'){
+  let backgroundColor = ''
+  if(String(phenomenon?.['color']) === 'none'){
+    if(phenomenon?.['content-type-alias'] === 'rising'){
       iconClassName = 'rising'
-  } 
-  else if(phenomenon?.['content-type-alias'] === 'weaksignal'){
-    iconClassName = 'weaksignal'
-  }
-  else if (phenomenon?.['content-type-alias'] === 'summary'){
-    iconClassName = 'summary'
-  }
-  else if (phenomenon?.['content-type-alias'] === 'cooling'){
-    iconClassName = 'cooling'
-  }
-  else if (phenomenon?.['content-type-alias'] === 'wildcard'){
-    iconClassName = 'wildcard'
-  }
-  else {
+    } 
+    else if(phenomenon?.['content-type-alias'] === 'weaksignal'){
+      iconClassName = 'weaksignal'
+    }
+    else if (phenomenon?.['content-type-alias'] === 'summary'){
+      iconClassName = 'summary'
+    }
+    else if (phenomenon?.['content-type-alias'] === 'cooling'){
+      iconClassName = 'cooling'
+    }
+    else if (phenomenon?.['content-type-alias'] === 'wildcard'){
+      iconClassName = 'wildcard'
+    }
+    else {
+      iconClassName = 'undefined'
+    }
+  } else {
     iconClassName = 'undefined'
+    backgroundColor = phenomenon?.['color']
   }
 
   const onVisibilityHandler = async () => {
@@ -225,6 +231,7 @@ const VoteResult = ({ phenomenon, radar }) => {
       <WildCardWrapper className='left' data-href={getPhenomenonUrl(radar?.id, phenomenon)}>
         <WildCard
           className= {`icon-issue ${iconClassName}`}
+          backgroundColor={backgroundColor}
         >
           {phenomenon?.content?.title}
         </WildCard>

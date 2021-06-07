@@ -11,18 +11,22 @@ import {
   ConclusionsTabFooter
 } from "./styles";
 const VotingResultsView = () => {
-  const { state: {phenonmenaData, radar, hiddenPhenomena }} = useContext(DataContext)
-  let visiblePhenonmena = []
-  visiblePhenonmena = phenonmenaData?.filter(phenomenon => !hiddenPhenomena?.includes(phenomenon?.id))
+  const { state: {phenonmenaData, radar, hiddenPhenomenaRating, hiddenPhenomenaVoting }} = useContext(DataContext)
+  let visiblePhenonmenaRating = []
+  let visiblePhenonmenaVoting = []
+
+  visiblePhenonmenaRating = phenonmenaData?.filter(phenomenon => !hiddenPhenomenaRating?.includes(phenomenon?.id))
+  visiblePhenonmenaVoting = phenonmenaData?.filter(phenomenon => !hiddenPhenomenaVoting?.includes(phenomenon?.id))
+
   const getTabContentElement = document.getElementsByClassName('tab-content')[0]
  
   let sortedPhenomenaX = [];
   let sortedPhenomenaY = [];
   let sortedPhenomenaForChart = [];
-  sortedPhenomenaX = visiblePhenonmena.filter((p) => p.hasOwnProperty("rating_x"))
+  sortedPhenomenaX = visiblePhenonmenaRating.filter((p) => p.hasOwnProperty("rating_x"))
     .sort((a, b) => Number(b["rating_x"].avg) - Number(a["rating_x"].avg))
     .slice(0, 5)
-  sortedPhenomenaY = visiblePhenonmena.filter((p) => p.hasOwnProperty("rating_y"))
+  sortedPhenomenaY = visiblePhenonmenaRating.filter((p) => p.hasOwnProperty("rating_y"))
   .sort((a, b) => Number(b["rating_y"].avg) - Number(a["rating_y"].avg))
   .slice(0, 5)
   
@@ -69,7 +73,7 @@ const VotingResultsView = () => {
     <VoteTabWrapper>
       <HorizontalLine></HorizontalLine>
       <ConclusionsHeader>Top 5 voted phenomena</ConclusionsHeader>
-        <VoteResults phenomena={phenonmenaData || []} radar={radar}/>
+        <VoteResults phenomena={visiblePhenonmenaVoting || []} radar={radar}/>
       <HorizontalLine></HorizontalLine>
       <ConclusionsHeader>Top 5 rated phenomena</ConclusionsHeader>
       {
@@ -91,7 +95,7 @@ const VotingResultsView = () => {
           radar={radar}
         />
       }
-        <RatingResults phenomena={visiblePhenonmena || []} radar={radar}/>
+        <RatingResults phenomena={visiblePhenonmenaRating || []} radar={radar}/>
         <ConclusionsTabFooter></ConclusionsTabFooter>
     </VoteTabWrapper>
   );
