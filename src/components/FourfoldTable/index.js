@@ -393,7 +393,7 @@ const App = ({
         const t = e.transform
   
         const k = t.k / z.k
-        const point = center(e, scatterSvg)
+        const point = center(e, this)
   
         // is it on an axis? is the shift key pressed?
         const doX = point[0] > x.range()[0]
@@ -402,11 +402,11 @@ const App = ({
   
         if (k === 1) {
           // pure translation?
-          doX && gx.call(zoomX.translateBy, (t.x - z.x) / tx().k, 0)
-          doY && gy.call(zoomY.translateBy, 0, (t.y - z.y) / ty().k)
+          gx.call(zoomX.translateBy, (t.x - z.x) / tx().k, 0)
+          gy.call(zoomY.translateBy, 0, (t.y - z.y) / ty().k)
         } else {
           // if not, we're zooming on a fixed point
-          doX && gx.call(zoomX.scaleBy, shift ? 1 / k : k, point)
+          gx.call(zoomX.scaleBy, shift ? 1 / k : k, point)
           gy.call(zoomY.scaleBy, k, point)
           // doY && gy.call(zoomY.scaleBy, k, point)
         }
@@ -458,7 +458,7 @@ const App = ({
           .attr('x', d => {
             return xr(d.x) - maxTextWidth / 2
           })
-          .attr('y', d => yr(d.y) + radius / 1 - 3)
+          .attr('y', d => yr(d.y) + radius / 1)
 
         myForeignObjectsMedian
           .transition(trans)
@@ -476,7 +476,7 @@ const App = ({
           .attr('x', d => {
             return xr(d.x) - maxTextWidth / 2
           })
-          .attr('y', d => yr(d.y) + radius / 1 - 3)
+          .attr('y', d => yr(d.y) + radius / 1)
   
         myCircleAvg1
           .transition(trans)
