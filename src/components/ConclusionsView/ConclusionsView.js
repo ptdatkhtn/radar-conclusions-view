@@ -3,6 +3,7 @@ import {DataContext} from '../../store/GlobalState'
 import VoteResults from "../VoteResults/VoteResults";
 import RatingResults from "../RatingResults/RatingResults";
 import FourfoldTable from '../FourfoldTable'
+import ConclusionSession from "../ConclusionSession/ConclusionSession";
 import {innerDimensions} from '../../helpers/dimension'
 import {
   VoteTabWrapper,
@@ -71,6 +72,7 @@ const VotingResultsView = () => {
 
   return (
     <VoteTabWrapper>
+      <ConclusionSession />
       <HorizontalLine></HorizontalLine>
       <ConclusionsHeader>Top 5 voted phenomena</ConclusionsHeader>
         <VoteResults phenomena={visiblePhenonmenaVoting || []} radar={radar}/>
