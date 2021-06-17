@@ -6,7 +6,7 @@ const ConclusionSession = () => {
     const { state: { radar }} = useContext(DataContext)
     
     return (
-        <div>
+        <div className="conclusions-main-content">
             {parse(radar?.mapIntro || '')}
         </div>
     )
