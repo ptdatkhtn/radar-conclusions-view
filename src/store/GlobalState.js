@@ -1,4 +1,4 @@
-import { createContext, useReducer, useEffect, useCallback } from 'react'
+import { createContext, useState, useReducer, useEffect, useCallback } from 'react'
 import reducers from './Reducers'
 import { startSession } from '../helpers/session';
 import { ACTIONS } from './Actions'
@@ -7,6 +7,8 @@ import { getRadar, getPhenomenaTypes } from '@sangre-fp/connectors/drupal-api';
 import radarDataApi from '@sangre-fp/connectors/radar-data-api';
 import {getPhenomena} from '../helpers/phenomenonFetcher'
 import { votingApi, ratingApi } from '../helpers/fetcher';
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
 const initialState = {
     status: VOTING_STATUS.none,
@@ -22,7 +24,8 @@ const initialState = {
 export const DataContext = createContext(initialState)
 
 export const DataProvider = ({children, node}) => {
-   
+    NProgress.configure({ minimum: 0.1 })
+    const [isLoadingData, setIsLoadingData] = useState(true)
     const [state, dispatch] = useReducer(reducers, initialState)
 
     const fetchAllPhenomenonByRadarIdAndGroupId = useCallback(
@@ -31,6 +34,9 @@ export const DataProvider = ({children, node}) => {
 
             let phenomenaIds = []
             let groups = [0]
+
+            NProgress.start()
+            NProgress.set(0.4)
 
             // node=194690
             await Promise.all([
@@ -128,7 +134,9 @@ export const DataProvider = ({children, node}) => {
                     });
                 }
             )
-   
+            NProgress.done(true)
+            NProgress.remove()
+            setIsLoadingData(false)
             return []
         },
         [dispatch]
@@ -136,7 +144,6 @@ export const DataProvider = ({children, node}) => {
 
     useEffect(() => {
         try {
-
             fetchAllPhenomenonByRadarIdAndGroupId()
             dispatch({type: ACTIONS.ERROR, payload: null})
         } catch (error) {
@@ -145,8 +152,13 @@ export const DataProvider = ({children, node}) => {
     },[dispatch, fetchAllPhenomenonByRadarIdAndGroupId])
 
     return(
-        <DataContext.Provider value={{state, dispatch}}>
-            {children}
-        </DataContext.Provider>
+        <>
+        {
+            !isLoadingData &&
+            <DataContext.Provider value={{state, dispatch}}>
+                {children}
+            </DataContext.Provider>
+        }
+        </>
     )
 }
