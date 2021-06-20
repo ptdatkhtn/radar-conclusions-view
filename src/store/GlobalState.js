@@ -30,13 +30,13 @@ export const DataProvider = ({children, node}) => {
 
     const fetchAllPhenomenonByRadarIdAndGroupId = useCallback(
         async () => {
-            NProgress.start()
-            NProgress.set(0.4)
-
             await startSession()
 
             let phenomenaIds = []
             let groups = [0]
+
+            NProgress.start()
+            NProgress.set(0.4)
 
             // node=194690
             await Promise.all([
@@ -144,7 +144,6 @@ export const DataProvider = ({children, node}) => {
 
     useEffect(() => {
         try {
-
             fetchAllPhenomenonByRadarIdAndGroupId()
             dispatch({type: ACTIONS.ERROR, payload: null})
         } catch (error) {
