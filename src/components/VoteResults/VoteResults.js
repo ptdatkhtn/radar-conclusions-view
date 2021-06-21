@@ -17,6 +17,10 @@ const VoteResults = ({ phenomena, radar }) => {
         (a, b) =>
           Number(b?.vote_result?.plus_votes - b?.vote_result?.minus_votes) - Number(a?.vote_result?.plus_votes - a?.vote_result?.minus_votes) || null
       )
+      .sort((a, b) => {
+        if (Number(b.vote_result?.plus_votes - b.vote_result?.minus_votes) - Number(a.vote_result?.plus_votes - a.vote_result?.minus_votes) == 0) 
+            return a.content?.title.localeCompare(b.content?.title)
+      })
         .slice(0, 5)
         .map((phenomenon) => {
           return (

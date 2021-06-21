@@ -113,6 +113,7 @@ export const LineDown = styled.div`
 
 export const VoteAmountResult = styled.div`
     font-size: 14px;  
+    margin-right: 24px;
 `
 
 export const VoteAmountItem = styled.div`

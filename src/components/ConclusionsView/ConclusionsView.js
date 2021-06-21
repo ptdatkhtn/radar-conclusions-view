@@ -5,6 +5,7 @@ import RatingResults from "../RatingResults/RatingResults";
 import FourfoldTable from '../FourfoldTable'
 import ConclusionSession from "../ConclusionSession/ConclusionSession";
 import {innerDimensions} from '../../helpers/dimension'
+import { requestTranslation } from '@sangre-fp/i18n';
 import {
   VoteTabWrapper,
   HorizontalLine,
@@ -74,10 +75,10 @@ const VotingResultsView = () => {
     <VoteTabWrapper>
       <ConclusionSession />
       <HorizontalLine></HorizontalLine>
-      <ConclusionsHeader>Top 5 voted phenomena</ConclusionsHeader>
+      <ConclusionsHeader>{requestTranslation('top5Voted_RadarConclusions')}</ConclusionsHeader>
         <VoteResults phenomena={visiblePhenonmenaVoting || []} radar={radar}/>
       <HorizontalLine></HorizontalLine>
-      <ConclusionsHeader>Top 5 rated phenomena</ConclusionsHeader>
+      <ConclusionsHeader>{requestTranslation('top5Voted_RadarConclusions')}</ConclusionsHeader>
       {
         width > 0 && 
         <FourfoldTable 
