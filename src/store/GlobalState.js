@@ -1,6 +1,5 @@
 import { createContext, useState, useReducer, useEffect, useCallback } from 'react'
 import reducers from './Reducers'
-import { startSession } from '../helpers/session';
 import { ACTIONS } from './Actions'
 import { VOTING_STATUS } from '../constants'
 import { getRadar, getPhenomenaTypes } from '@sangre-fp/connectors/drupal-api';
@@ -30,8 +29,6 @@ export const DataProvider = ({children, node}) => {
 
     const fetchAllPhenomenonByRadarIdAndGroupId = useCallback(
         async () => {
-            await startSession()
-
             let phenomenaIds = []
             let groups = [0]
 

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getSessionToken } from './session'
+import { getSessionToken } from '@sangre-fp/connectors/session'
 
 const SEARCH_API_URL = process.env.REACT_APP_SEARCH_API_URL
 

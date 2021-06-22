@@ -1,5 +1,5 @@
 import  axios from 'axios';
-import { getCsrfToken, getSessionToken } from "./session";
+import { getCsrfToken, getSessionToken } from "@sangre-fp/connectors/session";
 
 const baseUrl = process.env.REACT_APP_VOTING_API_URL
 
