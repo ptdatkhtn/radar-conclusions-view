@@ -1926,10 +1926,10 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
-"@sangre-fp/connectors@^1.5.5":
-  version "1.6.1"
-  resolved "https://npm.sangre.dev/@sangre-fp%2fconnectors/-/connectors-1.6.1.tgz#fb16b5b74a688de54aeb8942c6296ce084ce9d39"
-  integrity sha512-09E7W2SsqM9mjuIk/zWmIK2gPKB86mugwXEYpALFEOOtorDV28fvhk3e8UZ1RV5l2ctWQFG4RuuHwsOcQHygqw==
+"@sangre-fp/connectors@^2.0.0-3":
+  version "2.0.0-3"
+  resolved "https://npm.sangre.dev/@sangre-fp%2fconnectors/-/connectors-2.0.0-3.tgz#3fc2f990d439a792287e066528beffe963328110"
+  integrity sha512-FEWG0YE7CC4cMbqLmkk94bjGQcOy2t7mrrxN5BtpM3xE0NboRgx5jGEpFNdbEx9PwDz5bULblx3/8wllYwxqhg==
   dependencies:
     axios "^0.19.1"
     lodash-es "^4.17.15"
