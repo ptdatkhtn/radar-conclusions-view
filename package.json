@@ -1,10 +1,10 @@
 {
   "name": "conclusions-tab",
-  "version": "1.0.3",
+  "version": "1.1.0-0",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.4",
-    "@sangre-fp/connectors": "^1.5.5",
+    "@sangre-fp/connectors": "^2.0.0-3",
     "@sangre-fp/css-framework": "^0.0.9",
     "@sangre-fp/ui": "^2.0.23",
     "@testing-library/jest-dom": "^5.11.4",
