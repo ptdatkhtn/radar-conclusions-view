@@ -56,10 +56,10 @@ export const DataProvider = ({children, node}) => {
             const page = 0
             const size = phenomenaIds?.length || 10
             const phenonmena = []
-           
+            const groupVotingParam  = groups[1] ? groups[1] : groups[0]
             await getPhenomena({ phenomena:phenomenaIds, undefined, groups, page, size }).then(
                 async (data) => {
-                    const types = await getPhenomenaTypes(groups[1]);
+                    const types = await getPhenomenaTypes(groupVotingParam);
                     data?.result.map((phenonmenon) => {
                         types?.map((type) => {
                             if (String(phenonmenon?.content?.type) === String(type?.id)) {
@@ -75,16 +75,16 @@ export const DataProvider = ({children, node}) => {
                             }
                         });
                     });
-
+                    
                     //fetch all votes for all phenomenon
-                    await votingApi.getAllVotes(groups[1], node).then(
+                    await votingApi.getAllVotes(groupVotingParam, node).then(
                         async ({ data }) => {
                             Object.keys(data)?.map(async (phe) => {
                                 const pheURL = String(Object.keys(data[phe]));
                                 const pheId = pheURL.split('/');
                                 phenonmena && !!phenonmena.length && phenonmena.forEach(phenomenon => {
-                                    if (data[phe][`/${groups[1]}/radar/${node}/phenomenon/${pheId[5]}`] && phenomenon.id === pheId[5]) {
-                                        phenomenon['vote_result'] = data[phe][`/${groups[1]}/radar/${node}/phenomenon/${pheId[5]}`];
+                                    if (data[phe][`/${groupVotingParam}/radar/${node}/phenomenon/${pheId[5]}`] && phenomenon.id === pheId[5]) {
+                                        phenomenon['vote_result'] = data[phe][`/${groupVotingParam}/radar/${node}/phenomenon/${pheId[5]}`];
                                     }
                                 });
                             });
@@ -92,7 +92,7 @@ export const DataProvider = ({children, node}) => {
                     );
 
                     // fetch all ratings for all phenomenon
-                    await ratingApi.getAllRatings(groups[1], node).then(
+                    await ratingApi.getAllRatings(groupVotingParam, node).then(
                         async ({data}) => {
                             Object.keys(data)?.map( async(phe) => {
                                 const pheId = phe.split('/')
@@ -109,19 +109,19 @@ export const DataProvider = ({children, node}) => {
                     )
 
 
-                    await votingApi.getAllHiddenVotes(groups[1], node)
+                    await votingApi.getAllHiddenVotes(groupVotingParam, node)
                         .then(async (hiddenPhenomena) => {
                             dispatch({
                                 type: ACTIONS.HIDDENPHENOMENAVOTING,
-                                payload:  hiddenPhenomena?.data[`voting/${groups[1]}/radar/${node}`]?.hidden || []
+                                payload:  hiddenPhenomena?.data[`voting/${groupVotingParam}/radar/${node}`]?.hidden || []
                             })
                         })
 
-                    await ratingApi.getAllHiddenRatings(groups[1], node)
+                    await ratingApi.getAllHiddenRatings(groupVotingParam, node)
                         .then(async (hiddenPhenomena) => {
                             dispatch({
                                 type: ACTIONS.HIDDENPHENOMENARATING,
-                                payload:  hiddenPhenomena?.data[`rating/${groups[1]}/radar/${node}`]?.hidden || []
+                                payload:  hiddenPhenomena?.data[`rating/${groupVotingParam}/radar/${node}`]?.hidden || []
                             })
                         })
 

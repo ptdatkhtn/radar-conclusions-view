@@ -33,7 +33,7 @@ const VoteResult = ({ phenomenon, radar }) => {
   useEffect(() => {
     const updateAmountVotes = async() => {
       const { data } = await votingApi.getVotes(
-        radar.group.id,
+        radar?.group?.id ? radar?.group?.id : 0,
         radar.id,
         phenomenon.id
       )
@@ -103,13 +103,13 @@ const VoteResult = ({ phenomenon, radar }) => {
         setVoteStatus(VOTING_STATUS.none)
         setAmountUpVotes(amountUpVotes - 1)
 
-        await votingApi.deleteVote(radar.group.id, radar.id, phenomenon.id);
+        await votingApi.deleteVote(radar?.group?.id || 0, radar?.id, phenomenon?.id);
       } else if (String(voteStatus) === String(VOTING_STATUS.none)) {
         setVoteStatus(VOTING_STATUS.up)
         setAmountUpVotes(amountUpVotes + 1)
         // setAmountDownVotes(amountDownVotes - 1)
 
-        await votingApi.addVote(radar.group.id, radar.id, phenomenon.id, {
+        await votingApi.addVote(radar?.group?.id || 0, radar?.id, phenomenon?.id, {
           up: true,
         });
       } else {
@@ -117,7 +117,7 @@ const VoteResult = ({ phenomenon, radar }) => {
         setAmountUpVotes(amountUpVotes + 1)
         setAmountDownVotes(amountDownVotes - 1)
 
-        await votingApi.addVote(radar.group.id, radar.id, phenomenon.id, {
+        await votingApi.addVote(radar?.group?.id || 0, radar?.id, phenomenon?.id, {
           up: true,
         });
       }
@@ -139,7 +139,7 @@ const VoteResult = ({ phenomenon, radar }) => {
         setVoteStatus(VOTING_STATUS.none)
         setAmountDownVotes(amountDownVotes - 1)
 
-        await votingApi.deleteVote(radar.group.id, radar.id, phenomenon.id);
+        await votingApi.deleteVote(radar?.group?.id || 0, radar?.id, phenomenon?.id);
         
       } else if (String(voteStatus) === String(VOTING_STATUS.none)) {
         // setVoteStatus(VOTING_STATUS.down)
@@ -147,7 +147,7 @@ const VoteResult = ({ phenomenon, radar }) => {
         // setAmountUpVotes(amountUpVotes - 1)
         setAmountDownVotes(amountDownVotes + 1)
 
-        await votingApi.addVote(radar.group.id, radar.id, phenomenon.id, {
+        await votingApi.addVote(radar?.group?.id || 0, radar?.id, phenomenon?.id, {
           up: false,
         });
       } else {
@@ -155,7 +155,7 @@ const VoteResult = ({ phenomenon, radar }) => {
         setAmountUpVotes(amountUpVotes - 1)
         setAmountDownVotes(amountDownVotes + 1)
 
-        await votingApi.addVote(radar.group.id, radar.id, phenomenon.id, {
+        await votingApi.addVote(radar?.group?.id || 0, radar?.id, phenomenon?.id, {
           up: false,
         });
       }
@@ -174,7 +174,7 @@ const VoteResult = ({ phenomenon, radar }) => {
     const setStatus = async() => {
       const {
         data: { plus_votes, minus_votes },
-      } = await votingApi.getVote(radar.group.id, radar.id, phenomenon.id);
+      } = await votingApi.getVote(radar?.group?.id || 0, radar?.id, phenomenon?.id);
       
       const sum = Number(plus_votes - minus_votes);
   
@@ -220,11 +220,11 @@ const VoteResult = ({ phenomenon, radar }) => {
       payload: hiddenPhenomenaUpdated,
     });
     const payload = {
-      [`voting/${radar.group.id}/radar/${radar.id}`]: {
+      [`voting/${radar?.group?.id || 0}/radar/${radar.id}`]: {
         hidden: hiddenPhenomenaUpdated,
       },
     };
-    await votingApi.addHiddenPhenomenaVotes(radar.group.id, radar.id, payload);
+    await votingApi.addHiddenPhenomenaVotes(radar?.group?.id || 0, radar?.id, payload);
   };
   return (
     <Container>
