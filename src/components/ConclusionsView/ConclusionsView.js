@@ -78,7 +78,7 @@ const VotingResultsView = () => {
       <ConclusionsHeader>{requestTranslation('top5Voted_RadarConclusions')}</ConclusionsHeader>
         <VoteResults phenomena={visiblePhenonmenaVoting || []} radar={radar}/>
       <HorizontalLine></HorizontalLine>
-      <ConclusionsHeader>{requestTranslation('top5Voted_RadarConclusions')}</ConclusionsHeader>
+      <ConclusionsHeader>{requestTranslation('top5Rated_RadarConclusions')}</ConclusionsHeader>
       {
         width > 0 && 
         <FourfoldTable 

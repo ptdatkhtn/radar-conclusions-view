@@ -2,12 +2,12 @@ import { initTranslations } from '@sangre-fp/i18n'
 
 const localTranslations = {
   top5Voted_RadarConclusions: {
-      en: 'Top 5 voted phenomena ',
-      fi: 'Viisi suosituinta ilmiötä'
+      en: 'Top 5 voted content ',
+      fi: 'Top 5 -äänestetyt'
   },
   top5Rated_RadarConclusions: {
-    en: 'Top 5 rated phenomena ',
-    fi: 'Suosituimmat 5 ilmiötä'
+    en: 'Top 5 rated content ',
+    fi: 'Top 5 -arvioidut'
   },
   HideTitles_RadarConclusions: {
     en: 'Hide titles ',
