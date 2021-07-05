@@ -1,4 +1,5 @@
-import { initTranslations } from '@sangre-fp/i18n'
+import { initTranslations, setLanguage } from '@sangre-fp/i18n'
+setLanguage(document.querySelector('html').getAttribute('lang'))
 
 const localTranslations = {
   top5Voted_RadarConclusions: {
