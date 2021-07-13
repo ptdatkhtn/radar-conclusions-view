@@ -3,7 +3,7 @@ import { getCsrfToken, getSessionToken } from "@sangre-fp/connectors/session";
 
 const baseUrl = process.env.REACT_APP_VOTING_API_URL
 
-async function httpRequest(baseUrl, method, path, payload = null) {
+export async function httpRequest(baseUrl, method, path, payload = null) {
   return axios({
       method,
       url: `${baseUrl}/${path}`,
@@ -71,5 +71,11 @@ export const ratingApi = {
   //get all hidden ratings
   getAllHiddenRatings : async (gid, radarId) => {
     return await httpRequest(baseUrl, 'GET', `meta/rating/${gid}/radar/${radarId}/phenomenon/`)
-},
+  },
+
+  //Rating
+  //get avg radar phenomenon rating for current user
+  getRatingsCurrentUser: async (gid, radarId, pid) => {
+    return await httpRequest(baseUrl, 'GET', `rating/${gid}/radar/${radarId}/phenomenon/${pid}/user`)
+  },
 }

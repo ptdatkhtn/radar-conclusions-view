@@ -8,12 +8,13 @@ import {
   RatingHeader,
   RatingSliderScale,
   SliderScaleMin,
-  SliderScaleMax
+  SliderScaleMax,
+  SingleRatingCurrentUser
 } from "./styles";
 import {getPhenomenonUrl} from '../../helpers/contentCard'
 import {SingleRating} from './styles'
 
-const Rating = ({ phenomenon, radar, isRatingX }) => { 
+const Rating = ({ phenomenon, radar, isRatingX, currentUserRatings }) => { 
   const {
     state: { error }
   } = useContext(DataContext);
@@ -79,6 +80,14 @@ const Rating = ({ phenomenon, radar, isRatingX }) => {
                   
               )
             }
+
+          <SingleRatingCurrentUser 
+            leftValue
+              ={isRatingX 
+                  ? currentUserRatings?.ratingCurrentX?.percentage 
+                    : currentUserRatings?.ratingCurrentY?.percentage} 
+                isRated={!!currentUserRatings?.ratingCurrentX?.percentage}
+          />
           </div>     
         </RatingItem>
       </RatingWidget>

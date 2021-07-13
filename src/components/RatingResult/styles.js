@@ -123,3 +123,14 @@ export const SingleRating= styled.span `
     top: -13px;
     left: calc(${props => props.leftValue}%  - 2.5px);
 `
+
+export const SingleRatingCurrentUser= styled.span `
+    height: 12px;
+    width: 12px;
+    background-color: ${props => props.isRated ? 'rgb(0, 195, 255)' : 'transparent'};
+    border-radius: 50%;
+    display: inline-block;
+    position: absolute;
+    top: -13px;
+    left: calc(${props => props.leftValue}%  - 2.5px);
+`
