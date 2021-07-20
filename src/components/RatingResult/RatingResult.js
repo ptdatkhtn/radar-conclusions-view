@@ -4,7 +4,6 @@ import {
   RatingWidget,
   RatingItemHeader,
   RatingItem,
-  RatingSlider,
   RatingHeader,
   RatingSliderScale,
   SliderScaleMin,
@@ -13,6 +12,7 @@ import {
 } from "./styles";
 import {getPhenomenonUrl} from '../../helpers/contentCard'
 import {SingleRating} from './styles'
+import Slider from '../Slider'
 
 const Rating = ({ phenomenon, radar, isRatingX, currentUserRatings }) => { 
   const {
@@ -60,14 +60,9 @@ const Rating = ({ phenomenon, radar, isRatingX, currentUserRatings }) => {
               <SliderScaleMin>{isRatingX? radar?.axisXMin : radar?.axisYMin}</SliderScaleMin>
               <SliderScaleMax>{isRatingX? radar?.axisXMax : radar?.axisYMax}</SliderScaleMax>
             </RatingSliderScale>
-          <RatingSlider
-            className="inactive"
-            type="range"
-            min="1"
-            max="100"
+            <Slider 
             value={isRatingX? phenomenon?.rating_x?.avg: phenomenon?.rating_y?.avg }
-            disabled={true}
-          ></RatingSlider>    
+          />   
           <div style={{position:'relative', width:'100%'}}>
             {
               ((isRatingX ? 
