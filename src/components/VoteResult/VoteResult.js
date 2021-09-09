@@ -52,13 +52,13 @@ const VoteResult = ({ phenomenon, radar }) => {
         });
     
       // dispatch({
-      //   type: ACTIONS.PHENOMENONDATA,
+        // type: ACTIONS.PHENOMENONDATA,
       //   payload: newPhenomena,
       // });
     }
-    if (!!phenonmenaData.length && isUpDownActions) {
-      console.log('testtting111')
-    }
+    // if (!!phenonmenaData.length && isUpDownActions) {
+    //   console.log('testtting111')
+    // }
     !!phenonmenaData?.length && isUpDownActions && updateAmountVotes()
     return () => {
       setIsUpDownActions(false)
