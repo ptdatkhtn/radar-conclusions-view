@@ -119,9 +119,10 @@ export const DataProvider = ({children, node}) => {
 
                     await ratingApi.getAllHiddenRatings(groupVotingParam, node)
                         .then(async (hiddenPhenomena) => {
-                            dispatch({
+                            const hiddenRatingsResults = hiddenPhenomena?.data[`rating/${groupVotingParam}/radar/${node}`]?.hidden
+                            hiddenRatingsResults && !!hiddenRatingsResults.length && dispatch({
                                 type: ACTIONS.HIDDENPHENOMENARATING,
-                                payload:  hiddenPhenomena?.data[`rating/${groupVotingParam}/radar/${node}`]?.hidden || []
+                                payload: hiddenRatingsResults
                             })
                         })
 
@@ -135,8 +136,10 @@ export const DataProvider = ({children, node}) => {
             NProgress.remove()
             setIsLoadingData(false)
             return []
+
+            
         },
-        [dispatch]
+        []
     )
 
     useEffect(() => {
@@ -146,7 +149,7 @@ export const DataProvider = ({children, node}) => {
         } catch (error) {
             dispatch({type: ACTIONS.ERROR, payload: {error}})
         }
-    },[dispatch, fetchAllPhenomenonByRadarIdAndGroupId])
+    },[dispatch])
 
     return(
         <>
