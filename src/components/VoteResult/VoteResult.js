@@ -26,6 +26,8 @@ const VoteResult = ({ phenomenon, radar }) => {
     state: { phenonmenaData, hiddenPhenomena, error },
     dispatch,
   } = useContext(DataContext);
+
+  const [isUpDownActions, setIsUpDownActions] = React.useState(false);
   const [voteStatus, setVoteStatus] = React.useState(VOTING_STATUS.none);
   const [amountUpVotes, setAmountUpVotes] = React.useState(phenomenon?.vote_result?.plus_votes);
   const [amountDownVotes, setAmountDownVotes] = React.useState(phenomenon?.vote_result?.minus_votes);
@@ -38,7 +40,7 @@ const VoteResult = ({ phenomenon, radar }) => {
         phenomenon.id
       )
   
-      const newPhenomena = [...phenonmenaData];
+      const newPhenomena = phenonmenaData;
       /* eslint-disable */
       !!phenonmenaData?.length &&
         newPhenomena?.map((phen) => {
@@ -54,8 +56,13 @@ const VoteResult = ({ phenomenon, radar }) => {
       //   payload: newPhenomena,
       // });
     }
-
-    !!phenonmenaData.length && updateAmountVotes()
+    if (!!phenonmenaData.length && isUpDownActions) {
+      console.log('testtting111')
+    }
+    !!phenonmenaData?.length && isUpDownActions && updateAmountVotes()
+    return () => {
+      setIsUpDownActions(false)
+    }
 
   }, [amountUpVotes, setAmountUpVotes, amountDownVotes, setAmountDownVotes])
   //get radar phenomenon vote for current user
@@ -97,6 +104,7 @@ const VoteResult = ({ phenomenon, radar }) => {
   // }
   
   const onUpHandler = async () => {
+    setIsUpDownActions(true)
     try {
       // await fetchVoteCurrentUser();
       if (String(voteStatus) === String(VOTING_STATUS.up)) {
@@ -133,6 +141,7 @@ const VoteResult = ({ phenomenon, radar }) => {
   };
 
   const onDownHandler = async () => {
+    setIsUpDownActions(true)
     try {
       if (String(voteStatus) === String(VOTING_STATUS.down)) {
         // setVoteStatus(VOTING_STATUS.none)
