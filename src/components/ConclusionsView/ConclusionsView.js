@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useContext, useState, useMemo } from "react";
 import {DataContext} from '../../store/GlobalState'
 import VoteResults from "../VoteResults/VoteResults";
 import RatingResults from "../RatingResults/RatingResults";
@@ -14,26 +14,27 @@ import {
 } from "./styles";
 const VotingResultsView = () => {
   const { state: {phenonmenaData, radar, hiddenPhenomenaRating, hiddenPhenomenaVoting }} = useContext(DataContext)
-  let visiblePhenonmenaRating = []
-  let visiblePhenonmenaVoting = []
 
-  visiblePhenonmenaRating = phenonmenaData?.filter(phenomenon => !hiddenPhenomenaRating?.includes(phenomenon?.id))
-  visiblePhenonmenaVoting = phenonmenaData?.filter(phenomenon => !hiddenPhenomenaVoting?.includes(phenomenon?.id))
+  const visiblePhenonmenaVoting = useMemo(() => {
+    return phenonmenaData ? phenonmenaData.filter(phenomenon => !hiddenPhenomenaVoting?.includes(phenomenon?.id)) : []
+  }, [phenonmenaData, hiddenPhenomenaVoting])
+  
+  const visiblePhenonmenaRating = useMemo(() => {
+    return phenonmenaData ? phenonmenaData.filter(phenomenon => !hiddenPhenomenaRating?.includes(phenomenon?.id)) : []
+  }, [phenonmenaData, hiddenPhenomenaRating])
 
   const getTabContentElement = document.getElementsByClassName('tab-content')[0]
- 
-  let sortedPhenomenaX = [];
-  let sortedPhenomenaY = [];
-  let sortedPhenomenaForChart = [];
-  sortedPhenomenaX = visiblePhenonmenaRating.filter((p) => p.hasOwnProperty("rating_x"))
-    .sort((a, b) => Number(b["rating_x"].avg) - Number(a["rating_x"].avg))
-    .slice(0, 5)
-  sortedPhenomenaY = visiblePhenonmenaRating.filter((p) => p.hasOwnProperty("rating_y"))
-  .sort((a, b) => Number(b["rating_y"].avg) - Number(a["rating_y"].avg))
-  .slice(0, 5)
   
-  sortedPhenomenaForChart = React.useMemo( () => sortedPhenomenaX.concat(sortedPhenomenaY), [phenonmenaData])
-
+  const sortedPhenomenaForChart = React.useMemo(() => {
+    const sortedPhenomenaX = visiblePhenonmenaRating.filter((p) => p.hasOwnProperty("rating_x"))
+      .sort((a, b) => Number(b["rating_x"].avg) - Number(a["rating_x"].avg))
+      .slice(0, 5)
+    const sortedPhenomenaY = visiblePhenonmenaRating.filter((p) => p.hasOwnProperty("rating_y"))
+    .sort((a, b) => Number(b["rating_y"].avg) - Number(a["rating_y"].avg))
+    .slice(0, 5)
+    
+    return sortedPhenomenaX ? sortedPhenomenaX.concat(sortedPhenomenaY) : []
+  }, [visiblePhenonmenaRating])
 
   const eventTimeoutRef = React.useRef(null)
   const [height, setHeight] = useState(0)
@@ -76,13 +77,16 @@ const VotingResultsView = () => {
       <ConclusionSession />
       <HorizontalLine></HorizontalLine>
       <ConclusionsHeader>{requestTranslation('top5Voted_RadarConclusions')}</ConclusionsHeader>
-        <VoteResults phenomena={visiblePhenonmenaVoting || []} radar={radar}/>
+      {visiblePhenonmenaVoting.length > 0 && radar && (
+        <VoteResults phenomena={visiblePhenonmenaVoting} radar={radar}/>
+      )}
+      
       <HorizontalLine></HorizontalLine>
       <ConclusionsHeader>{requestTranslation('top5Rated_RadarConclusions')}</ConclusionsHeader>
       {
-        width > 0 && 
+        width > 0 && radar && sortedPhenomenaForChart.length > 0 &&
         <FourfoldTable 
-          phenomena={sortedPhenomenaForChart || []} 
+          phenomena={sortedPhenomenaForChart} 
           containerWidth={width - 60} 
           containerHeight={height + 60}
           axisLabel3={radar?.fourFieldsBottomLeft} 
@@ -98,8 +102,11 @@ const VotingResultsView = () => {
           radar={radar}
         />
       }
-        <RatingResults phenomena={visiblePhenonmenaRating || []} radar={radar}/>
-        <ConclusionsTabFooter></ConclusionsTabFooter>
+      {visiblePhenonmenaRating.length > 0 && radar && (
+        <RatingResults phenomena={visiblePhenonmenaRating} radar={radar}/>
+      )}
+      
+      <ConclusionsTabFooter></ConclusionsTabFooter>
     </VoteTabWrapper>
   );
 };

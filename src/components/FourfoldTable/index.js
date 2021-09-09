@@ -31,21 +31,6 @@ const App = ({
   const { axis, scatterSvg } = appContext
   const [isAverage, setIsAverage] = useState(true)
 
-  const buttonStyles = {
-    position: 'fixed',
-    top: '50%',
-    left: 'calc(30% - 2px)',
-    'zIndex': 100,
-    width: '66px',
-    height: '74px',
-    background: 'white',
-    borderColor: 'transparent',
-    cursor: 'pointer',
-    'boxShadow': '1px 1px 1px 0px #887979',
-    fontSize: '48px',
-    fontWeight: 540,
-  }
-
   const innerTexts = [
     { x: 25, y: 25, title: axisLabel3 },
     { x: 75, y: 25, title: axisLabel4 },
@@ -94,30 +79,24 @@ const App = ({
 
     if (phenomenon['content-type-alias'] === 'summary') {
       innerStroke = '#fff'
-      fillSymbol = 'rgb(0, 202, 141)'
     }
 
     if (phenomenon['content-type-alias'] === 'rising') {
       innerStroke = 'transparent'
-      outerStroke = 'transparent'
-      fillSymbol = 'rgb(0, 202, 141)'
     }
 
     if (phenomenon['content-type-alias'] === 'weaksignal') {
       innerStroke = 'transparent'
-      outerStroke = 'transparent'
       fillSymbol = 'rgb(168, 168, 168)'
     }
 
     if (phenomenon['content-type-alias'] === 'cooling') {
       innerStroke = 'transparent'
-      outerStroke = 'transparent'
       fillSymbol = 'rgb(0, 152, 255)'
     }
 
     if (phenomenon['content-type-alias'] === 'wildcard') {
       innerStroke = 'transparent'
-      outerStroke = 'transparent'
       fillSymbol = 'rgb(233, 87, 87)'
     }
     return { innerStroke, outerStroke, fillSymbol }
@@ -443,8 +422,8 @@ const App = ({
         const point = center(e, this)
   
         // is it on an axis? is the shift key pressed?
-        const doX = point[0] > x.range()[0]
-        const doY = point[1] < y.range()[0]
+        // const doX = point[0] > x.range()[0]
+        // const doY = point[1] < y.range()[0]
         const shift = e.sourceEvent && e.sourceEvent.shiftKey
   
         if (k === 1) {
@@ -463,7 +442,7 @@ const App = ({
         const xr = tx().rescaleX(x)
         const yr = ty().rescaleY(y)
   
-        const radius1 = myCircleAvg1.attr('r')
+        // const radius1 = myCircleAvg1.attr('r')
         const radius = myCircleAvg.attr('r')
   
         gx.call(xAxis, xr)
