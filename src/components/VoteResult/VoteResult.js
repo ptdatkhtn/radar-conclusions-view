@@ -49,10 +49,10 @@ const VoteResult = ({ phenomenon, radar }) => {
           }
         });
     
-      dispatch({
-        type: ACTIONS.PHENOMENONDATA,
-        payload: newPhenomena,
-      });
+      // dispatch({
+      //   type: ACTIONS.PHENOMENONDATA,
+      //   payload: newPhenomena,
+      // });
     }
 
     updateAmountVotes()
