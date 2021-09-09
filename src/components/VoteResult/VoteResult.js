@@ -55,7 +55,7 @@ const VoteResult = ({ phenomenon, radar }) => {
       // });
     }
 
-    updateAmountVotes()
+    !!phenonmenaData.length && updateAmountVotes()
 
   }, [amountUpVotes, setAmountUpVotes, amountDownVotes, setAmountDownVotes])
   //get radar phenomenon vote for current user
