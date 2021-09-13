@@ -1,8 +1,11 @@
 import React from "react";
 import VoteResult from "../VoteResult/VoteResult";
 import { VoteResultsWrapper } from "./styles";
+import { votingApi } from "../../helpers/fetcher";
 
 const VoteResults = ({ phenomena, radar }) => {
+  const [phenonList, setphenonList] = React.useState([]);
+
   let SortedPhenomena = [];
   // const SortedPhenomena = !!phenomena?.length ? [].concat(phenomena) : [];
   phenomena?.filter((p) => {
@@ -11,9 +14,35 @@ const VoteResults = ({ phenomena, radar }) => {
     }
   });
 
+  React.useEffect(() => {
+    const getVotingCurrentUser = async () => {
+      const {data } = await votingApi.getVotingsCurrentUserOnly1Api(
+        radar?.group?.id,
+        radar.id
+      )
+
+      !!SortedPhenomena?.length && SortedPhenomena.map((phenSorted) => {
+        !!data?.length && data?.some(d => {
+          // console.log(11111, d, phenSorted)
+          if (String(d['entityUri']?.split('/')[5]) ===  phenSorted?.id) {
+            phenSorted['currentUp'] = d.up
+            return true
+          }
+        })
+
+
+      })
+
+      setphenonList(SortedPhenomena)
+      // !!phenomena?.length && phenomena 
+    }
+
+    !!phenomena?.length && getVotingCurrentUser()
+  }, [phenomena])
+
   return (
     <VoteResultsWrapper>
-      {SortedPhenomena.sort(
+      {phenonList.sort(
         (a, b) =>
           Number(b?.vote_result?.plus_votes - b?.vote_result?.minus_votes) - Number(a?.vote_result?.plus_votes - a?.vote_result?.minus_votes) || null
       )

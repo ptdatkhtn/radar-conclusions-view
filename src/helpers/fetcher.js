@@ -48,6 +48,10 @@ export const votingApi = {
   getAllHiddenVotes: async (gid, radarId) => {
     return await httpRequest(baseUrl, 'GET', `meta/voting/${gid}/radar/${radarId}/phenomenon/`)
   },
+
+  getVotingsCurrentUserOnly1Api: async (gid, radarId) => {
+    return await httpRequest(baseUrl, 'GET', `voting/${gid}/radar/${radarId}/user`)
+  },
 }
 
 export const ratingApi = {

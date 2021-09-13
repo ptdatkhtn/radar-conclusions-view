@@ -179,22 +179,14 @@ const VoteResult = ({ phenomenon, radar }) => {
     }
   };
 
-  useEffect(() => {
-    const setStatus = async() => {
-      const {
-        data: { plus_votes, minus_votes },
-      } = await votingApi.getVote(radar?.group?.id || 0, radar?.id, phenomenon?.id);
-      
-      const sum = Number(plus_votes - minus_votes);
-  
-      if (sum === 0) {
+  useEffect(() => {  
+      if (!phenomenon?.currentUp) {
         setVoteStatus(VOTING_STATUS.none);
       } else {
-        setVoteStatus(Number(sum) === 1 ? VOTING_STATUS.up : VOTING_STATUS.down);
+        setVoteStatus(phenomenon?.currentUp === true ? VOTING_STATUS.up : VOTING_STATUS.down);
       }
-    }
-    setStatus()
-  }, []);
+
+  }, [phenomenon]);
 
   let iconClassName = ''
   let backgroundColor = ''
