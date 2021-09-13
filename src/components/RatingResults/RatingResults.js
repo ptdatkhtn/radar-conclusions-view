@@ -19,32 +19,22 @@ const RatingResults = ({ phenomena, radar }) => {
 
   React.useEffect(() => {
     const fetchRatingsCurrentUser = async () => {
-      const ratingsCurrentUser = await Promise.all(
-        phenomena?.map((phen) => ratingApi.getRatingsCurrentUser(radar?.group.id, radar?.id, phen?.id))
-      )
-      /* eslint-disable */
-      /* eslint-disable */
-      ratingsCurrentUser?.filter( rating => {
-        const currentPhenId = Object.keys(rating?.data)[0]?.split('/')[5]
+      const ratingsCurrentUser = await ratingApi.getRatingsCurrentUserOnly1Api(radar?.group.id, radar?.id)
 
+      /* eslint-disable */
+      /* eslint-disable */
+      Object.entries(ratingsCurrentUser?.data).filter( rating => {
+        const currentPhenId = rating[0]?.split('/')[5]
         SortedPhenomenaX?.map((pheX) => {
           if (String(currentPhenId) === String(pheX?.id)) {
             // console.log('pheX', pheX)
-            if (String(Object.keys(rating?.data)[0]?.split('/')[6]) === 'x') {
-              pheX['ratingCurrentX'] = rating?.data[`/${radar?.group.id}/radar/${radar?.id}/phenomenon/${currentPhenId}/x`]
-            } else if (String(Object.keys(rating?.data)[0]?.split('/')[6]) === 'y') {
-              pheX['ratingCurrentY'] = rating?.data[`/${radar?.group.id}/radar/${radar?.id}/phenomenon/${currentPhenId}/y`]
-            }
-
-            if ((String(Object.keys(rating?.data)[1]?.split('/')[6]) === 'x')) {
-              pheX['ratingCurrentX'] = rating?.data[`/${radar?.group.id}/radar/${radar?.id}/phenomenon/${currentPhenId}/x`]
-            } else if ((String(Object.keys(rating?.data)[1]?.split('/')[6]) === 'y')) {
-              pheX['ratingCurrentY'] = rating?.data[`/${radar?.group.id}/radar/${radar?.id}/phenomenon/${currentPhenId}/y`]
+            if (String(rating[0]?.split('/')[6]) === 'x') {
+              pheX['ratingCurrentX'] = rating[1]?.percentage
+            } else if (String(rating[0]?.split('/')[6]) === 'y') {
+              pheX['ratingCurrentY'] = rating[1]?.percentage
             }
           }
         })
-
-        
       })
 
       setphenonmenonListX(SortedPhenomenaX)
