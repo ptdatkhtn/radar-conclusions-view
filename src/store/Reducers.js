@@ -31,7 +31,14 @@ const reducers = (state, action) => {
       return {
         ...state,
         hiddenPhenomenaVoting: action.payload
+    }
+
+    case ACTIONS.ISFLIP:
+      return {
+          ...state,
+          isFlip: action.payload
       }
+
 
     
     default:

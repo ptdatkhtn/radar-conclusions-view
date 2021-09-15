@@ -86,4 +86,9 @@ export const ratingApi = {
   getRatingsCurrentUserOnly1Api: async (gid, radarId) => {
     return await httpRequest(baseUrl, 'GET', `rating/${gid}/radar/${radarId}/user`)
   },
+
+  getFlipAxisAfterSaved : async (gid, radarId) => {
+    return await httpRequest(baseUrl, 'GET', `meta/rating/${gid}/radar/${radarId}/flipAxisAfterSaved/`)
+  },
+
 }

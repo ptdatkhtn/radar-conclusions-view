@@ -16,7 +16,8 @@ const initialState = {
     error: {},
     radar: {},
     hiddenPhenomenaRating: [],
-    hiddenPhenomenaVoting: []
+    hiddenPhenomenaVoting: [],
+    isFlip: false
 
 }
 
@@ -57,6 +58,7 @@ export const DataProvider = ({children, node}) => {
             const size = phenomenaIds?.length || 10
             const phenonmena = []
             const groupVotingParam  = groups[1] ? groups[1] : groups[0]
+
             await getPhenomena({ phenomena:phenomenaIds, undefined, groups, page, size }).then(
                 async (data) => {
                     const types = await getPhenomenaTypes(groupVotingParam);
@@ -76,6 +78,15 @@ export const DataProvider = ({children, node}) => {
                         });
                     });
                     
+                    const res = await ratingApi.getFlipAxisAfterSaved(groups[1], node)
+                    console.log('aaa', res)
+
+                    dispatch({
+                        type: ACTIONS.ISFLIP,
+                        payload: res.data?.isFlip
+                    })
+
+
                     //fetch all votes for all phenomenon
                     await votingApi.getAllVotes(groupVotingParam, node).then(
                         async ({ data }) => {
