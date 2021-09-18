@@ -20,7 +20,7 @@ const localTranslations = {
   },
   Average_RadarConclusions: {
     en: 'Average ',
-    fi: 'Keskiverto'
+    fi: 'Keskiarvo'
   },
   Median_RadarConclusions: {
     en: 'Median',
