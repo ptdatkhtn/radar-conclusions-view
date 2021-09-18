@@ -20,7 +20,8 @@
     "react-scripts": "4.0.3",
     "sass": "^1.34.0",
     "styled-components": "^5.2.1",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "@sangre-fp/i18n": "^2.1.7"
   },
   "scripts": {
     "start": "sh -ac '. ./.env.dev; PORT=3011 react-scripts start'",

@@ -1948,6 +1948,13 @@
   dependencies:
     lodash "^4.17.15"
 
+"@sangre-fp/i18n@^2.1.7":
+  version "2.1.7"
+  resolved "https://npm.sangre.dev/@sangre-fp%2fi18n/-/i18n-2.1.7.tgz#8c5331af5513ed81d474e9bc803db2fc7e7ea3b4"
+  integrity sha512-xdbZ05ly135L0nNkz7LMAT102maTB48BFhExjufnRi6EVVrqKa9xGLPo9L/SubexmxmpK3uJ28JdS2oBty2n7w==
+  dependencies:
+    lodash "^4.17.15"
+
 "@sangre-fp/ui@^2.0.23":
   version "2.0.28"
   resolved "https://npm.sangre.dev/@sangre-fp%2fui/-/ui-2.0.28.tgz#ccea095515a5762e11519f14732593b19257e702"
