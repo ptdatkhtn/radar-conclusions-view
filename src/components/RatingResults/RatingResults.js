@@ -48,8 +48,10 @@ const RatingResults = ({ phenomena, radar }) => {
     <Container>
       <div style={{width: 'calc(50% - 12px)'}}>
         <AxisName>{radar?.axisXTitle}</AxisName>
-        {phenonmenonListX?.sort(
-          (a, b) => Number(b["rating_x"].avg) - Number(a["rating_x"].avg)
+        {!!phenonmenonListX.length && phenonmenonListX
+          .filter((p) => p.hasOwnProperty("rating_x") && p["rating_x"])
+          .sort(
+            (a, b) => Number(b["rating_x"].avg) - Number(a["rating_x"].avg)
         )
         .slice(0, 5)
         .map((phenomenon) => (
@@ -64,7 +66,9 @@ const RatingResults = ({ phenomena, radar }) => {
       </div>
       <div style={{width: 'calc(50% - 12px)'}}>
         <AxisName>{radar?.axisYTitle}</AxisName>
-        { phenonmenonListX?.sort(
+        { !!phenonmenonListX.length && phenonmenonListX
+          .filter((p) => p.hasOwnProperty("rating_y") && p["rating_y"])
+          .sort(
           (a, b) => Number(b["rating_y"].avg) - Number(a["rating_y"].avg)
         )
         .slice(0, 5)

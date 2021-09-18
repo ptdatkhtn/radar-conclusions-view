@@ -47,10 +47,11 @@ const VotingResultsView = () => {
   const getTabContentElement = document.getElementsByClassName('tab-content')[0]
   
   const sortedPhenomenaForChart = React.useMemo(() => {
-    const sortedPhenomenaX = visiblePhenonmenaRating.filter((p) => p.hasOwnProperty("rating_x"))
+    const sortedPhenomenaX = visiblePhenonmenaRating
+      .filter((p) => p.hasOwnProperty("rating_x") && p["rating_x"])
       .sort((a, b) => Number(b["rating_x"].avg) - Number(a["rating_x"].avg))
       .slice(0, 5)
-    const sortedPhenomenaY = visiblePhenonmenaRating.filter((p) => p.hasOwnProperty("rating_y"))
+    const sortedPhenomenaY = visiblePhenonmenaRating.filter((p) => p.hasOwnProperty("rating_y") && p["rating_y"])
     .sort((a, b) => Number(b["rating_y"].avg) - Number(a["rating_y"].avg))
     .slice(0, 5)
     
