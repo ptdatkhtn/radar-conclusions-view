@@ -98,13 +98,13 @@ const VotingResultsView = () => {
     <VoteTabWrapper>
       <ConclusionSession />
       <HorizontalLine></HorizontalLine>
-      <ConclusionsHeader>{requestTranslation('top5Voted_RadarConclusions')}</ConclusionsHeader>
+      <ConclusionsHeader>{(radar?.radarLanguage === "en" ? 'Top 5 voted content' : 'Top 5 -äänestetyt') || (requestTranslation('top5Voted_RadarConclusions'))}</ConclusionsHeader>
       {visiblePhenonmenaVoting.length > 0 && radar && (
         <VoteResults phenomena={visiblePhenonmenaVoting} radar={radar}/>
       )}
       
       <HorizontalLine></HorizontalLine>
-      <ConclusionsHeader>{requestTranslation('top5Rated_RadarConclusions')}</ConclusionsHeader>
+      <ConclusionsHeader>{ (radar?.radarLanguage === "en" ? 'Top 5 rated content' : 'Top 5 -arvioidut') || (requestTranslation('top5Rated_RadarConclusions'))}</ConclusionsHeader>
       {
         width > 0 && radar && sortedPhenomenaForChart.length > 0 &&
         <FourfoldTable 
