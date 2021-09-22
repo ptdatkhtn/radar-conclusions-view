@@ -180,13 +180,17 @@ const VoteResult = ({ phenomenon, radar }) => {
   };
 
   useEffect(() => {  
-      if (!phenomenon?.currentUp) {
-        setVoteStatus(VOTING_STATUS.none);
-      } else {
-        setVoteStatus(phenomenon?.currentUp === true ? VOTING_STATUS.up : VOTING_STATUS.down);
-      }
+    if (phenomenon?.currentUp === null || phenomenon?.currentUp === undefined) {
+      setVoteStatus(VOTING_STATUS.none);
+    } 
+    else if  (phenomenon?.currentUp === false) {
+      setVoteStatus(VOTING_STATUS.down)
+    }
+    else {
+      setVoteStatus(phenomenon?.currentUp === true ? VOTING_STATUS.up : VOTING_STATUS.down);
+    }
 
-  }, [phenomenon]);
+}, [phenomenon]);
 
   let iconClassName = ''
   let backgroundColor = ''
