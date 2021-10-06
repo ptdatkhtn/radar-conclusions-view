@@ -238,7 +238,7 @@ const VoteResult = ({ phenomenon, radar }) => {
           className= {`icon-issue ${iconClassName}`}
           backgroundColor={backgroundColor}
         >
-          {phenomenon?.content?.title}
+          {phenomenon?.content?.short_title || phenomenon?.content?.title}
         </WildCard>
       </WildCardWrapper>
       <VoteWrapper>

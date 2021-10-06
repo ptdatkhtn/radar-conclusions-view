@@ -52,7 +52,7 @@ const Rating = ({ phenomenon, radar, isRatingX, currentUserRatings }) => {
             className= {`icon-issue ${iconClassName}`}
             backgroundColor={backgroundColor}
           >
-            {phenomenon?.content?.title}
+            {phenomenon?.content?.short_title || phenomenon?.content?.title}
           </RatingItemHeader>
         </RatingHeader>
         <RatingItem>
