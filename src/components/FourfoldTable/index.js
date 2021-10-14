@@ -3815,11 +3815,18 @@ const App = ({
   const { axis, scatterSvg } = appContext
   const [isAverage, setIsAverage] = useState(true)
 
+  const margin = {
+    top: 20,
+    right: 20,
+    bottom: 20,
+    left: 20
+  }
+  
   const innerTexts = [
-    { x: 25, y: 25, title: axisLabel3 },
-    { x: 75, y: 25, title: axisLabel4 },
-    { x: 25, y: 75, title: axisLabel5 },
-    { x: 75, y: 75, title: axisLabel6 }
+    { x: 25, y: 25, title: axisLabel3, gutter: -margin.left / 2 },
+    { x: 75, y: 25, title: axisLabel4, gutter: margin.left / 2 },
+    { x: 25, y: 75, title: axisLabel5, gutter: -margin.top / 2 },
+    { x: 75, y: 75, title: axisLabel6, gutter: margin.top / 2 }
   ]
   const innerLineData = [
     {
@@ -3835,13 +3842,6 @@ const App = ({
       y2: 1500
     }
   ]
-
-  const margin = {
-    top: 50,
-    right: 50,
-    bottom: 50,
-    left: 50
-  }
 
   const maxTextWidth = 90
 
@@ -4065,17 +4065,19 @@ const App = ({
       .join('rect')
       .attr('fill', 'white')
 
-    const innerText = scatterSvg.append('g')
-      .selectAll('text')
-      .data(innerTexts)
-      .join('text')
-      .text(d => d.title)
-      .style('fill', 'rgb(224, 222, 222)')
-      .style('font-size', '18.2px')
-      .style('font-style', 'italic')
-      .style('font-weight', '700')
-      .style('font-family', 'L10')
-      .style('text-align', 'center')
+      const innerText = scatterSvg.append('g').selectAll('foreignObject').data(innerTexts).join('foreignObject')
+      innerText
+        .attr('width', containerWidth / 2)
+        .attr('height', 60)
+        .style('fill', 'rgb(224, 222, 222)')
+        .style('font-style', 'italic')
+        .style('font-weight', '700')
+        .style('font-family', 'L10')
+        .style('font-size', '18')
+        .style('color', 'rgb(224, 222, 222)')
+        // .style('text-align', 'center')
+        .append("xhtml:div")
+        .html(d => d.title)
 
     const innerLine = scatterSvg.append('g')
       .selectAll("line")
@@ -4247,10 +4249,12 @@ const App = ({
           .attr('width', d => d.width * t.k)
           .attr('height', d => d.height * t.k)
   
-        innerText
+          innerText
           .transition(trans)
-          .attr('x', d => xr(d.x) - getTextWidth(d.title))
-          .attr('y', d => yr(d.y))
+          .attr('x', d => {
+            return xr(d.x) - Math.min(getTextWidth(d.title, 18), containerWidth / 2) / 2 + d.gutter
+          })
+          .attr('y', d => yr(d.y) - 22)
   
         innerLine
           .transition(trans)

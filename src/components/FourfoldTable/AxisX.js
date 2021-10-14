@@ -1,4 +1,5 @@
 import React from 'react'
+import Tooltip from '@mui/material/Tooltip';
 
 const AxisX = ({
   axisWidth = 600,
@@ -17,11 +18,22 @@ const AxisX = ({
         }}>
         <tbody style={{borderTop: 'none'}}>
           <tr>
-            <td style={{ ...cellStyle, textAlign: 'left' }}>
-              <div style={{ width: originalWidth / 2, overflow: 'hidden', textOverflow: 'ellipsis', fontWeight: 400, fontSize: '13px' }}>{axisLabel1a}</div>
+            <td style={{ ...cellStyle, textAlign: 'left', width:  originalWidth / 2 }}>
+              <Tooltip 
+                    placement="bottom-start"
+                    title={axisLabel1a}>
+                    <div style={{width: 'fit-content', maxWidth: originalWidth / 2, overflow: 'hidden', textOverflow: 'ellipsis', fontWeight: 400, fontSize: '13px' }}>{axisLabel1a}</div>
+                  </Tooltip>
             </td>
-            <td style={{ ...cellStyle, textAlign: 'right' }}>
-              <div style={{ width: originalWidth / 2, overflow: 'hidden', textOverflow: 'ellipsis', fontWeight: 400, fontSize: '13px' }}>{axisLabel1b}</div>
+            <td style={{ ...cellStyle, textAlign: 'right', width:  originalWidth / 2 }}>
+              <Tooltip 
+                    placement="bottom-end"
+                    title={axisLabel1b}>
+                    <div style={{
+                      width: 'fit-content',
+                      marginLeft: 'auto',
+                      maxWidth: originalWidth / 2, overflow: 'hidden', textOverflow: 'ellipsis', fontWeight: 400, fontSize: '13px' }}>{axisLabel1b}</div>
+                  </Tooltip>
             </td>
           </tr>
         </tbody>
@@ -35,7 +47,11 @@ const AxisX = ({
         <tbody style={{borderTop: 'none'}}>
           <tr>
             <td style={{ ...cellStyle, textAlign: 'center' }}>
-              <div style={{ width: originalWidth, overflow: 'hidden', textOverflow: 'ellipsis' }}>{axisLabel1}</div>
+              <Tooltip title={axisLabel1}>
+                <div style={{margin: 'auto',
+                      maxWidth: originalWidth / 2,
+                      width: 'fit-content', overflow: 'hidden', textOverflow: 'ellipsis' }}>{axisLabel1}</div>
+              </Tooltip>
             </td>
           </tr>
         </tbody>

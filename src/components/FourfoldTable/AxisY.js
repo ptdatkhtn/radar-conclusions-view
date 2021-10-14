@@ -1,4 +1,5 @@
 import React from 'react'
+import Tooltip from '@mui/material/Tooltip';
 
 const AxisY = ({
   axisHeight = 600,
@@ -22,8 +23,12 @@ const AxisY = ({
         padding: '0px 0px 93px 0' }}>
         <tbody style={{borderTop: 'none'}}>
           <tr style={{ ...cellStyle }}>
-            <td>
-              <div style={{ width: 30, paddingLeft: '12px', writingMode: 'vertical-lr', transform: 'rotate(180deg)', overflow: 'hidden', textOverflow: 'ellipsis', height: originalHeight, textAlign: 'center' }}>{axisLabel2}</div>
+            <td style={{height: originalHeight }}>
+            <Tooltip 
+                    placement="right"
+                    title={axisLabel2}>
+                    <div style={{ width: 30, paddingLeft: '12px', writingMode: 'vertical-lr', transform: 'rotate(180deg)', overflow: 'hidden', textOverflow: 'ellipsis', maxHeight: originalHeight, height: 'fit-content',textAlign: 'center' }}>{axisLabel2}</div>
+                  </Tooltip>
             </td>
           </tr>
           
@@ -37,14 +42,35 @@ const AxisY = ({
         padding: '0px 0px 93px 0' }}>
         <tbody style={{borderTop: 'none'}}>
           <tr style={{ ...cellStyle }}>
-            <td>
-              <div style={{ width: 30, writingMode: 'vertical-rl', transform: 'rotate(180deg)', overflow: 'hidden', textOverflow: 'ellipsis', height: originalHeight / 2 - 10, textAlign: 'right', fontWeight: 400, fontSize: '13px' }}>{axisLabel2b}</div>
+            <td style={{height: originalHeight/2, position:'relative', verticalAlign: 'top' }}>
+              <Tooltip
+                    placement="top"
+                    title={axisLabel2b}>
+                    <div style={{
+                      width: 30, writingMode: 'vertical-rl', transform: 'rotate(180deg)', overflow: 'hidden', textOverflow: 'ellipsis', maxHeight: originalHeight / 2 - 10, height: 'fit-content', textAlign: 'right', fontWeight: 400, fontSize: '13px' }}>{axisLabel2b}</div>
+                  </Tooltip>
             </td>
           </tr>
 
           <tr style={{ ...cellStyle }}>
-            <td>
-              <div style={{ width: 30, writingMode: 'vertical-rl', transform: 'rotate(180deg)', overflow: 'hidden', textOverflow: 'ellipsis', height: originalHeight / 2 - 10, textAlign: 'left', fontWeight: 400, fontSize: '13px' }}>{axisLabel2a}</div>
+            <td style={{height: originalHeight/2, position:'relative' }}>
+                <Tooltip 
+                    // placement="bottom-start"
+                    title={axisLabel2a}>
+                      <div style={{
+                        position: 'absolute',
+                        bottom: 0, 
+                        width: 30,
+                        writingMode: 'vertical-rl', 
+                        transform: 'rotate(180deg)', 
+                        overflow: 'hidden', 
+                        textOverflow: 'ellipsis', 
+                        maxHeight: originalHeight / 2 - 10, 
+                        height: 'fit-content', 
+                        textAlign: 'left', 
+                        fontWeight: 400, 
+                        fontSize: '13px' }}>{axisLabel2a}</div>
+                  </Tooltip>
             </td>
           </tr>
           
