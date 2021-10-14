@@ -72,7 +72,7 @@ const VotingResultsView = () => {
     setWidth(
       getTabContentElement?
       (innerDimensions(getTabContentElement).width -60)
-      : 800
+      : 900
       )
   }
 

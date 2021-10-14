@@ -4066,18 +4066,33 @@ const App = ({
       .attr('fill', 'white')
 
       const innerText = scatterSvg.append('g').selectAll('foreignObject').data(innerTexts).join('foreignObject')
-      innerText
-        .attr('width', containerWidth / 2 -10)
-        .attr('height', 60)
-        .style('fill', 'rgb(224, 222, 222)')
-        .style('font-style', 'italic')
-        .style('font-weight', '700')
-        .style('font-family', 'L10')
-        .style('font-size', '18')
-        .style('color', 'rgb(224, 222, 222)')
-        // .style('text-align', 'center')
-        .append("xhtml:div")
-        .html(d => d.title)
+      if (+window.innerWidth >= 1071) {
+        innerText
+          .attr('width', containerWidth / 2 - (20 * containerWidth /800))
+          .attr('height', 60)
+          .style('fill', 'rgb(224, 222, 222)')
+          .style('font-style', 'italic')
+          .style('font-weight', '700')
+          .style('font-family', 'L10')
+          .style('font-size', '18')
+          .style('color', 'rgb(224, 222, 222)')
+          // .style('text-align', 'center')
+          .append("xhtml:div")
+          .html(d => d.title)
+      } else {
+        innerText
+          .attr('width', containerWidth / 2)
+          .attr('height', 60)
+          .style('fill', 'rgb(224, 222, 222)')
+          .style('font-style', 'italic')
+          .style('font-weight', '700')
+          .style('font-family', 'L10')
+          .style('font-size', '18')
+          .style('color', 'rgb(224, 222, 222)')
+          // .style('text-align', 'center')
+          .append("xhtml:div")
+          .html(d => d.title)
+      }
 
     const innerLine = scatterSvg.append('g')
       .selectAll("line")
@@ -4249,12 +4264,21 @@ const App = ({
           .attr('width', d => d.width * t.k)
           .attr('height', d => d.height * t.k)
   
+        if (+window.innerWidth >= 1071) {
           innerText
-          .transition(trans)
-          .attr('x', d => {
-            return xr(d.x) - Math.min(getTextWidth(d.title, 18), containerWidth / 2) / 2 + d.gutter
-          })
-          .attr('y', d => yr(d.y) - 22)
+            .transition(trans)
+            .attr('x', d => {
+              return xr(d.x) - Math.min(getTextWidth(d.title, 18), containerWidth / 2) / 2 + (d.gutter * containerWidth / 800) -(20 * containerWidth /800)
+            })
+            .attr('y', d => yr(d.y) - 22)
+        } else {
+          innerText
+            .transition(trans)
+            .attr('x', d => {
+              return xr(d.x) - Math.min(getTextWidth(d.title, 18), containerWidth / 2) / 2 + (d.gutter)
+            })
+            .attr('y', d => yr(d.y) - 22)
+        }
   
         innerLine
           .transition(trans)
