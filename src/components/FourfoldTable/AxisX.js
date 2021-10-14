@@ -13,7 +13,9 @@ const AxisX = ({
     <>
       <table cellPadding='0' cellSpacing='0' align='center' style={{ 
         width: axisWidth, 
-        margin: 0, 
+        margin: 0,
+        position:'relative',
+        zIndex: 999
         // background: 'rgb(224 222 222)' 
         }}>
         <tbody style={{borderTop: 'none'}}>
@@ -41,7 +43,9 @@ const AxisX = ({
 
       <table cellPadding='0' cellSpacing='0' align='center' style={{ 
         width: axisWidth, 
-        margin: 0, 
+        margin: 0,
+        position:'relative',
+        zIndex: 999
         // background: 'rgb(224 222 222)'
          }}>
         <tbody style={{borderTop: 'none'}}>
