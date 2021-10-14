@@ -4067,7 +4067,7 @@ const App = ({
 
       const innerText = scatterSvg.append('g').selectAll('foreignObject').data(innerTexts).join('foreignObject')
       innerText
-        .attr('width', containerWidth / 2)
+        .attr('width', containerWidth / 2 -10)
         .attr('height', 60)
         .style('fill', 'rgb(224, 222, 222)')
         .style('font-style', 'italic')
