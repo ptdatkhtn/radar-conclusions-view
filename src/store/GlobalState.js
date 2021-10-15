@@ -79,7 +79,6 @@ export const DataProvider = ({children, node}) => {
                     });
                     
                     const res = await ratingApi.getFlipAxisAfterSaved(groups[1], node)
-                    console.log('aaa', res)
 
                     dispatch({
                         type: ACTIONS.ISFLIP,

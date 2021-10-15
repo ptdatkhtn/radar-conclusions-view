@@ -14,7 +14,7 @@ import {getPhenomenonUrl} from '../../helpers/contentCard'
 import {SingleRating} from './styles'
 import Slider from '../Slider'
 
-const Rating = ({ phenomenon, radar, isRatingX, currentUserRatings }) => { 
+const Rating = ({ phenomenon, radar, isRatingX }) => { 
   const {
     state: { error }
   } = useContext(DataContext);
@@ -79,9 +79,9 @@ const Rating = ({ phenomenon, radar, isRatingX, currentUserRatings }) => {
           <SingleRatingCurrentUser 
             leftValue
               ={isRatingX 
-                  ? currentUserRatings?.ratingCurrentX?.percentage 
-                    : currentUserRatings?.ratingCurrentY?.percentage} 
-                isRated={!!currentUserRatings?.ratingCurrentX?.percentage}
+                  ? phenomenon?.ratingCurrentX
+                    : phenomenon?.ratingCurrentY} 
+                isRated={!!phenomenon?.ratingCurrentX}
           />
           </div>     
         </RatingItem>
