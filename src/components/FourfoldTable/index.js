@@ -3816,18 +3816,19 @@ const App = ({
   const [isAverage, setIsAverage] = useState(true)
 
   const margin = {
-    top: 40,
-    right: 40,
-    bottom: 40,
-    left: 40
+    top: 50,
+    right: 50,
+    bottom: 50,
+    left: 50
   }
   
   const innerTexts = [
     { x: 25, y: 25, title: axisLabel3, gutter: -margin.left / 2 },
     { x: 75, y: 25, title: axisLabel4, gutter: margin.left / 2 },
-    { x: 25, y: 75, title: axisLabel5, gutter: -margin.top / 2 },
-    { x: 75, y: 75, title: axisLabel6, gutter: margin.top / 2 }
+    { x: 25, y: 75, title: axisLabel5, gutter: -margin.left / 2 },
+    { x: 75, y: 75, title: axisLabel6, gutter: margin.left / 2 }
   ]
+
   const innerLineData = [
     {
       x1: -1500,
@@ -4028,190 +4029,176 @@ const App = ({
   }, [containerWidth])
 
   useEffect(() => {
+    try {
+      if (phenomena.length < 1 || !scatterSvg) return
+        let nodes = [...nodeListAsAverage, ...nodeListAsMedian]
+
+        let data = nodes.map(item => [item.x, item.y])
+        data = [...data, ...Array.from({ length: 50 }, () => [100 * Math.random(), 100 * Math.random()])]
+
+        const x = d3.scaleLinear()
+          .domain(d3.extent(data, d => d[0]))
+          .nice()
+          .rangeRound([margin.left, containerWidth - margin.right])
+          
+        const y = d3.scaleLinear()
+          .domain(d3.extent(data, d => d[0]))
+          .nice()
+          .rangeRound([containerHeight - margin.bottom, margin.top])
+
+        const xAxis = (g, scale) => g
+          .attr("transform", `translate(0,${y(0) + 10})`)
+          .style('opacity', 0)
+          .call(d3.axisBottom(scale).ticks(8))
+          .call(g2 => g2.select(".domain").attr("display", "none"))
+          .call(g2 => g2.selectAll(".tick line").attr("display", "none"))
+
+        const yAxis = (g, scale) => g
+          .attr("transform", `translate(${x(0) - 5},0)`)
+          .style('opacity', 0)
+          .call(d3.axisLeft(scale).ticks(8))
+          .call(g2 => g2.select(".domain").attr("display", "none"))
+          .call(g2 => g2.selectAll(".tick line").attr("display", "none"))
+
+        const myWhiteRect = scatterSvg.append('g')
+          .selectAll('rect')
+          .data(rectNodes)
+          .join('rect')
+          .attr('fill', 'white')
+
+          const innerText = scatterSvg.append('g').selectAll('foreignObject').data(innerTexts).join('foreignObject')
+          innerText
+            .attr('width', containerWidth / 2)
+            .attr('height', 60)
+            .style('fill', 'rgb(224, 222, 222)')
+            .style('font-style', 'italic')
+            .style('font-weight', '700')
+            .style('font-family', 'L10')
+            .style('font-size', '18')
+            .style('text-align', 'center')
+            .style('color', 'rgb(224, 222, 222)')
+            .append("xhtml:div")
+            .html(d => d.title)
+
+        const innerLine = scatterSvg.append('g')
+          .selectAll("line")
+          .data(innerLineData)
+          .join('line')
+          .attr("fill", "none")
+          .attr("stroke", "#ccc")
+          .attr("stroke-width", 1)
+
+        const gx = scatterSvg.append("g")
+        const gy = scatterSvg.append("g")
+
+        const myForeignObjectsAvg = scatterSvg.append('g').selectAll('foreignObject').data(nodeListAsAverage).join('foreignObject')
+        myForeignObjectsAvg
+          .attr('id', 'myNewTextsAvg_Conclusion')
+          .attr('width', maxTextWidth)
+          .attr('height', 200)
+          .style('transition', 'font-size 0.2s')
+          .style('transition-timing-function', 'linear')
+          .style('text-align', 'center')
+          .append("xhtml:div")
+          .html(d => d.title)
+
+        const myForeignObjectsMedian = scatterSvg.append('g').selectAll('foreignObject').data(nodeListAsMedian).join('foreignObject')
+          myForeignObjectsMedian
+            .attr('id', 'myNewTextsMedian_Conclusion')
+            .attr('width', maxTextWidth)
+            .attr('height', 200)
+            .style('transition', 'font-size 0.2s')
+            .style('transition-timing-function', 'linear')
+            .style('text-align', 'center')
+            .append("xhtml:div")
+            .html(d => d.title)
+
+        const myCircleAvg1 = scatterSvg.append('g')
+          .selectAll('circle')
+          .data(nodeListAsAverage)
+          .join('circle')
+          .attr('stroke', d => {
+            return d.type[0].outerStroke
+          })
+          .attr('cursor', 'pointer')
+          .attr('class', d => {
+            return (String(d?.color) === 'none' && (String(d['content-type-alias']) === 'undefined')) ? 'outer_special_circle left' : 'outer_normal_circle left'
+          })
+          .attr('id', 'circleAvg_Conclusion')
+          .style('fill', d => d.type[0].fillSymbol)
+
+        const myCircleAvg = scatterSvg.append('g')
+          .selectAll('circle')
+          .data(nodeListAsAverage)
+          .join('circle')
+          .attr('stroke', d => {
+            return d.type[0].innerStroke
+          })
+          .attr('cursor', 'pointer')
+          .attr('class', d => {return (String(d?.color) === 'none' && (String(d['content-type-alias']) === 'undefined')) ? 'inner_special_circle left' : 'inner_normal_circle left'})
+          .attr('id', 'circleAvg_Conclusion')
+          .style('fill', d => {
+            if (!!(String(d?.color) === 'none' && (String(d['content-type-alias']) === 'undefined'))) {
+              return 'white'
+            }
+
+            return d.type[0].fillSymbol
+          })
+          .attr('cursor', 'pointer')
+
+        const myCircleMedian1 = scatterSvg.append('g')
+          .selectAll('circle')
+          .data(nodeListAsMedian)
+          .join('circle')
+          .attr('stroke', d => d.type[0].outerStroke)
+          .attr('cursor', 'pointer')
+          .attr('id', 'circleMedian_Conclusion')
+          .attr('class', d => {
+            return (!!(String(d?.color) === 'none' && (String(d['content-type-alias']) === 'undefined'))) ? 'outer_special_circle_median left' : 'outer_normal_circle_median left'
+          })
+          .style('fill', d => d.type[0].fillSymbol)
+
+        const myCircleMedian = scatterSvg.append('g')
+          .selectAll('circle')
+          .data(nodeListAsMedian)
+          .join('circle')
+          .attr('stroke', d => d.type[0].innerStroke)
+          .attr('cursor', 'pointer')
+          .attr('id', 'circleMedian_Conclusion')
+          .attr('class', d => {return (!!(String(d?.color) === 'none' && (String(d['content-type-alias']) === 'undefined'))) ? 'inner_special_circle_median left' : 'inner_normal_circle_median left'})
+          .style('fill', d => {
+            if (!!(String(d?.color) === 'none' && (String(d['content-type-alias']) === 'undefined'))) {
+              return 'white'
+            }
+
+            return d.type[0].fillSymbol
+          })
+          .attr('cursor', 'pointer')
+
+          if (isAverage) {
+            d3.selectAll('#myNewTextsAvg_Conclusion').style('opacity', visibleText ? 1 : 0)
+            d3.selectAll('#myNewTextsMedian_Conclusion').style('opacity', 0)
+            d3.selectAll('#circleAvg_Conclusion').style('opacity', 1)
+            d3.selectAll('#circleMedian_Conclusion').style('opacity', 0)
+          }
+          else if (!isAverage) {
+            d3.selectAll('#myNewTextsMedian_Conclusion').style('opacity', visibleText ? 1 : 0)
+            d3.selectAll('#myNewTextsAvg_Conclusion').style('opacity', 0)
+            d3.selectAll('#circleMedian_Conclusion').style('opacity', 1)
+            d3.selectAll('#circleAvg_Conclusion').style('opacity', 0)
+          }
+
+        // z holds a copy of the previous transform, so we can track its changes
+        let z = d3.zoomIdentity
+
+        // set up the ancillary zooms and an accessor for their transforms
+        const zoomX = d3.zoom().scaleExtent([1, 8]).translateExtent([[0, 0], [containerWidth, containerHeight]])
+        const zoomY = d3.zoom().scaleExtent([1, 8]).translateExtent([[0, 0], [containerWidth, containerHeight]])
+        const tx = () => d3.zoomTransform(gx.node())
+        const ty = () => d3.zoomTransform(gy.node())
+        gx.call(zoomX).attr("pointer-events", "none")
+        gy.call(zoomY).attr("pointer-events", "none")
     
-    if (phenomena.length < 1 || !scatterSvg) return
-    let nodes = [...nodeListAsAverage, ...nodeListAsMedian]
-
-    let data = nodes.map(item => [item.x, item.y])
-    data = [...data, ...Array.from({ length: 50 }, () => [100 * Math.random(), 100 * Math.random()])]
-
-    const x = d3.scaleLinear()
-      .domain(d3.extent(data, d => d[0]))
-      .nice()
-      .rangeRound([margin.left, containerWidth - margin.right])
-      
-    const y = d3.scaleLinear()
-      .domain(d3.extent(data, d => d[0]))
-      .nice()
-      .rangeRound([containerHeight - margin.bottom, margin.top])
-
-    const xAxis = (g, scale) => g
-      .attr("transform", `translate(0,${y(0) + 10})`)
-      .style('opacity', 0)
-      .call(d3.axisBottom(scale).ticks(8))
-      .call(g2 => g2.select(".domain").attr("display", "none"))
-      .call(g2 => g2.selectAll(".tick line").attr("display", "none"))
-
-    const yAxis = (g, scale) => g
-      .attr("transform", `translate(${x(0) - 5},0)`)
-      .style('opacity', 0)
-      .call(d3.axisLeft(scale).ticks(8))
-      .call(g2 => g2.select(".domain").attr("display", "none"))
-      .call(g2 => g2.selectAll(".tick line").attr("display", "none"))
-
-    const myWhiteRect = scatterSvg.append('g')
-      .selectAll('rect')
-      .data(rectNodes)
-      .join('rect')
-      .attr('fill', 'white')
-
-      const innerText = scatterSvg.append('g').selectAll('foreignObject').data(innerTexts).join('foreignObject')
-      if (+window.innerWidth >= 1071) {
-        innerText
-          .attr('width', containerWidth / 2 - (20 * containerWidth /800))
-          .attr('height', 60)
-          .style('fill', 'rgb(224, 222, 222)')
-          .style('font-style', 'italic')
-          .style('font-weight', '700')
-          .style('font-family', 'L10')
-          .style('font-size', '18')
-          .style('color', 'rgb(224, 222, 222)')
-          // .style('text-align', 'center')
-          .append("xhtml:div")
-          .html(d => d.title)
-      } else {
-        innerText
-          .attr('width', containerWidth / 2)
-          .attr('height', 60)
-          .style('fill', 'rgb(224, 222, 222)')
-          .style('font-style', 'italic')
-          .style('font-weight', '700')
-          .style('font-family', 'L10')
-          .style('font-size', '18')
-          .style('color', 'rgb(224, 222, 222)')
-          // .style('text-align', 'center')
-          .append("xhtml:div")
-          .html(d => d.title)
-      }
-
-    const innerLine = scatterSvg.append('g')
-      .selectAll("line")
-      .data(innerLineData)
-      .join('line')
-      .attr("fill", "none")
-      .attr("stroke", "#ccc")
-      .attr("stroke-width", 1)
-
-    const gx = scatterSvg.append("g")
-    const gy = scatterSvg.append("g")
-
-    const myForeignObjectsAvg = scatterSvg.append('g').selectAll('foreignObject').data(nodeListAsAverage).join('foreignObject')
-    myForeignObjectsAvg
-      .attr('id', 'myNewTextsAvg_Conclusion')
-      .attr('width', maxTextWidth)
-      .attr('height', 200)
-      .style('transition', 'font-size 0.2s')
-      .style('transition-timing-function', 'linear')
-      .style('text-align', 'center')
-      .append("xhtml:div")
-      .html(d => d.title)
-
-    const myForeignObjectsMedian = scatterSvg.append('g').selectAll('foreignObject').data(nodeListAsMedian).join('foreignObject')
-      myForeignObjectsMedian
-        .attr('id', 'myNewTextsMedian_Conclusion')
-        .attr('width', maxTextWidth)
-        .attr('height', 200)
-        .style('transition', 'font-size 0.2s')
-        .style('transition-timing-function', 'linear')
-        .style('text-align', 'center')
-        .append("xhtml:div")
-        .html(d => d.title)
-
-    const myCircleAvg1 = scatterSvg.append('g')
-      .selectAll('circle')
-      .data(nodeListAsAverage)
-      .join('circle')
-      .attr('stroke', d => {
-        return d.type[0].outerStroke
-      })
-      .attr('cursor', 'pointer')
-      .attr('class', d => {
-        return (String(d?.color) === 'none' && (String(d['content-type-alias']) === 'undefined')) ? 'outer_special_circle left' : 'outer_normal_circle left'
-      })
-      .attr('id', 'circleAvg_Conclusion')
-      .style('fill', d => d.type[0].fillSymbol)
-
-    const myCircleAvg = scatterSvg.append('g')
-      .selectAll('circle')
-      .data(nodeListAsAverage)
-      .join('circle')
-      .attr('stroke', d => {
-        return d.type[0].innerStroke
-      })
-      .attr('cursor', 'pointer')
-      .attr('class', d => {return (String(d?.color) === 'none' && (String(d['content-type-alias']) === 'undefined')) ? 'inner_special_circle left' : 'inner_normal_circle left'})
-      .attr('id', 'circleAvg_Conclusion')
-      .style('fill', d => {
-        if (!!(String(d?.color) === 'none' && (String(d['content-type-alias']) === 'undefined'))) {
-          return 'white'
-        }
-
-        return d.type[0].fillSymbol
-      })
-      .attr('cursor', 'pointer')
-
-    const myCircleMedian1 = scatterSvg.append('g')
-      .selectAll('circle')
-      .data(nodeListAsMedian)
-      .join('circle')
-      .attr('stroke', d => d.type[0].outerStroke)
-      .attr('cursor', 'pointer')
-      .attr('id', 'circleMedian_Conclusion')
-      .attr('class', d => {
-        return (!!(String(d?.color) === 'none' && (String(d['content-type-alias']) === 'undefined'))) ? 'outer_special_circle_median left' : 'outer_normal_circle_median left'
-      })
-      .style('fill', d => d.type[0].fillSymbol)
-
-    const myCircleMedian = scatterSvg.append('g')
-      .selectAll('circle')
-      .data(nodeListAsMedian)
-      .join('circle')
-      .attr('stroke', d => d.type[0].innerStroke)
-      .attr('cursor', 'pointer')
-      .attr('id', 'circleMedian_Conclusion')
-      .attr('class', d => {return (!!(String(d?.color) === 'none' && (String(d['content-type-alias']) === 'undefined'))) ? 'inner_special_circle_median left' : 'inner_normal_circle_median left'})
-      .style('fill', d => {
-        if (!!(String(d?.color) === 'none' && (String(d['content-type-alias']) === 'undefined'))) {
-          return 'white'
-        }
-
-        return d.type[0].fillSymbol
-      })
-      .attr('cursor', 'pointer')
-
-      if (isAverage) {
-        d3.selectAll('#myNewTextsAvg_Conclusion').style('opacity', visibleText ? 1 : 0)
-        d3.selectAll('#myNewTextsMedian_Conclusion').style('opacity', 0)
-        d3.selectAll('#circleAvg_Conclusion').style('opacity', 1)
-        d3.selectAll('#circleMedian_Conclusion').style('opacity', 0)
-      }
-      else if (!isAverage) {
-        d3.selectAll('#myNewTextsMedian_Conclusion').style('opacity', visibleText ? 1 : 0)
-        d3.selectAll('#myNewTextsAvg_Conclusion').style('opacity', 0)
-        d3.selectAll('#circleMedian_Conclusion').style('opacity', 1)
-        d3.selectAll('#circleAvg_Conclusion').style('opacity', 0)
-      }
-
-    // z holds a copy of the previous transform, so we can track its changes
-    let z = d3.zoomIdentity
-
-    // set up the ancillary zooms and an accessor for their transforms
-    const zoomX = d3.zoom().scaleExtent([1, 8]).translateExtent([[0, 0], [containerWidth, containerHeight]])
-    const zoomY = d3.zoom().scaleExtent([1, 8]).translateExtent([[0, 0], [containerWidth, containerHeight]])
-    const tx = () => d3.zoomTransform(gx.node())
-    const ty = () => d3.zoomTransform(gy.node())
-    gx.call(zoomX).attr("pointer-events", "none")
-    gy.call(zoomY).attr("pointer-events", "none")
 
     const inner_normal_circle = d3.selectAll('.inner_normal_circle')
     const outer_normal_circle = d3.selectAll('.outer_normal_circle')
@@ -4264,21 +4251,12 @@ const App = ({
           .attr('width', d => d.width * t.k)
           .attr('height', d => d.height * t.k)
   
-        if (+window.innerWidth >= 1071) {
           innerText
-            .transition(trans)
-            .attr('x', d => {
-              return xr(d.x) - Math.min(getTextWidth(d.title, 18), containerWidth / 2) / 2 + (d.gutter * containerWidth / 800) -(20 * containerWidth /800)
-            })
-            .attr('y', d => yr(d.y) - 22)
-        } else {
-          innerText
-            .transition(trans)
-            .attr('x', d => {
-              return xr(d.x) - Math.min(getTextWidth(d.title, 18), containerWidth / 2) / 2 + (d.gutter)
-            })
-            .attr('y', d => yr(d.y) - 22)
-        }
+          .transition(trans)
+          .attr('x', d => {
+            return xr(d.x) - containerWidth / 4 + d.gutter
+          })
+          .attr('y', d => yr(d.y) - 22)
   
         innerLine
           .transition(trans)
@@ -4504,6 +4482,10 @@ const App = ({
     return () => {
       scatterSvg.selectAll("*").remove()
     }
+
+  } catch (error) {
+      
+  }
   }, [phenomena, scatterSvg, containerHeight, containerWidth])
 
   const onClickNode = (id) => {
