@@ -83,16 +83,20 @@ const VotingResultsView = () => {
     }
   }, [])
 
-  window.addEventListener('resize', function () {
-    // clearTimeOut() resets the setTimeOut() timer
-    // due to this the function in setTimeout() is 
-    // fired after we are done resizing
-    clearTimeout(eventTimeoutRef.current)
-
-    // setTimeout returns the numeric ID which is used by
-    // clearTimeOut to reset the timer
-    eventTimeoutRef.current = setTimeout(calcSizeRateTabWrapper, 250);
-  }, false)
+  try {
+    window.addEventListener('resize', function () {
+      // clearTimeOut() resets the setTimeOut() timer
+      // due to this the function in setTimeout() is 
+      // fired after we are done resizing
+      clearTimeout(eventTimeoutRef.current)
+  
+      // setTimeout returns the numeric ID which is used by
+      // clearTimeOut to reset the timer
+      eventTimeoutRef.current = setTimeout(calcSizeRateTabWrapper, 250);
+    }, false)
+  } catch (error) {
+    console.error(error)
+  }
 
   return (
     <VoteTabWrapper>
