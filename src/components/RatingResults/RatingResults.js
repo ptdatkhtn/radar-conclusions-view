@@ -5,18 +5,7 @@ import { Container, AxisName } from "./styles";
 import { ratingApi } from "../../helpers/fetcher";
 
 const RatingResults = ({ phenomena, radar }) => {
-  // let SortedPhenomenaX = [];
   const [ratingsCurrentUser, setRatingsCurrentUser] = useState([])
-  // let SortedPhenomenaY = [];
-
-  // phenomena.filter((p) => {
-  //   if (p.hasOwnProperty("rating_x") && p.hasOwnProperty("rating_y")) {
-  //     SortedPhenomenaX = SortedPhenomenaX.concat(p);
-  //   }
-  // });
-
-  const [phenonmenonListX, setphenonmenonListX] = React.useState([])
-
   const SortedPhenomenaX = React.useMemo( () => {
     let sortedPhena = phenomena
     /* eslint-disable */
@@ -25,11 +14,18 @@ const RatingResults = ({ phenomena, radar }) => {
       /* eslint-disable */
       sortedPhena.length > 0 && sortedPhena.map((pheX) => {
         if (String(currentPhenId) === String(pheX?.id)) {
-          // console.log('pheX', pheX)
-          if (String(rating[0]?.split('/')[6]) === 'x') {
-            pheX['ratingCurrentX'] = rating[1]?.percentage
-          } else if (String(rating[0]?.split('/')[6]) === 'y') {
-            pheX['ratingCurrentY'] = rating[1]?.percentage
+          if (!isFlip) {
+            if (String(rating[0]?.split('/')[6]) === 'x') {
+              pheX['ratingCurrentX'] = rating[1]?.percentage
+            } else if (String(rating[0]?.split('/')[6]) === 'y') {
+              pheX['ratingCurrentY'] = rating[1]?.percentage
+            }
+          } else {
+            if (String(rating[0]?.split('/')[6]) === 'x') {
+              pheX['ratingCurrentY'] = rating[1]?.percentage
+            } else if (String(rating[0]?.split('/')[6]) === 'y') {
+              pheX['ratingCurrentX'] = rating[1]?.percentage
+            }
           }
         }
       })

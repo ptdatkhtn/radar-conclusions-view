@@ -16,27 +16,27 @@ const VotingResultsView = () => {
   const { state: {phenonmenaData, radar, hiddenPhenomenaRating, hiddenPhenomenaVoting, isFlip }} = useContext(DataContext)
 
   let phenomenaFlip = [];
-  // if ( !!phenonmenaData?.length && isFlip) {
-  //   /* eslint-enable */
-  //   phenonmenaData.map((p) => {
-  //     const rating_x = p && p['rating_y']
-  //     const rating_y = p && p['rating_x']
-  //     const ratingCurrentX = p && p['ratingCurrentY']
-  //     const ratingCurrentY = p && p['ratingCurrentX']
-  //     const phenCLone = {...p}
-  //     phenCLone['rating_x'] = rating_x
-  //     phenCLone['rating_y'] = rating_y
-  //     phenCLone['ratingCurrentX'] = ratingCurrentX
-  //     phenCLone['ratingCurrentY'] = ratingCurrentY
+  if ( !!phenonmenaData?.length && isFlip) {
+    /* eslint-enable */
+    phenonmenaData.map((p) => {
+      const rating_x = p && p['rating_y']
+      const rating_y = p && p['rating_x']
+      const ratingCurrentX = p && p['ratingCurrentY']
+      const ratingCurrentY = p && p['ratingCurrentX']
+      const phenCLone = {...p}
+      phenCLone['rating_x'] = rating_x
+      phenCLone['rating_y'] = rating_y
+      phenCLone['ratingCurrentX'] = ratingCurrentX
+      phenCLone['ratingCurrentY'] = ratingCurrentY
 
-  //     phenomenaFlip.push(phenCLone)
-  //   })
-  // } else {
-  //   phenomenaFlip = phenonmenaData
-  // }
+      phenomenaFlip.push(phenCLone)
+    })
+  } else {
+    phenomenaFlip = phenonmenaData
+  }
 
-  phenomenaFlip = phenonmenaData
-  
+  // phenomenaFlip = phenonmenaData
+
   const visiblePhenonmenaVoting = useMemo(() => {
     return phenomenaFlip ? phenomenaFlip.filter(phenomenon => !hiddenPhenomenaVoting?.includes(phenomenon?.id)) : []
   }, [phenonmenaData, hiddenPhenomenaVoting])
