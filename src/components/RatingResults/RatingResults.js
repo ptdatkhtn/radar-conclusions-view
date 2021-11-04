@@ -4,7 +4,7 @@ import RatingResult from "../RatingResult/RatingResult";
 import { Container, AxisName } from "./styles";
 import { ratingApi } from "../../helpers/fetcher";
 
-const RatingResults = ({ phenomena, radar }) => {
+const RatingResults = ({ phenomena, radar, isFlip }) => {
   const [ratingsCurrentUser, setRatingsCurrentUser] = useState([])
   const SortedPhenomenaX = React.useMemo( () => {
     let sortedPhena = phenomena

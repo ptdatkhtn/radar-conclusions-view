@@ -130,7 +130,7 @@ const VotingResultsView = () => {
         />
       }
       {visiblePhenonmenaRating.length > 0 && radar && (
-        <RatingResults phenomena={visiblePhenonmenaRating} radar={radar}/>
+        <RatingResults phenomena={visiblePhenonmenaRating} radar={radar} isFlip={isFlip}/>
       )}
       
       <ConclusionsTabFooter></ConclusionsTabFooter>
