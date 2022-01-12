@@ -15,7 +15,7 @@ const AxisX = ({
         width: axisWidth, 
         margin: 0,
         position:'relative',
-        zIndex: 999
+        // zIndex: 999
         // background: 'rgb(224 222 222)' 
         }}>
         <tbody style={{borderTop: 'none'}}>
@@ -45,7 +45,7 @@ const AxisX = ({
         width: axisWidth, 
         margin: 0,
         position:'relative',
-        zIndex: 999
+        // zIndex: 999
         // background: 'rgb(224 222 222)'
          }}>
         <tbody style={{borderTop: 'none'}}>

@@ -33,9 +33,9 @@ const RatingResults = ({ phenomena, radar, isFlip }) => {
     return sortedPhena
   }, [ratingsCurrentUser]);
 
-  const xSortedPhenomena = React.useMemo( () => SortedPhenomenaX.length > 0 && SortedPhenomenaX
+  const xSortedPhenomena = React.useMemo( () => SortedPhenomenaX.length > 0 && [...SortedPhenomenaX]
     ?.sort((a, b) => Number(b.rating_x?.avg) - Number(a.rating_x?.avg) ), [SortedPhenomenaX])
-  const ySortedPhenomena = React.useMemo( () => SortedPhenomenaX.length > 0 && SortedPhenomenaX
+  const ySortedPhenomena = React.useMemo( () => SortedPhenomenaX.length > 0 && [...SortedPhenomenaX]
     ?.sort((a, b) => Number(b.rating_y?.avg) - Number(a.rating_y?.avg) )
     , [SortedPhenomenaX])
 
