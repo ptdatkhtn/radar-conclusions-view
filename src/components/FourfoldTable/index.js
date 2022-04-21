@@ -55,7 +55,7 @@ const App = ({
   const zoomRef = useRef({ k: 1, x: 0, y: 0})
   const zoomFuncRef = useRef(null)
 
-  const wrapperChartForFullscreenMode = document?.getElementById('wrapper-chart-1')
+  const wrapperChartForFullscreenMode = document?.getElementById('wrapper-chart-1_ConclusionRadarView')
   const uA = navigator.userAgent;
   const vendor = navigator.vendor;
   const isSafari = (/Safari/i.test(uA) && /Apple Computer/.test(vendor) && !/Mobi|Android/i.test(uA))
@@ -99,33 +99,19 @@ const App = ({
     decreaseLevelRef.current = 1
     try {
       closePopupLeftfs()
-      if (document.fullscreenElement || 
-        document.webkitFullscreenElement || 
-        document.mozFullScreenElement) {
-        document?.exitFullscreen();
-      } else if (document.fullscreenElement || 
-        document.webkitFullscreenElement || 
-        document.mozFullScreenElement) { /* Safari */
-        document?.webkitExitFullscreen();
-      } else if (document.fullscreenElement || 
-        document.webkitFullscreenElement || 
-        document.mozFullScreenElement) { /* IE11 */
-        document?.msExitFullscreen();
-      } else if (document.fullscreenElement || 
-        document.webkitFullscreenElement || 
-        document.mozFullScreenElement) { /* Safari */
-        document?.cancelFullScreen();
-      } else if (document.fullscreenElement || 
-        document.webkitFullscreenElement || 
-        document.mozFullScreenElement) { /* Safari */
-        document.mozCancelFullScreen();
-      } else if (document.fullscreenElement || 
-        document.webkitFullscreenElement || 
-        document.mozFullScreenElement) { /* Safari */
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) { /* Safari */
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) { /* IE11 */
+        document.msExitFullscreen();
+      } else if (document.cancelFullScreen) { /* Safari */
         document.cancelFullScreen();
-      } else if (document.fullscreenElement || 
-        document.webkitFullscreenElement || 
-        document.mozFullScreenElement) { /* Safari */
+      } else if (document.mozCancelFullScreen) { /* Safari */
+        document.mozCancelFullScreen();
+      } else if (document.cancelFullScreen) { /* Safari */
+        document.cancelFullScreen();
+      } else if (document.webkitCancelFullScreen) { /* Safari */
         document.webkitCancelFullScreen();
       }
     } catch (error) {
@@ -1448,7 +1434,7 @@ const App = ({
 
   return (
     <div style=
-      {{ width: '100%', 
+      {{ width: '100%',
         background: !!openFullScreenMode ? '#e8ebeb' : null, 
         // paddingTop: !!openFullScreenMode ? '32px' : 'unset',  
         paddingBottom: !!openFullScreenMode ? '32px' : 'unset'
