@@ -1,0 +1,19 @@
+.ReactModal__Content__Wrapper{
+    position: relative;
+    background-color: rgb(255, 255, 255);
+}
+.btn-close-modal{
+    display: block;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgb(0, 105, 152);
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    color: rgb(255, 255, 255);
+    line-height: 30px;
+    vertical-align: middle;
+    text-align: center;
+    cursor: pointer;
+}

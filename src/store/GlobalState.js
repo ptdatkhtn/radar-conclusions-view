@@ -17,7 +17,9 @@ const initialState = {
     radar: {},
     hiddenPhenomenaRating: [],
     hiddenPhenomenaVoting: [],
-    isFlip: false
+    isFlip: false,
+    keyMode: 1,
+    keyAvgMedian: 1
 
 }
 

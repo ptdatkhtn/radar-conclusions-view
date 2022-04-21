@@ -1,11 +1,12 @@
-import React, {useState} from "react";
-
+import React, {useContext, useState} from "react";
+import {DataContext} from '../../store/GlobalState'
 import RatingResult from "../RatingResult/RatingResult";
 import { Container, AxisName } from "./styles";
 import { ratingApi } from "../../helpers/fetcher";
 
 const RatingResults = ({ phenomena, radar, isFlip }) => {
   const [ratingsCurrentUser, setRatingsCurrentUser] = useState([])
+  const { state: { keyAvgMedian } } = useContext(DataContext)
   const SortedPhenomenaX = React.useMemo( () => {
     let sortedPhena = phenomena
     /* eslint-disable */
@@ -34,10 +35,16 @@ const RatingResults = ({ phenomena, radar, isFlip }) => {
   }, [ratingsCurrentUser]);
 
   const xSortedPhenomena = React.useMemo( () => SortedPhenomenaX.length > 0 && [...SortedPhenomenaX]
-    ?.sort((a, b) => Number(b.rating_x?.avg) - Number(a.rating_x?.avg) ), [SortedPhenomenaX])
+          ?.sort((a, b) => 
+          (keyAvgMedian === 1 ? Number(b['rating_x']?.avg) : Number(b['rating_x']?.median))
+            - ((keyAvgMedian === 1 ? Number(a['rating_x']?.avg) : Number(a['rating_x']?.median)))
+            ), 
+            [SortedPhenomenaX, keyAvgMedian])
+
   const ySortedPhenomena = React.useMemo( () => SortedPhenomenaX.length > 0 && [...SortedPhenomenaX]
-    ?.sort((a, b) => Number(b.rating_y?.avg) - Number(a.rating_y?.avg) )
-    , [SortedPhenomenaX])
+          ?.sort((a, b) => (keyAvgMedian === 1 ? Number(b['rating_y']?.avg) : Number(b['rating_y']?.median)) - (keyAvgMedian === 1 ? Number(a['rating_y']?.avg) : Number(a['rating_y']?.median)) )
+          , [SortedPhenomenaX, keyAvgMedian])
+
 
   React.useEffect(() => {
     const fetchRatingsCurrentUser = async () => {

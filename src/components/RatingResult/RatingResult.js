@@ -16,7 +16,7 @@ import Slider from '../Slider'
 
 const Rating = ({ phenomenon, radar, isRatingX }) => { 
   const {
-    state: { error }
+    state: { error, keyAvgMedian }
   } = useContext(DataContext);
 
   let iconClassName = ''
@@ -61,8 +61,8 @@ const Rating = ({ phenomenon, radar, isRatingX }) => {
               <SliderScaleMax>{isRatingX? radar?.axisXMax : radar?.axisYMax}</SliderScaleMax>
             </RatingSliderScale>
             <Slider 
-            value={isRatingX? phenomenon?.rating_x?.avg: phenomenon?.rating_y?.avg }
-          />   
+              value={isRatingX? (keyAvgMedian === 1 ? phenomenon?.rating_x?.avg : phenomenon?.rating_x?.median): (keyAvgMedian === 1 ? phenomenon?.rating_y?.avg : phenomenon?.rating_y?.median) }
+            />   
           <div style={{position:'relative', width:'100%'}}>
             {
               ((isRatingX ? 

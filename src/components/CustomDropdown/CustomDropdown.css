@@ -1,0 +1,20 @@
+/* .custom-react-select-height-att {
+    height: 28px;
+  }
+
+.custom-react-select-width-att {
+  width: 144px;
+}
+.react-select-rating-results__container {
+    width: 144px;
+    height: 28px;
+} */
+.react-select-rating-results__value-container {
+    min-height: 32px !important;
+    height: 32px;
+}
+
+.react-select-rating-results__single-value {
+    padding-bottom: 4px;
+}
+

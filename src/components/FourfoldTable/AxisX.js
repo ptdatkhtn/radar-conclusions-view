@@ -1,24 +1,35 @@
 import React from 'react'
 import Tooltip from '@mui/material/Tooltip';
 
+const fullscreenChartModeAxisXStyles = {
+  // eslint-disable-next-line no-restricted-globals
+  width: screen?.width * 80/100 + '!important'
+}
+
 const AxisX = ({
   axisWidth = 600,
   axisLabel1 = 'Horizontal Axis Default',
   axisLabel1a = 'Left End Default',
   axisLabel1b = 'Right End Default',
-  originalWidth
+  originalWidth,
+  isFm
 }) => {
   const cellStyle = { fontSize: 14, color: 'rgb(153, 153, 153)', fontWeight: 700, height: 30, whiteSpace: 'nowrap' }
   return (
     <>
-      <table cellPadding='0' cellSpacing='0' align='center' style={{ 
-        width: axisWidth, 
-        margin: 0,
-        position:'relative',
-        // zIndex: 999
-        // background: 'rgb(224 222 222)' 
-        }}>
-        <tbody style={{borderTop: 'none'}}>
+      <table cellPadding='0' cellSpacing='0' 
+        align='center' 
+        style={{
+          // eslint-disable-next-line no-restricted-globals
+          width: !!isFm ? screen?.width * 80/100 : axisWidth, 
+          margin: 0,
+          position:'relative',
+          
+          // eslint-disable-next-line no-restricted-globals
+          // zIndex: 999
+          // background: 'rgb(224 222 222)' 
+          }}>
+        <tbody style={{borderTop: 'none', ...fullscreenChartModeAxisXStyles}}>
           <tr>
             <td style={{ ...cellStyle, textAlign: 'left', width:  originalWidth / 2 }}>
               <Tooltip 
@@ -41,8 +52,9 @@ const AxisX = ({
         </tbody>
       </table>
 
-      <table cellPadding='0' cellSpacing='0' align='center' style={{ 
-        width: axisWidth, 
+      <table cellPadding='0' cellSpacing='0' align='center' style={{
+        // eslint-disable-next-line no-restricted-globals
+        width: !!isFm ? screen?.width * 80/100 : axisWidth,
         margin: 0,
         position:'relative',
         // zIndex: 999
