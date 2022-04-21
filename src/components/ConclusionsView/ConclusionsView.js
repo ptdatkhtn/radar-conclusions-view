@@ -146,7 +146,7 @@ const VotingResultsView = () => {
     <VoteTabWrapper>
        <HeaderWrapper>
         <div style={{display: 'flex'}}>
-          <h2>{(radar?.radarLanguage === "en" ? 'Rating results' : 'Arvioinnin tulokset') || requestTranslation('RatingResultsTitle')}</h2>
+          <h2>{(radar?.radarLanguage === "en" ? 'Priorities and conclusions' : 'Yhteenveto ja johtopäätökset') || requestTranslation('RatingResultsTitle')}</h2>
           <InformationIcon 
               // background={false}
               onMouseEnter={onHoverRatingIcon} 
