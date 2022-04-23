@@ -1425,12 +1425,23 @@ const App = ({
     setDecreaseLevel(value => (value - 0.1))
   }
   function closePopupLeftfs() {
-    document.getElementById('popup-left-ratings_ConclusionRadarView').style.visibility = 'hidden'
-    document.getElementById('popup-left-ratings_ConclusionRadarView')
-      ?.getElementsByClassName('scroll-pane-left')[0]
-      ?.getElementsByClassName("jspPane")[0]
-      ?.getElementsByClassName("column")[0]
-      ?.remove()
+    if (document.getElementById('popup-left-ratings_ConclusionRadarView')) {
+      document.getElementById('popup-left-ratings_ConclusionRadarView').style.visibility = 'hidden'
+      document.getElementById('popup-left-ratings_ConclusionRadarView')
+        ?.getElementsByClassName('scroll-pane-left')[0]
+        ?.getElementsByClassName("jspPane")[0]
+        ?.getElementsByClassName("column")[0]
+        ?.remove()
+    }
+    
+    if (document.getElementById('popup-left-ratings')) {
+      document.getElementById('popup-left-ratings').style.visibility = 'hidden'
+      document.getElementById('popup-left-ratings')
+        ?.getElementsByClassName('scroll-pane-left')[0]
+        ?.getElementsByClassName("jspPane")[0]
+        ?.getElementsByClassName("column")[0]
+        ?.remove()
+    }
   }
 
   function closePopupRightfs() {
