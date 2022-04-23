@@ -99,6 +99,7 @@ const App = ({
     decreaseLevelRef.current = 1
     try {
       closePopupLeftfs()
+      closePopupRightfs()
       if (document.exitFullscreen) {
         document.exitFullscreen();
       } else if (document.webkitExitFullscreen) { /* Safari */
@@ -1433,13 +1434,23 @@ const App = ({
   }
 
   function closePopupRightfs() {
-    // checkIfComments('popup-left')
-    document.getElementById('popup-right-ratings_ConclusionRadarView').style.visibility = 'hidden'
-    document.getElementById('popup-right-ratings_ConclusionRadarView')
-      ?.getElementsByClassName('scroll-pane-right')[0]
-      ?.getElementsByClassName("jspPane")[0]
-      ?.getElementsByClassName("column")[0]
-      ?.remove()
+    if (document.getElementById('popup-right-ratings_ConclusionRadarView')) {
+      document.getElementById('popup-right-ratings_ConclusionRadarView').style.visibility = 'hidden'
+      document.getElementById('popup-right-ratings_ConclusionRadarView')
+        ?.getElementsByClassName('scroll-pane-right')[0]
+        ?.getElementsByClassName("jspPane")[0]
+        ?.getElementsByClassName("column")[0]
+        ?.remove()
+    }
+    
+    if (document.getElementById('popup-right-ratings')) {
+      document.getElementById('popup-right-ratings').style.visibility = 'hidden'
+      document.getElementById('popup-right-ratings')
+        ?.getElementsByClassName('scroll-pane-right')[0]
+        ?.getElementsByClassName("jspPane")[0]
+        ?.getElementsByClassName("column")[0]
+        ?.remove()
+    }
   }
 
   return (
