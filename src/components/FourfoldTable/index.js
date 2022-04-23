@@ -1432,6 +1432,16 @@ const App = ({
       ?.remove()
   }
 
+  function closePopupRightfs() {
+    // checkIfComments('popup-left')
+    document.getElementById('popup-right-ratings_ConclusionRadarView').style.visibility = 'hidden'
+    document.getElementById('popup-right-ratings_ConclusionRadarView')
+      ?.getElementsByClassName('scroll-pane-right')[0]
+      ?.getElementsByClassName("jspPane")[0]
+      ?.getElementsByClassName("column")[0]
+      ?.remove()
+  }
+
   return (
     <div style=
       {{ width: '100%',
@@ -1449,6 +1459,16 @@ const App = ({
           <img src="/sites/all/themes/AltFutures_theme/images/ajax-loader.gif" width="20" height="20" />
         </div>
       </div>
+      <div class="popup popup-right popup-right-ratings_ConclusionRadarView popup-phenomenon-radar-results" id="popup-right-ratings_ConclusionRadarView">
+        <a class="btn-close" id="btn-close-popup-right-fs" onClick={closePopupRightfs}><span class="af-custom-close"></span></a>
+        <div class="stateindicatorright"></div>
+        <div class="scroll-pane-right">
+        </div>
+        <div class="popup-contentloader">
+        <img src="/sites/all/themes/AltFutures_theme/images/ajax-loader.gif" width="20" height="20" />
+        </div>
+      </div>
+
       <div
         id='wrapper-chart-2_ConclusionRadarView'
         style={!openFullScreenMode ?
