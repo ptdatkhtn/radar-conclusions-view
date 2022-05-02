@@ -1469,7 +1469,8 @@ const App = ({
       {{ width: '100%',
         background: !!openFullScreenMode ? '#e8ebeb' : null, 
         // paddingTop: !!openFullScreenMode ? '32px' : 'unset',  
-        paddingBottom: !!openFullScreenMode ? '32px' : 'unset'
+        paddingBottom: !!openFullScreenMode ? '32px' : 'unset',
+        position: 'relative'
       }}
       id='wrapper-chart-1_ConclusionRadarView'
     >
@@ -1525,30 +1526,7 @@ const App = ({
                                           // eslint-disable-next-line no-restricted-globals
                                           margin: 'auto', width: screen?.width * 80 / 100 +'px'
                                         }}>
-        <div style={{position: 'absolute', display: 'flex', top: '20px', right: '124px', visibility: !!openFullScreenMode ? 'hidden': 'visible'}}>
-          <p style={{ fontSize: "13px", margin: 0, fontWeight: 400, paddingTop: '10px', marginRight: '20px' }}>{(radar?.radarLanguage === "en" ? 'Show results as:' : 'Näytä tulokset:') || requestTranslation('ShowResultsAs_RatingResults')} </p>
-        <CustomDropdown
-            name='AvgMedian'
-            options={[
-              {
-                labelEn: radar?.radarLanguage === "en" ? 'Average' : 'Keskiarvo',
-                labelFin: "Keskiarvo",
-                value: 1,
-              },
-              {
-                labelEn: radar?.radarLanguage === "en" ? 'Median' : 'Mediaani',
-                labelFin: "Mediaani",
-                value: 2,
-              },
-            ]}
-            openDropdownHandle={openMenuHandle}
-            dropdownIsOpen={menuIsOpen}
-            closeDropdownHandle={() => setMenuIsOpen(false)}
-            defaultOptionsProps={1}
-            selectedOptionsProps={keyAvgMedian}
-            lang={radar?.radarLanguage}
-          />
-        </div>
+       
         <div style={{ display: 'flex', alignItems: 'center' }}>
 
           <p style={{ fontSize: "13px", margin: 0, fontWeight: 400, paddingTop: '10px', paddingRight: '20px' }}>{(radar?.radarLanguage === "en" ? 'Mode:' : 'Sijoittelu:') || requestTranslation('ShowResultsAs_RatingResults')} </p>
@@ -1594,6 +1572,30 @@ const App = ({
             <button style={{ backgroundColor: 'white', borderRadius: '16px', marginRight: '10px' }} disabled={decreaseLevel <= 0.6} onClick={handleDecreaseNodes}> <Remove /></button>
             <button style={{ backgroundColor: 'white', borderRadius: '16px' }} disabled={decreaseLevel >= 1.5} onClick={handleIncreaseNodes}> <Add /> </button>
           </div>
+        </div>
+        <div style={{position: !openFullScreenMode ? 'absolute' : '', marginLeft: !openFullScreenMode ? '' : '-20%', display: 'flex', top: '-46px', right: '0', visibility: 'visible'}}>
+          <p style={{ fontSize: "13px", margin: 0, fontWeight: 400, paddingTop: '10px', marginRight: '20px' }}>{(radar?.radarLanguage === "en" ? 'Show results as:' : 'Näytä tulokset:') || requestTranslation('ShowResultsAs_RatingResults')} </p>
+        <CustomDropdown
+            name='AvgMedian'
+            options={[
+              {
+                labelEn: radar?.radarLanguage === "en" ? 'Average' : 'Keskiarvo',
+                labelFin: "Keskiarvo",
+                value: 1,
+              },
+              {
+                labelEn: radar?.radarLanguage === "en" ? 'Median' : 'Mediaani',
+                labelFin: "Mediaani",
+                value: 2,
+              },
+            ]}
+            openDropdownHandle={openMenuHandle}
+            dropdownIsOpen={menuIsOpen}
+            closeDropdownHandle={() => setMenuIsOpen(false)}
+            defaultOptionsProps={1}
+            selectedOptionsProps={keyAvgMedian}
+            lang={radar?.radarLanguage}
+          />
         </div>
         <div style={{ display: 'flex', marginRight: !!openFullScreenMode ? '-8px' : 'unset' }}>
           {!openFullScreenMode ?
