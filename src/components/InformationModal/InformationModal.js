@@ -5,6 +5,7 @@ import { InfoCircle } from "@styled-icons/boxicons-regular";
 import styled from "styled-components";
 import EmbedLinkModal from "../EmbedLinkModal";
 import './InformationModal.css'
+import InfoModal from "./InfoModal";
 
 const InformationModal = ({
   InfoModalHeader,
@@ -55,7 +56,7 @@ const InformationModal = ({
           style={{ marginLeft: "10px", paddingBottom: '21px' }}
         >
           <div style={{ display: "flex", alignItems: "center" }}>
-            <InformationIcon />
+            <InfoModal />
             <h3 style={{ marginLeft: "20px", marginBottom: "0" }}>
               {InfoModalHeader}
             </h3>
@@ -148,12 +149,11 @@ const InformationModal = ({
 
 export default InformationModal;
 
-const InformationIcon = styled(InfoCircle)`
-  background-color: white;
-  color: #00C3FF;
-  width: 45px;
-  height: 45px;
-`;
+// const InformationIcon = styled(InfoModal)`
+//   background-color: transparent;
+//   width: 45px;
+//   height: 45px;
+// `;
 const InformationUl = styled.ul`
   line-height: 2
 `;
